@@ -8,66 +8,100 @@ The skill walks your agent through a structured build flow: it detects whether y
 
 ## Install
 
-Clone the repo and copy the skill into your agent's skills directory. Pick your agent below.
-
-**Claude Code**
+First, clone the repo:
 
 ```bash
-git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .claude/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git
 ```
 
-**Cursor**
+Then copy the skill into your agent's directory. You can install it **globally** (available in all your projects) or **per-project** (only available in the current project).
+
+### Claude Code
 
 ```bash
-git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .cursor/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+# Global (all projects)
+cp -r datocms-llm-skills/datocms-pluginsdk-skill ~/.claude/skills/datocms-plugin-builder
+
+# Project only
+cp -r datocms-llm-skills/datocms-pluginsdk-skill .claude/skills/datocms-plugin-builder
 ```
 
-**OpenAI Codex CLI**
+### Cursor
 
 ```bash
-git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .agents/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+# Global (all projects)
+cp -r datocms-llm-skills/datocms-pluginsdk-skill ~/.cursor/skills/datocms-plugin-builder
+
+# Project only
+cp -r datocms-llm-skills/datocms-pluginsdk-skill .cursor/skills/datocms-plugin-builder
 ```
 
-**Windsurf**
+### OpenAI Codex CLI
 
 ```bash
-git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .windsurf/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+# Global (all projects)
+cp -r datocms-llm-skills/datocms-pluginsdk-skill ~/.codex/skills/datocms-plugin-builder
+
+# Project only
+cp -r datocms-llm-skills/datocms-pluginsdk-skill .agents/skills/datocms-plugin-builder
 ```
 
-**Amp**
+### Windsurf
 
 ```bash
-git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .amp/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+# Global (all projects)
+cp -r datocms-llm-skills/datocms-pluginsdk-skill ~/.windsurf/skills/datocms-plugin-builder
+
+# Project only
+cp -r datocms-llm-skills/datocms-pluginsdk-skill .windsurf/skills/datocms-plugin-builder
 ```
 
-**Cline**
+### Amp
 
 ```bash
-git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .cline/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+# Project only
+cp -r datocms-llm-skills/datocms-pluginsdk-skill .amp/skills/datocms-plugin-builder
 ```
 
-**Roo Code**
+### Cline
 
 ```bash
-git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .roo/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+# Project only
+cp -r datocms-llm-skills/datocms-pluginsdk-skill .cline/skills/datocms-plugin-builder
 ```
 
-**GitHub Copilot**
+### Roo Code
 
 ```bash
-git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .agents/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+# Global (all projects)
+cp -r datocms-llm-skills/datocms-pluginsdk-skill ~/.roo/skills/datocms-plugin-builder
+
+# Project only
+cp -r datocms-llm-skills/datocms-pluginsdk-skill .roo/skills/datocms-plugin-builder
 ```
 
-**Gemini CLI**
+### GitHub Copilot
 
 ```bash
-git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .gemini/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+# Project only
+cp -r datocms-llm-skills/datocms-pluginsdk-skill .agents/skills/datocms-plugin-builder
 ```
 
-**Aider**
+### Gemini CLI
 
 ```bash
-git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .aider/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+# Global (all projects)
+cp -r datocms-llm-skills/datocms-pluginsdk-skill ~/.gemini/skills/datocms-plugin-builder
+
+# Project only
+cp -r datocms-llm-skills/datocms-pluginsdk-skill .gemini/skills/datocms-plugin-builder
+```
+
+### Aider
+
+```bash
+# Project only
+cp -r datocms-llm-skills/datocms-pluginsdk-skill .aider/skills/datocms-plugin-builder
 ```
 
 ## What's inside
