@@ -1,10 +1,74 @@
-# DatoCMS Plugin SDK — Agent Skills
+# DatoCMS Plugin SDK — Agent Skill
 
 Everything your coding agent needs to build DatoCMS plugins from scratch (or improve existing ones).
 
-This repo contains a comprehensive, interactive skill that teaches AI coding agents how to work with the [`datocms-plugin-sdk`](https://www.npmjs.com/package/datocms-plugin-sdk). It covers the full plugin surface: field extensions, sidebar panels, custom pages, dropdown actions, asset sources, lifecycle hooks, modals, config screens, inspectors, outlets, and more.
+This repo contains an interactive skill that teaches AI coding agents how to work with the [`datocms-plugin-sdk`](https://www.npmjs.com/package/datocms-plugin-sdk). It covers the full plugin surface — field extensions, sidebar panels, custom pages, dropdown actions, asset sources, lifecycle hooks, modals, config screens, inspectors, outlets, and more — across 16 detailed reference docs.
 
-The skill walks the agent through a structured build flow — it detects whether you're starting fresh or augmenting an existing plugin, asks the right discovery questions, loads only the relevant reference docs, generates proper TypeScript + React code, and guides you through wiring everything up in DatoCMS.
+The skill walks your agent through a structured build flow: it detects whether you're starting fresh or augmenting an existing plugin, asks discovery questions, loads only the relevant reference docs, generates TypeScript + React code, and guides you through wiring everything up in DatoCMS.
+
+## Install
+
+Clone the repo and copy the skill into your agent's skills directory. Pick your agent below.
+
+**Claude Code**
+
+```bash
+git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .claude/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+```
+
+**Cursor**
+
+```bash
+git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .cursor/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+```
+
+**OpenAI Codex CLI**
+
+```bash
+git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .agents/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+```
+
+**Windsurf**
+
+```bash
+git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .windsurf/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+```
+
+**Amp**
+
+```bash
+git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .amp/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+```
+
+**Cline**
+
+```bash
+git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .cline/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+```
+
+**Roo Code**
+
+```bash
+git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .roo/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+```
+
+**GitHub Copilot**
+
+```bash
+git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .agents/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+```
+
+**Gemini CLI**
+
+```bash
+git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .gemini/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+```
+
+**Aider**
+
+```bash
+git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git && cp -r datocms-llm-skills/datocms-pluginsdk-skill .aider/skills/datocms-plugin-builder && rm -rf datocms-llm-skills
+```
 
 ## What's inside
 
@@ -28,120 +92,6 @@ datocms-pluginsdk-skill/
     ├── structured-text.md      # Custom marks and block-level styles
     ├── record-presentation.md  # Custom record display in lists and link fields
     └── form-values.md          # Reading/writing form data, localization helpers
-```
-
-## Installation
-
-Clone the repo (or download it) somewhere on your machine, then point your agent at it. Each agent has a slightly different way to do this — pick yours below.
-
-### Clone
-
-```bash
-git clone https://github.com/datocms/datocms-plugin-sdk-agent-skill.git ~/.datocms-skill
-```
-
-(Use any path you like — the commands below assume `~/.datocms-skill`.)
-
-### Claude Code
-
-```bash
-claude --add-dir ~/.datocms-skill
-```
-
-Or, to make it permanent for a specific project, add to your project's `.claude/settings.json`:
-
-```json
-{
-  "additionalDirectories": ["~/.datocms-skill"]
-}
-```
-
-Claude Code will auto-discover the `SKILL.md` from the added directory and make the skill available in your session.
-
-### OpenAI Codex CLI
-
-Add the skill path as a read reference in your project's `AGENTS.md`:
-
-```markdown
-@~/.datocms-skill/datocms-pluginsdk-skill/SKILL.md
-```
-
-Or symlink it into your project's skills directory:
-
-```bash
-mkdir -p .agents/skills && ln -s ~/.datocms-skill/datocms-pluginsdk-skill .agents/skills/datocms-plugin-builder
-```
-
-### Gemini CLI
-
-Import the skill from your project's `GEMINI.md`:
-
-```markdown
-@~/.datocms-skill/datocms-pluginsdk-skill/SKILL.md
-```
-
-### Cursor
-
-Symlink the skill into your project's rules directory:
-
-```bash
-mkdir -p .cursor/rules && ln -s ~/.datocms-skill/datocms-pluginsdk-skill/SKILL.md .cursor/rules/datocms-plugin-builder.md
-```
-
-### Windsurf
-
-Symlink the skill into your project's rules directory:
-
-```bash
-mkdir -p .windsurf/rules && ln -s ~/.datocms-skill/datocms-pluginsdk-skill/SKILL.md .windsurf/rules/datocms-plugin-builder.md
-```
-
-### Amp
-
-Symlink or copy the skill file so Amp discovers it:
-
-```bash
-ln -s ~/.datocms-skill/datocms-pluginsdk-skill/SKILL.md ./AGENTS.md
-```
-
-Or reference it in an existing `AGENTS.md` with an import.
-
-### GitHub Copilot
-
-Copy or symlink the skill into your project's instructions:
-
-```bash
-mkdir -p .github/instructions && ln -s ~/.datocms-skill/datocms-pluginsdk-skill/SKILL.md .github/instructions/datocms-plugin-builder.instructions.md
-```
-
-### Cline
-
-Symlink the skill into your project's rules directory:
-
-```bash
-mkdir -p .clinerules && ln -s ~/.datocms-skill/datocms-pluginsdk-skill/SKILL.md .clinerules/datocms-plugin-builder.md
-```
-
-### Roo Code
-
-Symlink the skill into your project's rules directory:
-
-```bash
-mkdir -p .roo/rules && ln -s ~/.datocms-skill/datocms-pluginsdk-skill/SKILL.md .roo/rules/datocms-plugin-builder.md
-```
-
-### Aider
-
-Point Aider at the skill via CLI flag or config:
-
-```bash
-aider --read ~/.datocms-skill/datocms-pluginsdk-skill/SKILL.md
-```
-
-Or add to your `.aider.conf.yml`:
-
-```yaml
-read: ~/.datocms-skill/datocms-pluginsdk-skill/SKILL.md
 ```
 
 ## Usage
