@@ -95,7 +95,7 @@ Add as needed:
 
 ### Plugin Permissions
 
-If your plugin needs API access, add to `datoCmsPlugin`:
+For **marketplace plugins**, declare permissions in `package.json` so DatoCMS prompts users on install:
 
 ```json
 {
@@ -107,7 +107,9 @@ If your plugin needs API access, add to `datoCmsPlugin`:
 }
 ```
 
-This makes `ctx.currentUserAccessToken` available in all hooks.
+For **private plugins**, this array is ignored — permissions are granted through the DatoCMS UI in the plugin's permissions tab after installation.
+
+Either way, this makes `ctx.currentUserAccessToken` available in all hooks.
 
 ## `tsconfig.json`
 

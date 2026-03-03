@@ -41,7 +41,7 @@ Tell the user which mode you detected and what you found.
 If in scaffold mode, before asking detailed plugin questions:
 
 1. **Ask for the plugin name** using `AskUserQuestion` (e.g., "What should we name this plugin?"). This will be used as the folder name.
-2. **Create the project structure manually** using the patterns from `references/project-scaffold.md`. Create the plugin directory **inside the current working directory** (e.g., `./my-plugin-name/`). Create:
+2. **Create the project structure manually** using the patterns from `references/project-scaffold.md`. Create the plugin directory **inside the current working directory** (e.g., `./my-plugin-name/`). **Important**: adapt `package.json` based on the user's distribution intent from Step 2. For **private plugins**, the `name` field has no naming requirements, `keywords` and `homepage` can be omitted, and `prepublishOnly` is unnecessary. For **public/marketplace plugins**, `name` must start with `datocms-plugin-`, `keywords` must include `"datocms-plugin"`, and `homepage` must be set. Since Step 2 hasn't run yet at this point, scaffold with private-friendly defaults (no prefix requirement) and adjust after Step 2 if the user chooses marketplace distribution. Create:
    - The plugin directory with the chosen name
    - `package.json` with DatoCMS plugin metadata and dependencies
    - `tsconfig.json`, `tsconfig.app.json`, and `tsconfig.node.json`
@@ -75,11 +75,13 @@ Ask the user the relevant discovery questions using `AskUserQuestion`. Since `As
    - **Upload sidebar** — UI in the Media Area asset detail view (collapsible panel or full-width sidebar)
    - **Structured text customization** — custom inline marks or block-level styles for Structured Text fields
    - **Record presentation** — customize record display in lists/link fields, or pre-filter the record picker
-2. **DatoCMS API access**: Does the plugin need to fetch or update DatoCMS records, assets, or models via the Content Management API? If yes, the plugin needs the `@datocms/cma-client-browser` dependency and the `"currentUserAccessToken"` permission in `package.json`.
-3. **Target scope**: Should this apply to all models or specific ones?
-4. **External dependencies**: Any external APIs or npm packages needed?
+2. **Distribution intent** (scaffold mode only): Is this a **private plugin** (just for your project) or a **public/marketplace plugin** (published to npm for anyone to install)? This affects naming and metadata — private plugins have no naming requirements, while marketplace plugins must follow npm conventions (see Step 1b).
+3. **DatoCMS API access**: Does the plugin need to fetch or update DatoCMS records, assets, or models via the Content Management API? If yes, the plugin needs the `@datocms/cma-client-browser` dependency. For marketplace plugins, declare `"currentUserAccessToken"` in the `permissions` array in `package.json`. For private plugins, this permission is granted through the DatoCMS UI during plugin installation instead.
+4. **Target scope**: Should this apply to all models or specific ones?
 
-In **augment mode**, also ask: What should be ADDED to the existing plugin?
+If you still need to ask about external dependencies or other concerns, use a follow-up `AskUserQuestion` call.
+
+In **augment mode**, also ask: What should be ADDED to the existing plugin? (Skip the distribution intent question — the project already exists.)
 
 Adapt the questions based on what makes sense — skip irrelevant ones (e.g., don't ask about target models for an asset source). Infer features from the user's purpose description and present your best guess for confirmation rather than making the user pick from a raw list.
 
@@ -166,6 +168,7 @@ Guide the user through getting the plugin running:
 3. **Install in DatoCMS**:
    - Go to Settings > Plugins > Add new > Create a private plugin
    - Set entry point URL to `http://localhost:5173/`
+   - If the plugin needs API access, grant the "Current user's API token" permission in the plugin's permissions tab
 4. **Plugin-type-specific testing**:
    - Field extension: Go to a record form, check the field has the new editor/addon
    - Sidebar panel: Go to a record form, check the sidebar for the new panel
@@ -199,4 +202,3 @@ Only apply these improvements if the user requests them or if clearly needed:
 - **`onBoot` migration**: If plugin parameters evolve, use `onBoot` to migrate old formats
 - **Lazy loading**: Use `React.lazy()` + `Suspense` for code splitting on larger plugins
 - **Permission checks**: Always check `ctx.currentRole.meta.final_permissions.can_edit_schema` before `updatePluginParameters`
-- **Publishing**: If the user wants to publish to npm/marketplace, ensure `package.json` meets requirements: name starts with `datocms-plugin-`, keywords include `datocms-plugin`, `homepage` is filled in, `datoCmsPlugin.permissions` array is present, and all asset paths in `dist/index.html` are relative. See `references/project-scaffold.md` for details.

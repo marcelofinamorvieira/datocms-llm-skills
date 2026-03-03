@@ -84,18 +84,18 @@ ctx.scrollToField(path, locale?)  // Scroll to a specific field
 
 ### Payload shape
 
-The payload is an `ItemUpdateSchema` (existing record) or `ItemCreateSchema` (new record) from `@datocms/cma-client`:
+The payload is a `SchemaTypes.ItemUpdateSchema` (existing record) or `SchemaTypes.ItemCreateSchema` (new record) — raw JSON:API format with a `data` wrapper:
 
 ```ts
-import type { ItemUpdateSchema, ItemCreateSchema } from '@datocms/cma-client';
+import type { SchemaTypes } from '@datocms/cma-client';
 ```
 
 Key paths:
 
 ```ts
-payload.relationships?.item_type?.data?.id  // Model ID — use to identify which model
-payload.attributes                          // Field values (API key → value)
-payload.meta?.current_version               // Present on updates, absent on creates
+payload.data.relationships?.item_type?.data?.id  // Model ID — use to identify which model
+payload.data.attributes                          // Field values (API key → value)
+payload.data.meta?.current_version               // Present on updates, absent on creates
 ```
 
 **Important**: This runs BEFORE server-side validation. Client-side field validations (onBlur) are not affected.
@@ -109,14 +109,14 @@ connect({
   async onBeforeItemUpsert(payload, ctx) {
     // Only validate blog_post model
     const itemType = Object.values(ctx.itemTypes).find(
-      (it) => it?.id === payload.relationships?.item_type?.data?.id
+      (it) => it?.id === payload.data.relationships?.item_type?.data?.id
     );
     if (itemType?.attributes.api_key !== 'blog_post') {
       return true;
     }
 
     // Check that SEO title is filled
-    const seoField = payload.attributes?.seo_analysis;
+    const seoField = payload.data.attributes?.seo_analysis;
     if (!seoField) {
       ctx.alert('Please fill in the SEO analysis field before saving.');
       ctx.scrollToField('seo_analysis');
