@@ -18,7 +18,7 @@ Unlike top-level records, blocks:
 
 ## `buildBlockRecord()`
 
-**Always use `buildBlockRecord()` when creating block records for the simplified API.** It generates a unique ID and formats the block correctly.
+**Always use `buildBlockRecord()` when creating block records for the simplified API.** It serializes the block body into the format expected by the API.
 
 ```ts
 import { buildBlockRecord } from "@datocms/cma-client-node";

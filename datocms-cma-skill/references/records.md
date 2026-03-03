@@ -323,7 +323,7 @@ When creating or updating records, field values must match the expected format f
 | `date` | `string` (ISO 8601 date) | `"2024-01-15"` |
 | `date_time` | `string` (ISO 8601 datetime) | `"2024-01-15T10:30:00+00:00"` |
 | `color` | `{ red, green, blue, alpha }` | `{ red: 255, green: 0, blue: 0, alpha: 255 }` |
-| `json` | any JSON value | `{ key: "value" }` |
+| `json` | JSON-serialized string | `JSON.stringify({ key: "value" })` |
 | `slug` | `string` | `"hello-world"` |
 
 ### Geo Location
@@ -349,13 +349,21 @@ When creating or updating records, field values must match the expected format f
 
 ### Single File (upload)
 
+Minimal — just the upload ID (uses the upload's default metadata):
+
+```ts
+{ upload_id: "upload-id" }
+```
+
+With per-field metadata overrides:
+
 ```ts
 {
   upload_id: "upload-id",
-  alt: "Alt text",            // or null
-  title: "Image title",       // or null
-  custom_data: {},             // Record<string, string>
-  focal_point: { x: 0.5, y: 0.5 }, // or null
+  alt: "Alt text",            // optional, overrides upload default
+  title: "Image title",       // optional, overrides upload default
+  custom_data: {},             // optional
+  focal_point: { x: 0.5, y: 0.5 }, // optional
 }
 ```
 
@@ -365,8 +373,8 @@ Array of file objects (same shape as single file):
 
 ```ts
 [
-  { upload_id: "upload-id-1", alt: "First image", title: null, custom_data: {}, focal_point: null },
-  { upload_id: "upload-id-2", alt: "Second image", title: null, custom_data: {}, focal_point: null },
+  { upload_id: "upload-id-1" },
+  { upload_id: "upload-id-2", alt: "Custom alt", title: null, custom_data: {}, focal_point: null },
 ]
 ```
 

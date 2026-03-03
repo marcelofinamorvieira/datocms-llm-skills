@@ -369,6 +369,15 @@ await client.uploadCollections.destroy("collection-id");
 ### Single File Field
 
 ```ts
+// Minimal — uses upload's default metadata
+await client.items.create({
+  item_type: { id: modelId, type: "item_type" },
+  cover_image: {
+    upload_id: upload.id,
+  },
+});
+
+// With per-field metadata overrides
 await client.items.create({
   item_type: { id: modelId, type: "item_type" },
   cover_image: {
@@ -387,25 +396,13 @@ await client.items.create({
 await client.items.create({
   item_type: { id: modelId, type: "item_type" },
   gallery: [
-    {
-      upload_id: upload1.id,
-      alt: "First image",
-      title: null,
-      custom_data: {},
-      focal_point: null,
-    },
-    {
-      upload_id: upload2.id,
-      alt: "Second image",
-      title: null,
-      custom_data: {},
-      focal_point: null,
-    },
+    { upload_id: upload1.id },
+    { upload_id: upload2.id, alt: "Custom alt for second image" },
   ],
 });
 ```
 
-**Important:** Even when the upload already has `default_field_metadata`, the file/gallery field value requires its own `alt`, `title`, `custom_data`, and `focal_point` properties. These per-field values override the upload's defaults.
+**Note:** When the upload's `default_field_metadata` is sufficient, you can pass just `{ upload_id: "..." }`. To override defaults for a specific field usage, provide `alt`, `title`, `custom_data`, and/or `focal_point` — these per-field values override the upload's defaults.
 
 ---
 

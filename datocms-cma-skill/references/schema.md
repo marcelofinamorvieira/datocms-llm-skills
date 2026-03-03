@@ -153,7 +153,7 @@ const field = await client.fields.create(model.id, {
 | `date` | Date only | `"YYYY-MM-DD"` |
 | `date_time` | Date and time | ISO 8601 string |
 | `color` | RGBA color | `{ red, green, blue, alpha }` |
-| `json` | Arbitrary JSON | any JSON value |
+| `json` | Arbitrary JSON | JSON-serialized string (`JSON.stringify(...)`) |
 | `slug` | URL slug | `string` |
 | `lat_lon` | Geo coordinates | `{ latitude, longitude }` |
 | `seo` | SEO meta tags | `{ title, description, image, twitter_card }` |

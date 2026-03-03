@@ -8,8 +8,9 @@ description: >-
   configure webhooks and build triggers, manage roles and API tokens,
   schedule publication or unpublication, handle localized content,
   build modular content with blocks and structured text, paginate and
-  filter records, write migration or seeding scripts, or perform any
-  server-side DatoCMS API operation.
+  filter records, or write migration and seeding scripts. Covers the most
+  commonly used CMA resources — records, uploads, schema, environments,
+  webhooks, access control, scheduling, and workflows.
 ---
 
 # DatoCMS Content Management API Skill
@@ -23,20 +24,20 @@ You are an expert at writing code that interacts with the DatoCMS Content Manage
 Silently examine the project to determine the runtime and which CMA client package is available.
 
 1. Read `package.json` and check for these packages (in priority order):
-   - `@datocms/cma-client-node` — Node.js environments (scripts, Next.js API routes, serverless functions, CLI tools, CI/CD pipelines). **This is the most common choice.**
-   - `@datocms/cma-client-browser` — Browser-only environments (SPAs calling the CMA directly, browser extensions)
-   - `@datocms/cma-client` — Base package (universal/isomorphic; requires providing a custom `fetchFn`)
+   - `@datocms/cma-client` — Universal/isomorphic package. **Recommended for most cases.** Works in any environment with native `fetch`. Only provide a `fetchFn` if your runtime lacks native Fetch API.
+   - `@datocms/cma-client-node` — Node.js-optimized. Adds upload helpers (`createFromLocalFile`, `createFromUrl`). Use when you need file-system upload convenience methods.
+   - `@datocms/cma-client-browser` — Browser-optimized. Adds `createFromFileOrBlob()` for File/Blob uploads.
 
 2. If none is installed, recommend the appropriate package:
-   - Node.js project → `@datocms/cma-client-node`
-   - Browser-only project → `@datocms/cma-client-browser`
-   - Universal/edge runtime → `@datocms/cma-client` with a custom `fetchFn`
+   - General / universal → `@datocms/cma-client`
+   - Node.js project needing upload helpers → `@datocms/cma-client-node`
+   - Browser-only project needing File/Blob uploads → `@datocms/cma-client-browser`
 
 3. Search for existing `buildClient()` calls to understand how the project already configures the client (API token source, environment targeting, etc.).
 
 4. Check for a `.env` or `.env.local` file to see if `DATOCMS_API_TOKEN` (or a similar variable) is already defined.
 
-**Important:** The CMA requires a **full-access API token** (not a read-only CDA token). If you see a token variable named like `DATOCMS_READONLY_API_TOKEN` or `NEXT_PUBLIC_DATOCMS_API_TOKEN`, warn the user that CMA operations need a full-access token with appropriate permissions.
+**Important:** The CMA requires an API token with `can_access_cma: true` and a role granting the needed permissions (not a read-only CDA token). If you see a token variable named like `DATOCMS_READONLY_API_TOKEN` or `NEXT_PUBLIC_DATOCMS_API_TOKEN`, warn the user that CMA operations need a token with CMA access enabled. The token does not need to be "full-access" — it can be scoped to specific models, actions, and environments via its role.
 
 ---
 
@@ -131,7 +132,7 @@ Write the code following these mandatory rules:
 
 Before presenting the final code:
 
-1. **Token permissions** — CMA operations need a full-access token (not read-only). Schema changes require admin-level access.
+1. **Token permissions** — CMA operations need a token with CMA access enabled and appropriate role permissions (not a CDA-only read-only token). Schema changes require a role with `can_edit_schema: true`.
 2. **Environment targeting** — If working with a sandbox, ensure the `environment` config option is set
 3. **Error handling** — Ensure `ApiError` is caught at appropriate boundaries
 4. **Pagination** — Ensure `listPagedIterator()` is used for any collection that could exceed a single page
