@@ -344,7 +344,7 @@ For CMA client API calls, errors include rate limiting, permission issues, and v
 try {
   await client.items.update(recordId, { title: 'New Title' });
 } catch (error) {
-  if (error instanceof ApiError && error.statusCode === 422) {
+  if (error instanceof ApiError && error.response.status === 422) {
     ctx.alert('Validation error — check the record data.');
   } else {
     ctx.alert('Failed to update record. Please try again.');
