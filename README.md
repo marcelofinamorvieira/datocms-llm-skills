@@ -80,6 +80,40 @@ datocms-cma-skill/
 
 ---
 
+### `datocms-cda-skill` — Content Delivery API
+
+Everything your agent needs to query the DatoCMS Content Delivery API (CDA) — a read-only GraphQL API — using the official [`@datocms/cda-client`](https://www.npmjs.com/package/@datocms/cda-client) TypeScript/JavaScript library. Covers querying records, filtering, pagination, localization with fallbacks, modular content blocks, structured text (DAST) rendering, responsive images with imgix, SEO meta tags, video, draft/preview mode, cache tags, and environment targeting — across 10 reference docs.
+
+The skill follows a 5-step flow: detect the client package and token setup, classify the task, load relevant references, generate code with proper GraphQL variables/pagination/error handling, and verify correctness.
+
+**Example prompts:**
+- *"Fetch all blog posts sorted by date and paginate them"*
+- *"Query localized content with fallback locales for a multilingual site"*
+- *"Render structured text fields with custom block components in Next.js"*
+- *"Set up responsive images with blur-up placeholders and focal point cropping"*
+
+<details>
+<summary>What's inside</summary>
+
+```
+datocms-cda-skill/
+├── SKILL.md                              # Main interactive guide (the entry point)
+└── references/                           # 10 deep-dive reference docs
+    ├── client-and-config.md              # Client setup, options, error handling, scalars
+    ├── querying-basics.md                # Records, collections, meta fields, single-instance models
+    ├── filtering.md                      # Field filters, AND/OR logic, deep filtering, uploads
+    ├── pagination-and-ordering.md        # first/skip, auto-pagination, ordering, trees
+    ├── localization.md                   # Localized fields, fallback locales, all-locale values
+    ├── modular-content.md                # Block fields, GraphQL fragments, nested blocks
+    ├── structured-text.md                # DAST value/blocks/links, rendering with components
+    ├── images-and-videos.md              # responsiveImage, imgix transforms, placeholders, Mux video
+    ├── seo-and-meta.md                   # _seoMetaTags, favicons, globalSeo, Open Graph
+    └── draft-caching-environments.md     # Draft mode, cache tags, CDN invalidation, Content Link
+```
+</details>
+
+---
+
 ## Install
 
 Clone the repo:
@@ -90,7 +124,7 @@ git clone https://github.com/marcelofinamorvieira/datocms-llm-skills.git
 
 Then copy the skill(s) you want into your agent's directory. You can install them **globally** (available in all your projects) or **per-project** (only available in the current project).
 
-Replace `<skill-folder>` with the skill you want to install (e.g., `datocms-pluginsdk-skill`, `datocms-cma-skill`) and `<skill-name>` with whatever name you'd like to give it locally (e.g., `datocms-plugin-builder`, `datocms-cma`).
+Replace `<skill-folder>` with the skill you want to install (e.g., `datocms-pluginsdk-skill`, `datocms-cma-skill`, `datocms-cda-skill`) and `<skill-name>` with whatever name you'd like to give it locally (e.g., `datocms-plugin-builder`, `datocms-cma`, `datocms-cda`).
 
 ### Claude Code
 
