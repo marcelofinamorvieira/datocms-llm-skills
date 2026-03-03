@@ -49,7 +49,7 @@ Each event entry specifies an `entity_type` and the `event_types` to listen for:
 
 ### Event Filters
 
-Narrow webhook events to specific models or conditions. Filters are a **separate top-level attribute** on the webhook (not nested inside `events`):
+Narrow webhook events to specific models or conditions. Filters are defined **inside each `events[]` entry**:
 
 ```ts
 const webhook = await client.webhooks.create({
@@ -57,19 +57,28 @@ const webhook = await client.webhooks.create({
   url: "https://example.com/webhook",
   headers: {},
   events: [
-    { entity_type: "item", event_types: ["create", "update"] },
-  ],
-  filters: [
     {
-      entity_type_filter: {
-        entity_ids: [blogModelId], // Only blog_post records
-      },
+      entity_type: "item",
+      event_types: ["create", "update"],
+      filters: [
+        {
+          entity_type: "item_type",
+          entity_ids: [blogModelId], // Only blog_post records
+        },
+      ],
     },
   ],
+  custom_payload: null,
+  http_basic_user: null,
+  http_basic_password: null,
   enabled: true,
   payload_api_version: "3",
 });
 ```
+
+Each filter entry has:
+- `entity_type`: `"item_type"` | `"item"` | `"build_trigger"` | `"environment"` | `"environment_type"`
+- `entity_ids`: array of string IDs to match
 
 ### Custom Payloads (Mustache Templating)
 
@@ -84,6 +93,8 @@ const webhook = await client.webhooks.create({
   custom_payload: JSON.stringify({
     text: "Record {{entity.attributes.title}} was published!",
   }),
+  http_basic_user: null,
+  http_basic_password: null,
   enabled: true,
   payload_api_version: "3",
 });
@@ -96,15 +107,14 @@ const webhook = await client.webhooks.create({
 | `name` | `string` | **Required.** Display name |
 | `url` | `string` | **Required.** Endpoint URL |
 | `headers` | `Record<string, string>` | **Required.** Custom headers (can be `{}`) |
-| `events` | `array` | **Required.** Event configurations |
-| `custom_payload` | `string \| null` | Mustache template for custom payloads |
-| `http_basic_user` | `string \| null` | HTTP Basic auth username |
-| `http_basic_password` | `string \| null` | HTTP Basic auth password |
+| `events` | `array` | **Required.** Event configurations (each entry has `entity_type`, `event_types`, and optional `filters`) |
+| `custom_payload` | `string \| null` | **Required.** Mustache template for custom payloads (pass `null` for default payload) |
+| `http_basic_user` | `string \| null` | **Required.** HTTP Basic auth username (pass `null` if unused) |
+| `http_basic_password` | `string \| null` | **Required.** HTTP Basic auth password (pass `null` if unused) |
 | `enabled` | `boolean` | Whether the webhook is active |
 | `payload_api_version` | `string` | API version for payloads (use `"3"`) |
 | `nested_items_in_payload` | `boolean` | Include nested blocks in the payload |
 | `auto_retry` | `boolean` | Automatically retry on timeout or error |
-| `filters` | `array \| null` | Filter criteria (see Event Filters above) |
 
 ### Listing, Finding, Updating, Deleting Webhooks
 
@@ -172,6 +182,8 @@ const trigger = await client.buildTriggers.create({
   adapter: "custom",
   adapter_settings: {
     trigger_url: "https://example.com/deploy",
+    headers: { Authorization: "Bearer deploy-token" },
+    payload: { project: "my-site" },
   },
   frontend_url: "https://www.example.com",
   autotrigger_on_scheduled_publications: true,
@@ -299,6 +311,8 @@ async function setupDeployPipeline() {
     custom_payload: JSON.stringify({
       text: "Content published in DatoCMS!",
     }),
+    http_basic_user: null,
+    http_basic_password: null,
     enabled: true,
     payload_api_version: "3",
   });
@@ -309,6 +323,8 @@ async function setupDeployPipeline() {
     adapter: "custom",
     adapter_settings: {
       trigger_url: process.env.DEPLOY_HOOK_URL!,
+      headers: {},
+      payload: {},
     },
     frontend_url: "https://www.example.com",
     autotrigger_on_scheduled_publications: true,

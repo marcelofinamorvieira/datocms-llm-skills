@@ -87,9 +87,31 @@ Most resources with `list()` also have `listPagedIterator()`:
 - `client.webhookCalls.listPagedIterator()`
 - `client.buildEvents.listPagedIterator()`
 - `client.itemVersions.listPagedIterator()`
-- `client.auditLogEvents.listPagedIterator()`
 
 Resources with small collections (models, fields, roles, webhooks, etc.) only have `list()` which returns all items at once.
+
+**Note:** `client.auditLogEvents` uses cursor-based pagination, not offset/limit. Use `rawQuery()` for paginated access:
+
+```ts
+let nextToken: string | undefined;
+
+do {
+  const result = await client.auditLogEvents.rawQuery({
+    data: {
+      type: "audit_log_query",
+      attributes: {
+        next_token: nextToken,
+      },
+    },
+  });
+  for (const event of result.data) {
+    console.log(event.id, event.attributes.action_name);
+  }
+  nextToken = result.meta.next_token ?? undefined;
+} while (nextToken);
+```
+
+The simplified `query()` returns a flat `AuditLogEvent[]` (with `event.action_name` directly, no `.attributes` wrapper), but loses `meta.next_token` so it cannot paginate.
 
 ---
 

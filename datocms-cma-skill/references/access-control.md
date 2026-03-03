@@ -31,13 +31,16 @@ const role = await client.roles.create({
   can_manage_workflows: false,
   can_manage_access_tokens: false,
   can_access_audit_log: false,
+  can_access_build_events_log: false,
+  can_access_search_index_events_log: false,
   can_perform_site_search: false,
   // Environment access
   environments_access: "primary_only",
   // Per-model permissions
   positive_item_type_permissions: [
     {
-      item_type: { id: "model_123", type: "item_type" },
+      environment: "main",
+      item_type: "model_123",
       action: "all",
       localization_scope: null,
     },
@@ -45,7 +48,7 @@ const role = await client.roles.create({
   negative_item_type_permissions: [],
   // Per-upload permissions
   positive_upload_permissions: [
-    { action: "all" },
+    { environment: "main", action: "all" },
   ],
   negative_upload_permissions: [],
 });
@@ -68,7 +71,8 @@ Positive permissions grant access; negative permissions revoke access (for excep
 // Grant full access to blog_post model
 positive_item_type_permissions: [
   {
-    item_type: { id: blogModelId, type: "item_type" },
+    environment: "main",
+    item_type: blogModelId,
     action: "all",
     localization_scope: null,
   },
@@ -77,7 +81,8 @@ positive_item_type_permissions: [
 // Grant read-only access
 positive_item_type_permissions: [
   {
-    item_type: { id: blogModelId, type: "item_type" },
+    environment: "main",
+    item_type: blogModelId,
     action: "read",
     localization_scope: null,
   },
@@ -106,15 +111,15 @@ The `localization_scope` field controls which content the permission covers:
 
 ```ts
 positive_upload_permissions: [
-  { action: "all" },
+  { environment: "main", action: "all" },
 ]
 
 // Or more granular:
 positive_upload_permissions: [
-  { action: "read" },
-  { action: "create" },
-  { action: "update" },
-  { action: "delete" },
+  { environment: "main", action: "read" },
+  { environment: "main", action: "create" },
+  { environment: "main", action: "update" },
+  { environment: "main", action: "delete" },
 ]
 ```
 
@@ -159,7 +164,7 @@ await client.roles.destroy("role-id");
 
 ## API Tokens
 
-API tokens authenticate API requests and are associated with one or more roles.
+API tokens authenticate API requests and are each associated with a single role (or `null`).
 
 ### Creating an API Token
 
@@ -175,7 +180,7 @@ const token = await client.accessTokens.create({
 console.log("Token:", token.token); // Only shown once!
 ```
 
-**Important:** The `token` value is only returned in the create response. Store it securely — you cannot retrieve it later.
+**Important:** The `token` value is only returned when creating or regenerating a token. In list/find responses, the `token` field is `null`. Store the token securely at creation time.
 
 ### Token Attributes
 
@@ -301,8 +306,8 @@ SSO groups are provisioned from the identity provider, not created individually.
 // List SSO groups
 const groups = await client.ssoGroups.list();
 
-// Sync groups from identity provider
-await client.ssoGroups.copyRoles();
+// Sync roles from identity provider for a specific group
+await client.ssoGroups.copyRoles("group-id");
 
 // Update a group's role assignment
 await client.ssoGroups.update("group-id", {
@@ -354,13 +359,14 @@ async function setupEditorAccess() {
     environments_access: "primary_only",
     positive_item_type_permissions: [
       {
-        item_type: { id: blogModel.id, type: "item_type" },
+        environment: "main",
+        item_type: blogModel.id,
         action: "all",
         localization_scope: null,
       },
     ],
     negative_item_type_permissions: [],
-    positive_upload_permissions: [{ action: "all" }],
+    positive_upload_permissions: [{ environment: "main", action: "all" }],
     negative_upload_permissions: [],
   });
 

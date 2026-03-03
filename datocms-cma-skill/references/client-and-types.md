@@ -8,11 +8,11 @@ This reference is always loaded. It covers the CMA client packages, initializati
 
 | Package | Runtime | When to use |
 |---|---|---|
-| `@datocms/cma-client-node` | Node.js | Scripts, API routes, serverless functions, CI/CD, CLI tools. **Default choice.** |
-| `@datocms/cma-client-browser` | Browser | SPAs calling CMA directly, browser extensions |
-| `@datocms/cma-client` | Universal | Edge runtimes, custom environments. Requires providing `fetchFn`. |
+| `@datocms/cma-client` | Universal | **Recommended for most cases.** Works anywhere with native `fetch`. Only provide `fetchFn` if the runtime lacks it. |
+| `@datocms/cma-client-node` | Node.js | Use when you need Node.js upload helpers (`createFromLocalFile`, `createFromUrl`, `updateFromLocalFile`, `updateFromUrl`). |
+| `@datocms/cma-client-browser` | Browser | Use when you need browser upload helpers (`createFromFileOrBlob`, `updateFromFileOrBlob`). |
 
-All three packages export the same API surface. The only difference is the default `fetchFn` and, for the Node package, additional upload helpers (`createFromLocalFile`, `createFromUrl`, etc.).
+All three packages export the same API surface. The only difference is environment-specific upload convenience methods.
 
 Install with:
 
@@ -36,7 +36,7 @@ const client = buildClient({
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `apiToken` | `string \| null` | — | **Required.** Full-access CMA API token. |
+| `apiToken` | `string \| null` | — | **Required.** A CMA API token with appropriate permissions for the operations being performed. |
 | `baseUrl` | `string` | `"https://site-api.datocms.com"` | Base URL of the API. |
 | `environment` | `string` | — | Target a specific environment (e.g., `"sandbox-abc"`). When omitted, targets the primary environment. |
 | `requestTimeout` | `number` | `30000` | Timeout in milliseconds per request. |
@@ -44,7 +44,7 @@ const client = buildClient({
 | `logLevel` | `LogLevel` | `LogLevel.NONE` | Logging verbosity (`NONE`, `BASIC`, `BODY`, `BODY_AND_HEADERS`). |
 | `logFn` | `(message: string) => void` | `console.log` | Custom log function. |
 | `extraHeaders` | `Record<string, string>` | — | Additional headers sent with every request. |
-| `fetchFn` | `typeof fetch` | — | Custom fetch implementation. Required for `@datocms/cma-client` (base package). |
+| `fetchFn` | `typeof fetch` | — | Custom fetch implementation. Only needed if the runtime lacks native `fetch` (e.g., Node.js < 18). |
 
 ---
 
