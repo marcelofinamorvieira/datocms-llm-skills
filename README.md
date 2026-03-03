@@ -114,6 +114,39 @@ datocms-cda-skill/
 
 ---
 
+### `datocms-draft-endpoint-skill` — Draft Mode Endpoints
+
+Everything your agent needs to add authenticated draft mode endpoints to an existing DatoCMS project. The skill is modular — it always generates the core enable/disable API routes with dual-token architecture, and lets users independently opt into three additional features: **Web Previews** plugin integration (preview links from the DatoCMS UI), **Content Link** (click-to-edit overlays for visual editing), and **real-time update subscriptions**. Supports Next.js (App Router), Nuxt, SvelteKit, and Astro.
+
+The skill follows a 6-step flow: detect the framework and existing setup, ask which optional features the user wants, load concept and framework references (only for selected features), generate code following section markers in the framework reference (Core + selected optional sections), guide DatoCMS configuration, and verify correctness.
+
+**Example prompts:**
+- *"Set up draft mode for my Next.js project"*
+- *"Add preview endpoints so I can use the Web Previews plugin"*
+- *"Add draft/preview mode with real-time updates to my SvelteKit app"*
+- *"Set up enable/disable draft endpoints for my Astro site"*
+- *"Add Content Link visual editing to my existing draft mode setup"*
+
+<details>
+<summary>What's inside</summary>
+
+```
+datocms-draft-endpoint-skill/
+├── SKILL.md                              # Main interactive guide (the entry point)
+└── references/                           # 8 reference docs
+    ├── draft-mode-concepts.md            # Core concepts: tokens, cookies, open redirects, JWT
+    ├── web-previews-concepts.md          # Web Previews plugin: endpoint contract, CORS, recordToWebsiteRoute, Visual tab integration
+    ├── content-link-concepts.md          # Content Link: createController API, data attributes, group/boundary resolution, structured text, stega stripping, troubleshooting
+    ├── realtime-concepts.md              # Real-time updates: SSE streaming, client libraries
+    ├── nextjs.md                         # Next.js App Router patterns (all sections with markers)
+    ├── nuxt.md                           # Nuxt patterns (all sections with markers)
+    ├── sveltekit.md                      # SvelteKit patterns (all sections with markers)
+    └── astro.md                          # Astro patterns (all sections with markers)
+```
+</details>
+
+---
+
 ## Install
 
 Clone the repo:
