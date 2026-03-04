@@ -782,3 +782,258 @@ export default generatePageComponent({
 ### Real-Time Dependencies
 
 - `react-datocms` — For `useQuerySubscription` hook
+
+---
+
+## Cache Tags (Optional)
+
+Granular per-record cache invalidation using DatoCMS cache tags. This replaces the simple `cacheTag = 'datocms'` approach from Core (which revalidates **all** DatoCMS content on any change) with targeted invalidation — only pages affected by a content change are revalidated.
+
+### When to Use
+
+Use cache tags when:
+- The site has many pages and full-site revalidation is too slow or wasteful
+- You want per-record or per-query granularity in cache invalidation
+- You are deploying on Vercel or any platform that supports Next.js `revalidateTag()`
+
+**Note:** This pattern is Next.js-specific. For CDN-level cache tags (Netlify, Cloudflare, Fastly, Bunny), see `datocms-cda-skill/references/draft-caching-environments.md` → "Cache Tags".
+
+### The 64-Tag Problem
+
+Next.js limits each `fetch()` call to **64 cache tags**. A single DatoCMS GraphQL query can return hundreds of tags (one per record, asset, model, etc. touched by the query). You cannot pass DatoCMS tags directly to `next: { tags: [...] }`.
+
+### Solution: Query ID Indirection
+
+Each query gets a stable **Query ID** (a string you choose). The `fetch` is tagged with only that single Query ID. A database table maps each Query ID to all the DatoCMS cache tags returned for that query. When a webhook fires with invalidated tags, the handler looks up which Query IDs are affected and calls `revalidateTag()` for each.
+
+### File Structure
+
+```
+src/lib/datocms/
+├── executeQuery.ts          (replace Core version)
+├── cache-tags-db.ts         (DB abstraction)
+src/app/api/
+└── revalidate/
+    └── route.ts             (webhook handler)
+```
+
+### Replacement `executeQuery`
+
+**File:** `src/lib/datocms/executeQuery.ts`
+
+This version replaces the Core `executeQuery`. It is backward-compatible: when no `queryId` is provided, it falls back to the simple single-tag approach.
+
+```ts
+import { rawExecuteQuery } from '@datocms/cda-client';
+import type { TadaDocumentNode } from 'gql.tada';
+import { draftMode } from 'next/headers';
+import { cache } from 'react';
+import { cacheTagsDb } from './cache-tags-db';
+
+export const cacheTag = 'datocms';
+
+export const executeQuery = cache(executeQueryFn);
+
+async function executeQueryFn<Result, Variables>(
+  query: TadaDocumentNode<Result, Variables>,
+  options?: ExecuteQueryOptions<Variables>,
+) {
+  const { isEnabled: isDraft } = await draftMode();
+
+  const includeDrafts = options?.includeDrafts ?? isDraft;
+
+  const queryId = options?.queryId;
+  const tags = queryId ? [queryId] : [cacheTag];
+
+  const [result, response] = await rawExecuteQuery(query, {
+    variables: options?.variables,
+    excludeInvalid: true,
+    includeDrafts,
+    token: includeDrafts
+      ? process.env.DATOCMS_DRAFT_CONTENT_CDA_TOKEN!
+      : process.env.DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN!,
+    returnCacheTags: !!queryId,
+    requestInitOptions: {
+      cache: 'force-cache',
+      next: { tags },
+    },
+  });
+
+  if (queryId) {
+    const datocmsTags = (response.headers.get('x-cache-tags') ?? '').split(' ').filter(Boolean);
+    await cacheTagsDb.storeTags(queryId, datocmsTags);
+  }
+
+  return result;
+}
+
+type ExecuteQueryOptions<Variables> = {
+  variables?: Variables;
+  includeDrafts?: boolean;
+  queryId?: string;
+};
+```
+
+Key points:
+- When `queryId` is provided: uses `rawExecuteQuery` with `returnCacheTags: true`, reads the `x-cache-tags` header, persists the mapping to DB, and tags the fetch with `[queryId]`
+- When `queryId` is omitted: falls back to the simple `cacheTag = 'datocms'` approach (no DB interaction, no raw query)
+- Wrapped in React `cache()` to deduplicate identical calls within a single request
+- Reads `draftMode()` automatically, but allows explicit override via `options.includeDrafts`
+
+### DB Abstraction
+
+**File:** `src/lib/datocms/cache-tags-db.ts`
+
+Interface + Turso (libSQL) implementation. Replace with `@vercel/postgres` or any other DB as needed.
+
+```ts
+import { createClient } from '@libsql/client';
+
+interface CacheTagsDb {
+  /**
+   * Replace all stored DatoCMS tags for a given Query ID.
+   */
+  storeTags(queryId: string, tags: string[]): Promise<void>;
+
+  /**
+   * Given a list of invalidated DatoCMS tags, return the Query IDs
+   * that have at least one matching tag.
+   */
+  findQueryIdsForTags(tags: string[]): Promise<string[]>;
+}
+
+function createTursoDb(): CacheTagsDb {
+  const turso = createClient({
+    url: process.env.TURSO_DATABASE_URL!,
+    authToken: process.env.TURSO_AUTH_TOKEN!,
+  });
+
+  // Ensure the table exists on first use
+  const init = turso.execute(`
+    CREATE TABLE IF NOT EXISTS query_cache_tags (
+      query_id TEXT NOT NULL,
+      tag TEXT NOT NULL,
+      PRIMARY KEY (query_id, tag)
+    )
+  `);
+
+  return {
+    async storeTags(queryId, tags) {
+      await init;
+
+      await turso.batch([
+        {
+          sql: 'DELETE FROM query_cache_tags WHERE query_id = ?',
+          args: [queryId],
+        },
+        ...tags.map((tag) => ({
+          sql: 'INSERT OR IGNORE INTO query_cache_tags (query_id, tag) VALUES (?, ?)',
+          args: [queryId, tag],
+        })),
+      ]);
+    },
+
+    async findQueryIdsForTags(tags) {
+      await init;
+
+      if (tags.length === 0) return [];
+
+      const placeholders = tags.map(() => '?').join(', ');
+      const result = await turso.execute({
+        sql: `SELECT DISTINCT query_id FROM query_cache_tags WHERE tag IN (${placeholders})`,
+        args: tags,
+      });
+
+      return result.rows.map((row) => String(row.query_id));
+    },
+  };
+}
+
+export const cacheTagsDb = createTursoDb();
+```
+
+The schema is a simple join table: `query_cache_tags(query_id, tag)`. Each time a query runs, its previous tags are deleted and the new set is inserted.
+
+### Webhook Route Handler
+
+**File:** `src/app/api/revalidate/route.ts`
+
+```ts
+import { cacheTagsDb } from '@/lib/datocms/cache-tags-db';
+import { cacheTag } from '@/lib/datocms/executeQuery';
+import { revalidateTag } from 'next/cache';
+import { NextResponse } from 'next/server';
+
+export async function POST(request: Request) {
+  const authHeader = request.headers.get('authorization');
+
+  if (authHeader !== `Bearer ${process.env.CACHE_INVALIDATION_WEBHOOK_SECRET}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const body = await request.json();
+  const tags: string[] = body?.entity?.attributes?.tags ?? [];
+
+  // Always revalidate the global "datocms" tag for queries that don't use queryId
+  revalidateTag(cacheTag);
+
+  // Look up which Query IDs are affected by the invalidated tags
+  const affectedQueryIds = await cacheTagsDb.findQueryIdsForTags(tags);
+
+  for (const queryId of affectedQueryIds) {
+    revalidateTag(queryId);
+  }
+
+  return NextResponse.json({
+    revalidated: true,
+    affectedQueryIds,
+  });
+}
+```
+
+### Page-Level Config
+
+Pages that use cache tags should be statically generated:
+
+```ts
+export const dynamic = 'force-static';
+```
+
+Add this export to each page file that calls `executeQuery` with a `queryId`. This ensures pages are built at build time and only revalidated when the webhook fires.
+
+### Usage Example
+
+In a page component, pass a stable `queryId`:
+
+```tsx
+import { executeQuery } from '@/lib/datocms/executeQuery';
+
+export const dynamic = 'force-static';
+
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+
+  const data = await executeQuery(query, {
+    variables: { slug },
+    queryId: `blog-post-${slug}`,
+  });
+
+  return <Article data={data} />;
+}
+```
+
+The `queryId` should be stable and unique per query+variables combination. A simple pattern is `${page-type}-${identifier}`.
+
+### Environment Variables
+
+```
+CACHE_INVALIDATION_WEBHOOK_SECRET=   # Shared secret to verify webhook requests
+TURSO_DATABASE_URL=                  # Turso database URL (or replace with your DB)
+TURSO_AUTH_TOKEN=                    # Turso auth token
+```
+
+### Dependencies
+
+- `@libsql/client` — Turso/libSQL client for the cache tags database
+
+Alternative DB clients: `@vercel/postgres` (Vercel Postgres), `@planetscale/database` (PlanetScale), or any SQL client. The schema is a simple two-column join table — adapt `cache-tags-db.ts` to your preferred database.

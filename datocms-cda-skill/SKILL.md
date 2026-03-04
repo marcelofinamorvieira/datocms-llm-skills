@@ -141,3 +141,15 @@ Before presenting the final code:
 8. **Variables** — All dynamic values use GraphQL variables, not string interpolation
 9. **Structured text completeness** — If querying structured text, all relevant sub-fields (`value`, `blocks`, `links`, `inlineBlocks`) are included
 10. **Type generation** — If the project uses gql.tada or graphql-codegen, ensure queries use the project's `graphql()` function (not plain template literal strings) and that scalar mappings are configured
+
+---
+
+## Cross-Skill Routing
+
+This skill covers **reading content via the GraphQL CDA**. If the task involves any of the following, activate the companion skill:
+
+| Condition | Route to |
+|---|---|
+| Mutating content, managing schema/uploads/webhooks, writing scripts (including querying records via REST for scripts) | **datocms-cma-skill** |
+| Setting up draft mode endpoints, Web Previews, Content Link, real-time subscriptions, or cache tags in a framework | **datocms-frontend-integrations-skill** |
+| Building a DatoCMS plugin | **datocms-pluginsdk-skill** |

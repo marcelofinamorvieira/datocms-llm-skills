@@ -147,3 +147,15 @@ Before presenting the final code:
 7. **Generated types** — If the project has generated CMA types (`cma-types.ts`), ensure code uses them with `raw*()` method generics and `RawApiTypes.Item<>` instead of untyped access
 
 If the generated code is a script (migration, seeding, etc.), wrap it in an async function with proper error handling and progress reporting.
+
+---
+
+## Cross-Skill Routing
+
+This skill covers **content management via the REST CMA** (mutations, schema, uploads, webhooks, scripts). If the task involves any of the following, activate the companion skill:
+
+| Condition | Route to |
+|---|---|
+| Querying content with GraphQL for frontend display | **datocms-cda-skill** |
+| Setting up draft mode, Web Previews, Content Link, real-time subscriptions, or framework integration | **datocms-frontend-integrations-skill** |
+| Building a DatoCMS plugin | **datocms-pluginsdk-skill** |

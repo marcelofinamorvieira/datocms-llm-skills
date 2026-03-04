@@ -202,3 +202,15 @@ Only apply these improvements if the user requests them or if clearly needed:
 - **`onBoot` migration**: If plugin parameters evolve, use `onBoot` to migrate old formats
 - **Lazy loading**: Use `React.lazy()` + `Suspense` for code splitting on larger plugins
 - **Permission checks**: Always check `ctx.currentRole.meta.final_permissions.can_edit_schema` before `updatePluginParameters`
+
+---
+
+## Cross-Skill Routing
+
+This skill covers **building DatoCMS plugins** using `datocms-plugin-sdk`. Note that `@datocms/cma-client-browser` usage *inside* a plugin is in-scope for this skill. If the task involves any of the following, activate the companion skill:
+
+| Condition | Route to |
+|---|---|
+| Querying content with GraphQL for a frontend (not inside a plugin) | **datocms-cda-skill** |
+| Standalone scripts, migrations, or webhook/schema management outside a plugin | **datocms-cma-skill** |
+| Setting up draft mode, Web Previews, Content Link, real-time subscriptions, or framework integration | **datocms-frontend-integrations-skill** |
