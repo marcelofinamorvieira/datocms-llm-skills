@@ -81,6 +81,36 @@ datocms-cma-skill/
 
 ---
 
+### `datocms-cli-skill` — CLI Tool
+
+Everything your agent needs to work with the DatoCMS CLI ([`@datocms/cli`](https://www.npmjs.com/package/@datocms/cli)). Covers migration scripting (creating and running), environment management from the command line, maintenance mode, deployment workflows, CLI profiles and configuration, and content importing from WordPress or Contentful — across 6 reference docs.
+
+The skill follows a 5-step flow: detect CLI installation and config, classify the task, load relevant references, generate commands and migration scaffolds, and verify correctness.
+
+**Example prompts:**
+- *"Create a new migration to add a blog model with title and body fields"*
+- *"Run pending migrations against a forked sandbox environment"*
+- *"Set up a safe deployment workflow with maintenance mode and environment promotion"*
+- *"Import my WordPress site into DatoCMS"*
+
+<details>
+<summary>What's inside</summary>
+
+```
+datocms-cli-skill/
+├── SKILL.md                              # Main interactive guide (the entry point)
+└── references/                           # 6 deep-dive reference docs
+    ├── cli-setup.md                      # Installation, datocms.config.json, profiles, token resolution
+    ├── creating-migrations.md            # migrations:new command, templates, autogenerate, schema types
+    ├── running-migrations.md             # migrations:run command, fork-and-run, in-place, tracking
+    ├── environment-commands.md           # environments:* commands, cma:call for raw API access
+    ├── deployment-workflow.md            # Maintenance mode, safe deploy sequence, CI/CD integration
+    └── importing-content.md             # WordPress and Contentful import plugins
+```
+</details>
+
+---
+
 ### `datocms-cda-skill` — Content Delivery API
 
 Everything your agent needs to query the DatoCMS Content Delivery API (CDA) — a read-only GraphQL API — using the official [`@datocms/cda-client`](https://www.npmjs.com/package/@datocms/cda-client) TypeScript/JavaScript library. Covers querying records, filtering, pagination, localization with fallbacks, modular content blocks, structured text (DAST) rendering, responsive images with imgix, SEO meta tags, video, draft/preview mode, cache tags, and environment targeting — across 11 reference docs. Also includes setup for type generation with gql.tada or GraphQL Code Generator for fully typed CDA queries.
