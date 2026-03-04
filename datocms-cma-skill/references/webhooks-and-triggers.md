@@ -168,6 +168,55 @@ await client.webhookCalls.resendWebhook("webhook-call-id");
 
 ---
 
+## Receiving Webhooks (Payload & Behavior)
+
+When building a webhook handler, your endpoint receives a POST request with a JSON body. Unless you set a `custom_payload`, the default payload contains:
+
+| Field | Description |
+|---|---|
+| `site_id` | The DatoCMS project ID |
+| `webhook_id` | ID of the webhook that fired |
+| `webhook_call_id` | Unique ID for this specific delivery attempt |
+| `environment` | Environment name (e.g. `"main"`) |
+| `is_environment_primary` | `true` if the event occurred on the primary environment |
+| `event_triggered_at` | ISO 8601 timestamp of when the event occurred |
+| `entity_type` | `"item"`, `"item_type"`, `"upload"`, etc. |
+| `event_type` | `"create"`, `"update"`, `"publish"`, etc. |
+| `entity` | Full serialized entity at the time of the event |
+| `previous_entity` | Previous state of the entity (only present on `update` events, `null` otherwise) |
+| `related_entities` | Associated entities (e.g. the model for a record event) |
+
+### Timeouts and Retries
+
+- **Connection timeout:** 2 seconds — your endpoint must accept the connection within 2s.
+- **Execution timeout:** 8 seconds — your endpoint must respond within 8s total.
+- **Auto-retry** (when `auto_retry: true`): up to 7 retries with escalating delays — 2 min, 6 min, 30 min, 1 hr, 5 hrs, 1 day, 2 days.
+
+If your handler needs to do heavy processing, accept the webhook immediately (return 200) and process asynchronously.
+
+### Event Lifecycle with Draft/Published
+
+When a model has draft/published enabled:
+
+| Action | Events fired |
+|---|---|
+| Create new record | `create` (status: draft) |
+| Publish a draft | `publish` (status: published) |
+| Edit a published record | `update` (status: updated) |
+| Re-publish after edit | `publish` (status: published) |
+| Unpublish | `unpublish` (status: draft) |
+| Delete a published record | `unpublish` + `delete` |
+
+When a model does **not** have draft/published enabled:
+
+| Action | Events fired |
+|---|---|
+| Create new record | `create` + `publish` |
+| Update a record | `update` + `publish` |
+| Delete a record | `unpublish` + `delete` |
+
+---
+
 ## Cache Tags Invalidation Webhook
 
 To programmatically create a webhook that fires when CDA cache tags need invalidation, use the `cda_cache_tags` / `invalidate` event type:

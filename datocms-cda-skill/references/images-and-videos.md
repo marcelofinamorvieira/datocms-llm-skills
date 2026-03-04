@@ -82,6 +82,8 @@ responsiveImage(
 
 **Warning:** Using `trim`, `padding`, or `rotation` imgix parameters causes the API to return incorrect `width` and `height` values. You must manually calculate and override these in your frontend.
 
+**Advanced imgix transformations** (text overlays, face detection cropping, color space, auto-enhance, red-eye removal, etc.) are all supported. See the full imgix URL API reference at https://docs.imgix.com/apis/url for the complete list of parameters.
+
 ---
 
 ## Placeholder Images
@@ -190,6 +192,8 @@ The `url` field also accepts imgix parameters directly:
 url(imgixParams: { w: 200, h: 200, fit: crop })
 ```
 
+**Default optimization bypass:** DatoCMS projects apply automatic image optimization (typically `auto=format`) to all image URLs by default. To bypass these defaults on a specific URL, append `?skip-default-optimizations=true` to the raw image URL (not applicable when using `imgixParams` in GraphQL, which always override defaults for specified params).
+
 ---
 
 ## Video (Mux Integration)
@@ -231,6 +235,10 @@ query {
 | `thumbhash` | `String` | Base64 preview encoding for placeholder |
 
 **HLS streaming is recommended over MP4** for better adaptive bitrate and performance. Use `muxPlaybackId` with a Mux-compatible player or `streamingUrl` with HLS.js.
+
+**Limit streaming resolution:** Append `?max_resolution=1080p` to the HLS URL (e.g., `https://stream.mux.com/{ID}.m3u8?max_resolution=1080p`) to cap the maximum resolution. Accepted values: `720p`, `1080p`, `1440p`, `2160p`.
+
+**Raw video URLs return 422:** DatoCMS blocks direct access to raw video files by default ("Block Serving Raw Videos" setting). Always use HLS streaming or MP4 download URLs from the `video` field instead.
 
 ### Framework Video Players
 
