@@ -205,6 +205,30 @@ datocms-frontend-integrations-skill/
 
 ---
 
+### Slash Command Skills
+
+These are action-oriented slash command skills that detect your framework, ask minimal questions, and generate all files. They reference the same reference docs as `datocms-frontend-integrations-skill` (no duplication) and use `disable-model-invocation: true` so they don't activate automatically — you invoke them explicitly via slash commands.
+
+**Prerequisites:** `/setup-web-previews`, `/setup-content-link`, and `/setup-realtime` all require draft mode to be set up first. Run `/setup-draft-mode` before using them.
+
+#### `/setup-draft-mode` — `datocms-setup-draft-mode`
+
+Sets up DatoCMS draft mode from scratch: enable/disable endpoints, utilities (CORS, error handling, `isRelativeUrl`), and an `executeQuery` wrapper with dual-token switching and `includeDrafts` support. Detects the framework automatically, installs dependencies, and configures environment variables.
+
+#### `/setup-web-previews` — `datocms-setup-web-previews`
+
+Adds a preview-links endpoint for the DatoCMS Web Previews plugin. Asks for your content models and URL patterns (or uses TODO placeholders), generates the endpoint with CORS handling, token validation, `recordToWebsiteRoute` switch, and status branching for draft/published links.
+
+#### `/setup-content-link` — `datocms-setup-content-link`
+
+Enables Content Link visual editing — click-to-edit overlays that let editors click any element to jump to the corresponding field in DatoCMS. Modifies the `executeQuery` wrapper to enable stega encoding, generates a framework-specific `ContentLink` component, and adds it to the root layout.
+
+#### `/setup-realtime` — `datocms-setup-realtime`
+
+Adds real-time content updates in draft mode. Generates framework-specific subscription components: factory functions for Next.js (`generateRealtimeComponent` + `generatePageComponent`), `useQuerySubscription` usage for Nuxt, `querySubscription` store usage for SvelteKit, and `<QueryListener />` (page reload) for Astro.
+
+---
+
 ## Install
 
 Clone the repo:
