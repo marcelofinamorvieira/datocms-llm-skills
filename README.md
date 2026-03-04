@@ -46,7 +46,7 @@ datocms-pluginsdk-skill/
 
 ### `datocms-cma-skill` — Content Management API
 
-Everything your agent needs to interact with the DatoCMS Content Management API using the official TypeScript/JavaScript REST clients ([`@datocms/cma-client-node`](https://www.npmjs.com/package/@datocms/cma-client-node), `@datocms/cma-client-browser`). Covers records CRUD, uploads, schema management, filtering, localization, blocks & structured text, environments, webhooks, access control, scheduling, and migration patterns — across 12 reference docs.
+Everything your agent needs to interact with the DatoCMS Content Management API using the official TypeScript/JavaScript REST clients ([`@datocms/cma-client-node`](https://www.npmjs.com/package/@datocms/cma-client-node), `@datocms/cma-client-browser`). Covers records CRUD, uploads, schema management, filtering, localization, blocks & structured text, environments, webhooks, access control, scheduling, migration patterns, and CMA type generation for type-safe record operations — across 13 reference docs.
 
 The skill follows a 5-step flow: detect the client package and token setup, classify the task, load relevant references, generate code with proper pagination/error handling/types, and verify correctness.
 
@@ -62,7 +62,7 @@ The skill follows a 5-step flow: detect the client package and token setup, clas
 ```
 datocms-cma-skill/
 ├── SKILL.md                              # Main interactive guide (the entry point)
-└── references/                           # 12 deep-dive reference docs
+└── references/                           # 13 deep-dive reference docs
     ├── client-and-types.md               # Client setup, type system, error handling
     ├── records.md                        # Create, read, update, delete, publish records
     ├── uploads.md                        # File uploads, asset management, metadata
@@ -74,7 +74,8 @@ datocms-cma-skill/
     ├── webhooks-and-triggers.md          # Webhooks and build trigger configuration
     ├── access-control.md                 # Roles, API tokens, user management
     ├── scheduling.md                     # Scheduled publish/unpublish, workflows
-    └── migration-patterns.md             # Bulk operations, content seeding, field migrations
+    ├── migration-patterns.md             # Bulk operations, content seeding, field migrations
+    └── type-generation.md                # CMA schema type generation with @datocms/cli
 ```
 </details>
 
@@ -82,7 +83,7 @@ datocms-cma-skill/
 
 ### `datocms-cda-skill` — Content Delivery API
 
-Everything your agent needs to query the DatoCMS Content Delivery API (CDA) — a read-only GraphQL API — using the official [`@datocms/cda-client`](https://www.npmjs.com/package/@datocms/cda-client) TypeScript/JavaScript library. Covers querying records, filtering, pagination, localization with fallbacks, modular content blocks, structured text (DAST) rendering, responsive images with imgix, SEO meta tags, video, draft/preview mode, cache tags, and environment targeting — across 10 reference docs.
+Everything your agent needs to query the DatoCMS Content Delivery API (CDA) — a read-only GraphQL API — using the official [`@datocms/cda-client`](https://www.npmjs.com/package/@datocms/cda-client) TypeScript/JavaScript library. Covers querying records, filtering, pagination, localization with fallbacks, modular content blocks, structured text (DAST) rendering, responsive images with imgix, SEO meta tags, video, draft/preview mode, cache tags, and environment targeting — across 11 reference docs. Also includes setup for type generation with gql.tada or GraphQL Code Generator for fully typed CDA queries.
 
 The skill follows a 5-step flow: detect the client package and token setup, classify the task, load relevant references, generate code with proper GraphQL variables/pagination/error handling, and verify correctness.
 
@@ -98,7 +99,7 @@ The skill follows a 5-step flow: detect the client package and token setup, clas
 ```
 datocms-cda-skill/
 ├── SKILL.md                              # Main interactive guide (the entry point)
-└── references/                           # 10 deep-dive reference docs
+└── references/                           # 11 deep-dive reference docs
     ├── client-and-config.md              # Client setup, options, error handling, scalars
     ├── querying-basics.md                # Records, collections, meta fields, single-instance models
     ├── filtering.md                      # Field filters, AND/OR logic, deep filtering, uploads
@@ -108,40 +109,67 @@ datocms-cda-skill/
     ├── structured-text.md                # DAST value/blocks/links, rendering with components
     ├── images-and-videos.md              # responsiveImage, imgix transforms, placeholders, Mux video
     ├── seo-and-meta.md                   # _seoMetaTags, favicons, globalSeo, Open Graph
-    └── draft-caching-environments.md     # Draft mode, cache tags, CDN invalidation, Content Link
+    ├── draft-caching-environments.md     # Draft mode, cache tags, CDN invalidation, Content Link
+    └── type-generation.md                # gql.tada and GraphQL Code Generator setup for typed queries
 ```
 </details>
 
 ---
 
-### `datocms-draft-endpoint-skill` — Draft Mode Endpoints
+### `datocms-frontend-integrations-skill` — Front-End Integrations
 
-Everything your agent needs to add authenticated draft mode endpoints to an existing DatoCMS project. The skill is modular — it always generates the core enable/disable API routes with dual-token architecture, and lets users independently opt into three additional features: **Web Previews** plugin integration (preview links from the DatoCMS UI), **Content Link** (click-to-edit overlays for visual editing), and **real-time update subscriptions**. Supports Next.js (App Router), Nuxt, SvelteKit, and Astro.
+Everything your agent needs to set up DatoCMS front-end integrations in existing projects. Covers two domains: **(1) Draft mode setup** — authenticated endpoints with dual-token architecture, Web Previews plugin, Content Link visual editing, and real-time update subscriptions for Next.js (App Router), Nuxt, SvelteKit, and Astro. **(2) Component/hook/store usage** from `react-datocms`, `vue-datocms`, `@datocms/svelte`, and `@datocms/astro` — responsive images, structured text rendering, video player, SEO/meta tags, real-time subscriptions, Content Link, and site search — across 33 reference docs.
 
-The skill follows a 6-step flow: detect the framework and existing setup, ask which optional features the user wants, load concept and framework references (only for selected features), generate code following section markers in the framework reference (Core + selected optional sections), guide DatoCMS configuration, and verify correctness.
+The skill follows a 5-step flow: detect the framework and existing setup, classify the task, load relevant references (only for selected categories), generate code with proper patterns for each framework, and verify correctness.
 
 **Example prompts:**
-- *"Set up draft mode for my Next.js project"*
-- *"Add preview endpoints so I can use the Web Previews plugin"*
-- *"Add draft/preview mode with real-time updates to my SvelteKit app"*
-- *"Set up enable/disable draft endpoints for my Astro site"*
-- *"Add Content Link visual editing to my existing draft mode setup"*
+- *"Set up draft mode for my Next.js project with Content Link and real-time updates"*
+- *"Display responsive images from DatoCMS in my Astro site"*
+- *"Render structured text with custom blocks in my SvelteKit app"*
+- *"Add SEO meta tags to my Nuxt pages using vue-datocms"*
+- *"Set up Content Link visual editing in my Astro project"*
+- *"Build a site search page with useSiteSearch in React"*
 
 <details>
 <summary>What's inside</summary>
 
 ```
-datocms-draft-endpoint-skill/
+datocms-frontend-integrations-skill/
 ├── SKILL.md                              # Main interactive guide (the entry point)
-└── references/                           # 8 reference docs
+└── references/                           # 33 reference docs
     ├── draft-mode-concepts.md            # Core concepts: tokens, cookies, open redirects, JWT
-    ├── web-previews-concepts.md          # Web Previews plugin: endpoint contract, CORS, recordToWebsiteRoute, Visual tab integration
-    ├── content-link-concepts.md          # Content Link: createController API, data attributes, group/boundary resolution, structured text, stega stripping, troubleshooting
+    ├── web-previews-concepts.md          # Web Previews plugin: endpoint contract, CORS, Visual tab
+    ├── content-link-concepts.md          # Content Link: createController, data attributes, stega
     ├── realtime-concepts.md              # Real-time updates: SSE streaming, client libraries
-    ├── nextjs.md                         # Next.js App Router patterns (all sections with markers)
-    ├── nuxt.md                           # Nuxt patterns (all sections with markers)
-    ├── sveltekit.md                      # SvelteKit patterns (all sections with markers)
-    └── astro.md                          # Astro patterns (all sections with markers)
+    ├── nextjs.md                         # Next.js App Router draft mode patterns
+    ├── nuxt.md                           # Nuxt draft mode patterns
+    ├── sveltekit.md                      # SvelteKit draft mode patterns
+    ├── astro.md                          # Astro draft mode patterns
+    ├── react-image.md                    # <SRCImage>, <Image> — responsive images (React)
+    ├── react-structured-text.md          # <StructuredText> — render props (React)
+    ├── react-video-player.md             # <VideoPlayer> — Mux video (React)
+    ├── react-seo.md                      # renderMetaTags, toNextMetadata, toRemixMeta (React)
+    ├── react-realtime.md                 # useQuerySubscription — live updates (React)
+    ├── react-content-link.md             # <ContentLink> — visual editing (React)
+    ├── react-site-search.md              # useSiteSearch — search UI (React)
+    ├── vue-image.md                      # <datocms-image>, <datocms-naked-image> (Vue)
+    ├── vue-structured-text.md            # <datocms-structured-text> — h() renderers (Vue)
+    ├── vue-video-player.md               # <VideoPlayer> — Mux video (Vue)
+    ├── vue-seo.md                        # toHead() — SEO meta tags (Vue)
+    ├── vue-realtime.md                   # useQuerySubscription — live updates (Vue)
+    ├── vue-content-link.md               # <ContentLink> — visual editing (Vue)
+    ├── vue-site-search.md                # useSiteSearch — search UI (Vue)
+    ├── svelte-image.md                   # <Image>, <NakedImage> — responsive images (Svelte)
+    ├── svelte-structured-text.md         # <StructuredText> — predicate-component tuples (Svelte)
+    ├── svelte-video-player.md            # <VideoPlayer> — Mux video (Svelte)
+    ├── svelte-seo.md                     # <Head> — SEO meta tags (Svelte)
+    ├── svelte-realtime.md                # querySubscription — Svelte store for live updates
+    ├── svelte-content-link.md            # <ContentLink> — visual editing (Svelte)
+    ├── astro-image.md                    # <Image> — zero-JS responsive images (Astro)
+    ├── astro-structured-text.md          # <StructuredText> — __typename-keyed objects (Astro)
+    ├── astro-seo.md                      # <Seo> — SEO meta tags (Astro)
+    ├── astro-realtime.md                 # <QueryListener> — page reload on changes (Astro)
+    └── astro-content-link.md             # <ContentLink> — auto-navigation visual editing (Astro)
 ```
 </details>
 

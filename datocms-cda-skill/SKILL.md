@@ -9,7 +9,8 @@ description: >-
   SEO meta tags and favicons, query Mux videos, use draft/preview mode, target
   sandbox environments, integrate cache tags for CDN invalidation, enable Content
   Link for visual editing, or perform any client-side or server-side DatoCMS
-  content reading operation.
+  content reading operation. Also use when users want to set up type generation
+  for fully typed queries using gql.tada or GraphQL Code Generator.
 ---
 
 # DatoCMS Content Delivery API Skill
@@ -35,6 +36,11 @@ Silently examine the project to determine setup and configuration.
 
 4. Check the framework context (Next.js, Astro, Remix, Nuxt, SvelteKit, etc.) to determine whether queries run on the server or client. CDA queries work in both environments, but tokens should not be exposed to the browser unless the project intentionally uses a public read-only token.
 
+5. Check for existing type generation setup:
+   - **gql.tada:** Look for `gql.tada` in `package.json` dependencies and an `initGraphQLTada` call (typically in `lib/datocms/graphql.ts`)
+   - **graphql-codegen:** Look for `@graphql-codegen/cli` in devDependencies and a `graphql.config.ts` file
+   - This detection is for context only — use it to write queries that match the project's existing setup (e.g., using the project's `graphql()` function instead of plain strings). Do **not** proactively suggest setting up type generation.
+
 **Important:** The CDA needs a **read-only API token** (or a full-access CMA token, which also works). If you see a token named `DATOCMS_API_TOKEN` used for CMA operations, the user may need a separate read-only token for the CDA, or they can reuse the CMA token if appropriate.
 
 ---
@@ -54,6 +60,7 @@ Classify the user's task into one or more categories:
 | **Images & media** | Responsive images, imgix transforms, placeholders, focal points, video |
 | **SEO & meta** | `_seoMetaTags`, favicons, `globalSeo`, Open Graph tags |
 | **Draft/preview & caching** | Draft mode, strict mode, cache tags, CDN invalidation, Content Link |
+| **Type generation** | Set up gql.tada, configure graphql-codegen, generate schema types, typed queries |
 
 If the user's request is clear, skip clarifying questions and proceed directly.
 
@@ -79,6 +86,7 @@ Based on the task classification, use the `Read` tool to load the appropriate re
 | Images & media (responsiveImage, video) | `references/images-and-videos.md` |
 | SEO & meta tags | `references/seo-and-meta.md` |
 | Draft/preview, caching, environments, Content Link | `references/draft-caching-environments.md` |
+| Type generation (gql.tada, graphql-codegen, schema types) | `references/type-generation.md` |
 
 **Load cross-cutting references when needed:**
 - If filtering localized fields → also load `references/localization.md`
@@ -132,3 +140,4 @@ Before presenting the final code:
 7. **Imports** — All imports come from `@datocms/cda-client`
 8. **Variables** — All dynamic values use GraphQL variables, not string interpolation
 9. **Structured text completeness** — If querying structured text, all relevant sub-fields (`value`, `blocks`, `links`, `inlineBlocks`) are included
+10. **Type generation** — If the project uses gql.tada or graphql-codegen, ensure queries use the project's `graphql()` function (not plain template literal strings) and that scalar mappings are configured
