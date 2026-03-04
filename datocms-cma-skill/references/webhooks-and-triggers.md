@@ -168,6 +168,53 @@ await client.webhookCalls.resendWebhook("webhook-call-id");
 
 ---
 
+## Cache Tags Invalidation Webhook
+
+To programmatically create a webhook that fires when CDA cache tags need invalidation, use the `cda_cache_tags` / `invalidate` event type:
+
+```ts
+const webhook = await client.webhooks.create({
+  name: "Cache tags invalidation",
+  url: "https://example.com/api/revalidate",
+  headers: {
+    Authorization: `Bearer ${process.env.CACHE_INVALIDATION_WEBHOOK_SECRET}`,
+  },
+  events: [
+    {
+      entity_type: "cda_cache_tags",
+      event_types: ["invalidate"],
+    },
+  ],
+  custom_payload: null,
+  http_basic_user: null,
+  http_basic_password: null,
+  enabled: true,
+  payload_api_version: "3",
+  nested_items_in_payload: false,
+});
+```
+
+**Webhook payload format:**
+```json
+{
+  "entity_type": "cda_cache_tags",
+  "event_type": "invalidate",
+  "entity": {
+    "id": "cda_cache_tags",
+    "type": "cda_cache_tags",
+    "attributes": {
+      "tags": ["N*r;L", "6-KZ@", "t#k[uP"]
+    }
+  }
+}
+```
+
+**Note:** This event type does not support filters — the webhook always fires for all cache tag changes. You cannot narrow it to specific models or records.
+
+For details on how cache tags work and the two architectural patterns (CDN-first vs framework-centric), see `datocms-cda-skill/references/draft-caching-environments.md` → "Cache Tags".
+
+---
+
 ## Build Triggers
 
 Build triggers connect DatoCMS to deployment platforms. When content changes, DatoCMS can trigger a rebuild of your frontend.

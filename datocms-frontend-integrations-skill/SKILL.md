@@ -90,6 +90,7 @@ Classify the user's request into one or more categories:
 | **Real-Time Updates** | User wants live content updates via subscriptions (React / Vue / Svelte / Astro) |
 | **Visual Editing / Content Link** | User wants click-to-edit overlays for editors (React / Vue / Svelte / Astro) |
 | **Site Search** | User wants to build a search UI with DatoCMS Site Search (React / Vue only — not available in @datocms/svelte or @datocms/astro) |
+| **Cache Tags** | User wants granular per-record cache invalidation using DatoCMS cache tags (Next.js only for now) |
 
 Multiple categories can apply (e.g., "set up draft mode with content link and real-time updates", or "display images and render structured text with visual editing overlays").
 
@@ -109,6 +110,8 @@ When the task is classified as **Draft Mode Setup**, ask these additional questi
    - For Astro with React integration, mention that `react-datocms` provides `useQuerySubscription` for live data updates.
 
 4. **Content models** (only if Web Previews was selected): "What are your main content models and their frontend URL patterns? For example: `blog_post` → `/blog/[slug]`, `page` → `/[slug]`."
+
+5. **Cache tags** (only if the framework is Next.js): "Do you want granular cache invalidation using DatoCMS cache tags? Instead of revalidating all content on every change, this invalidates only the pages affected by the specific records that changed. Requires a small database (e.g., Turso, Vercel Postgres) to store tag mappings."
 
 ---
 
@@ -281,6 +284,15 @@ Before presenting the final code, check the items relevant to what was generated
 14. **Subscription setup** — Passes correct token, `includeDrafts`, and `excludeInvalid` options
 15. **Dependencies** — All required subscription packages listed for installation
 
+#### If Cache Tags was selected (Next.js only)
+16. **queryId parameter** — `executeQuery` calls on cached pages pass a stable `queryId`
+17. **DB persistence** — `cache-tags-db.ts` stores the mapping from Query ID → DatoCMS tags after each query
+18. **Webhook handler** — `POST /api/revalidate/route.ts` verifies auth, parses `entity.attributes.tags`, looks up affected Query IDs, and calls `revalidateTag()` for each
+19. **force-static pages** — Pages using `queryId` export `dynamic = 'force-static'`
+20. **Backward compatibility** — `executeQuery` without `queryId` still works (falls back to the simple `cacheTag = 'datocms'` approach)
+21. **Environment variables** — `CACHE_INVALIDATION_WEBHOOK_SECRET`, DB connection vars (e.g., `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`)
+22. **Dependencies** — DB client package listed for installation (e.g., `@libsql/client`)
+
 ### React Component/Hook Checks
 
 #### Responsive Images (React)
@@ -412,3 +424,15 @@ Before presenting the final code, check the items relevant to what was generated
 87. **No navigation props** — Does NOT use `onNavigateTo` or `currentPath` (auto-detects via `astro:page-load` events)
 88. **Only 2 props** — `enableClickToEdit` and `stripStega` (no `root`, `onNavigateTo`, or `currentPath`)
 89. **Subpath import** — Imports from `@datocms/astro/ContentLink`
+
+---
+
+## Cross-Skill Routing
+
+This skill covers **framework integration** (draft mode, Web Previews, Content Link, real-time updates, cache tags) and **component usage** (images, structured text, video, SEO, search). If the task involves any of the following, activate the companion skill:
+
+| Condition | Route to |
+|---|---|
+| Writing or optimizing GraphQL queries for the CDA | **datocms-cda-skill** |
+| Programmatic content management, schema changes, migration scripts, or webhook creation via REST | **datocms-cma-skill** |
+| Building a DatoCMS plugin | **datocms-pluginsdk-skill** |
