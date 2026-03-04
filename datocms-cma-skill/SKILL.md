@@ -8,9 +8,11 @@ description: >-
   configure webhooks and build triggers, manage roles and API tokens,
   schedule publication or unpublication, handle localized content,
   build modular content with blocks and structured text, paginate and
-  filter records, or write migration and seeding scripts. Covers the most
-  commonly used CMA resources — records, uploads, schema, environments,
-  webhooks, access control, scheduling, and workflows.
+  filter records, write migration and seeding scripts, or generate
+  TypeScript types from your DatoCMS schema for type-safe record
+  operations. Covers the most commonly used CMA resources — records,
+  uploads, schema, environments, webhooks, access control, scheduling,
+  and workflows.
 ---
 
 # DatoCMS Content Management API Skill
@@ -37,6 +39,8 @@ Silently examine the project to determine the runtime and which CMA client packa
 
 4. Check for a `.env` or `.env.local` file to see if `DATOCMS_API_TOKEN` (or a similar variable) is already defined.
 
+5. Check for `@datocms/cli` in `devDependencies` and an existing `cma-types.ts` file to determine if CMA type generation is already set up. Do **not** proactively suggest setting up type generation.
+
 **Important:** The CMA requires an API token with `can_access_cma: true` and a role granting the needed permissions (not a read-only CDA token). If you see a token variable named like `DATOCMS_READONLY_API_TOKEN` or `NEXT_PUBLIC_DATOCMS_API_TOKEN`, warn the user that CMA operations need a token with CMA access enabled. The token does not need to be "full-access" — it can be scoped to specific models, actions, and environments via its role.
 
 ---
@@ -58,6 +62,7 @@ Ask the user clarifying questions to classify their task into one or more catego
 | **Access control** | Create roles, manage API tokens, invite users |
 | **Scheduling** | Schedule publish/unpublish, manage workflows |
 | **Migration & scripting** | Bulk data operations, content seeding, field migrations |
+| **Type generation** | Generate CMA schema types, set up typed record operations, configure `@datocms/cli` |
 
 If the user's request is clear and falls into an obvious category, skip the clarifying questions and proceed directly.
 
@@ -85,6 +90,7 @@ Based on the task classification, use the `Read` tool to load the appropriate re
 | Access control | `references/access-control.md` |
 | Scheduling & workflows | `references/scheduling.md` |
 | Migration & scripting | `references/migration-patterns.md` |
+| Type generation (CMA schema types, `@datocms/cli`) | `references/type-generation.md` |
 
 **Load cross-cutting references when needed:**
 - If the task involves localized fields in any context → also load `references/localization.md`
@@ -138,5 +144,6 @@ Before presenting the final code:
 4. **Pagination** — Ensure `listPagedIterator()` is used for any collection that could exceed a single page
 5. **Type safety** — Ensure no type assertions (`as`) are used to silence errors
 6. **Imports** — Ensure all imports come from the correct package (the one detected in Step 1)
+7. **Generated types** — If the project has generated CMA types (`cma-types.ts`), ensure code uses them with `raw*()` method generics and `RawApiTypes.Item<>` instead of untyped access
 
 If the generated code is a script (migration, seeding, etc.), wrap it in an async function with proper error handling and progress reporting.
