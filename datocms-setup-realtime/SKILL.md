@@ -34,7 +34,7 @@ Silently examine the project:
    - Astro: `src/pages/api/draft-mode/enable.ts`
 
    **If draft mode does not exist, STOP immediately and tell the user:**
-   > "Draft mode must be set up before configuring real-time updates. Run `/setup-draft-mode` first."
+   > "Draft mode must be set up before configuring real-time updates. Run `datocms-setup-draft-mode` first (Claude Code alias: `/setup-draft-mode`)."
 
 3. **Content Link setup** — Check if Content Link is configured (look for `contentLink: 'v1'` in the `executeQuery` wrapper). If Content Link is set up, the real-time subscription options should include `contentLink` and `baseEditingUrl` as well.
 
@@ -44,7 +44,7 @@ Silently examine the project:
 
 ### Stop conditions
 
-- If draft mode does not exist, stop and tell the user to run `/setup-draft-mode` first.
+- If draft mode does not exist, stop and tell the user to run `datocms-setup-draft-mode` first (Claude Code alias: `/setup-draft-mode`).
 - If realtime components already exist, inform the user and ask if they want to replace them.
 
 ---

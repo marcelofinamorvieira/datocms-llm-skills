@@ -200,9 +200,9 @@ After generating all files, tell the user:
 2. **Generate the draft mode secret** — Run: `openssl rand -hex 32`
 
 3. **Suggested next steps:**
-   - Run `/setup-web-previews` to add preview links for editors in DatoCMS
-   - Run `/setup-content-link` to enable click-to-edit visual editing overlays
-   - Run `/setup-realtime` to enable real-time content updates in draft mode
+   - Run `datocms-setup-web-previews` (Claude Code alias: `/setup-web-previews`) to add preview links for editors in DatoCMS
+   - Run `datocms-setup-content-link` (Claude Code alias: `/setup-content-link`) to enable click-to-edit visual editing overlays
+   - Run `datocms-setup-realtime` (Claude Code alias: `/setup-realtime`) to enable real-time content updates in draft mode
 
 ---
 

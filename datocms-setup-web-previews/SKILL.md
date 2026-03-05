@@ -34,7 +34,7 @@ Silently examine the project:
    - Astro: `src/pages/api/draft-mode/enable.ts`
 
    **If draft mode does not exist, STOP immediately and tell the user:**
-   > "Draft mode must be set up before configuring Web Previews. Run `/setup-draft-mode` first."
+   > "Draft mode must be set up before configuring Web Previews. Run `datocms-setup-draft-mode` first (Claude Code alias: `/setup-draft-mode`)."
 
 3. **Existing preview-links endpoint** — Check if a preview-links endpoint already exists:
    - Next.js: `src/app/api/preview-links/route.ts` or `app/api/preview-links/route.ts`
@@ -50,7 +50,7 @@ Silently examine the project:
 
 ### Stop conditions
 
-- If draft mode does not exist, stop and tell the user to run `/setup-draft-mode` first.
+- If draft mode does not exist, stop and tell the user to run `datocms-setup-draft-mode` first (Claude Code alias: `/setup-draft-mode`).
 - If a preview-links endpoint already exists, inform the user and ask: "A preview-links endpoint already exists. Do you want me to replace it?"
 
 ---
@@ -170,8 +170,8 @@ After generating all files, tell the user:
 2. **Fill in URL patterns** (if TODO placeholders were used): Update the `recordToWebsiteRoute` function with your actual content models and URL patterns.
 
 3. **Suggested next steps:**
-   - Run `/setup-content-link` to enable click-to-edit visual editing overlays
-   - Run `/setup-realtime` to enable real-time content updates in draft mode
+   - Run `datocms-setup-content-link` (Claude Code alias: `/setup-content-link`) to enable click-to-edit visual editing overlays
+   - Run `datocms-setup-realtime` (Claude Code alias: `/setup-realtime`) to enable real-time content updates in draft mode
 
 ---
 
