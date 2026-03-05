@@ -205,33 +205,36 @@ datocms-frontend-integrations-skill/
 
 ---
 
-### Slash Command Skills
+### Setup Skills (Cross-Agent + Slash Aliases)
 
-These are action-oriented slash command skills that detect your framework, ask minimal questions, and generate all files. They reference the same reference docs as `datocms-frontend-integrations-skill` (no duplication) and use `disable-model-invocation: true` so they don't activate automatically — you invoke them explicitly via slash commands.
+These are action-oriented setup skills that detect your framework, ask minimal questions, and generate all files. They reference the same reference docs as `datocms-frontend-integrations-skill` (no duplication) and use `disable-model-invocation: true` so they don't activate automatically.
 
-**Prerequisites:** `/setup-web-previews`, `/setup-content-link`, `/setup-realtime`, and `/setup-cache-tags` all require draft mode to be set up first. Run `/setup-draft-mode` before using them.
+- In any coding agent, invoke them by skill name (for example, `datocms-setup-draft-mode`).
+- In Claude Code, you can also use slash aliases (for example, `/setup-draft-mode`).
 
-#### `/setup-draft-mode` — `datocms-setup-draft-mode`
+**Prerequisites:** `datocms-setup-web-previews`, `datocms-setup-content-link`, `datocms-setup-realtime`, and `datocms-setup-cache-tags` all require draft mode to be set up first. Run `datocms-setup-draft-mode` (Claude Code alias: `/setup-draft-mode`) before using them.
+
+#### `datocms-setup-draft-mode` (Claude Code alias: `/setup-draft-mode`)
 
 Sets up DatoCMS draft mode from scratch: enable/disable endpoints, utilities (CORS, error handling, `isRelativeUrl`), and an `executeQuery` wrapper with dual-token switching and `includeDrafts` support. Detects the framework automatically, installs dependencies, and configures environment variables.
 
-#### `/setup-web-previews` — `datocms-setup-web-previews`
+#### `datocms-setup-web-previews` (Claude Code alias: `/setup-web-previews`)
 
 Adds a preview-links endpoint for the DatoCMS Web Previews plugin. Asks for your content models and URL patterns (or uses TODO placeholders), generates the endpoint with CORS handling, token validation, `recordToWebsiteRoute` switch, and status branching for draft/published links.
 
-#### `/setup-content-link` — `datocms-setup-content-link`
+#### `datocms-setup-content-link` (Claude Code alias: `/setup-content-link`)
 
 Enables Content Link visual editing — click-to-edit overlays that let editors click any element to jump to the corresponding field in DatoCMS. Modifies the `executeQuery` wrapper to enable stega encoding, generates a framework-specific `ContentLink` component, and adds it to the root layout.
 
-#### `/setup-realtime` — `datocms-setup-realtime`
+#### `datocms-setup-realtime` (Claude Code alias: `/setup-realtime`)
 
 Adds real-time content updates in draft mode. Generates framework-specific subscription components: factory functions for Next.js (`generateRealtimeComponent` + `generatePageComponent`), `useQuerySubscription` usage for Nuxt, `querySubscription` store usage for SvelteKit, and `<QueryListener />` (page reload) for Astro.
 
-#### `/setup-cache-tags` — `datocms-setup-cache-tags`
+#### `datocms-setup-cache-tags` (Claude Code alias: `/setup-cache-tags`)
 
 Sets up DatoCMS cache tag invalidation for granular content purging — only pages affected by a content change are purged, instead of revalidating everything. Next.js uses a framework-centric approach with `revalidateTag()` and a database for tag storage; Nuxt, SvelteKit, and Astro use CDN-first cache tags forwarded via response headers (supporting Netlify, Cloudflare, Fastly, and Bunny). Requires `executeQuery` to be already configured.
 
-#### `/setup-graphql-types` — `datocms-setup-graphql-types`
+#### `datocms-setup-graphql-types` (Claude Code alias: `/setup-graphql-types`)
 
 Sets up TypeScript type generation for DatoCMS GraphQL queries using gql.tada or GraphQL Code Generator. Optionally generates CMA schema types for typed record operations. Detects the framework automatically, generates config files, installs dependencies, and runs the initial schema generation.
 
@@ -340,6 +343,16 @@ cp -r datocms-llm-skills/<skill-folder> .aider/skills/<skill-name>
 ## Usage
 
 Once installed, just describe what you want to do with DatoCMS. The relevant skill activates automatically when your agent detects matching intent — no special commands needed.
+
+## Evaluation Loop
+
+The repository includes a reusable trigger-evaluation workflow under [`evals/README.md`](evals/README.md) with scripts for:
+
+- measuring recall/precision/F1 from eval outputs
+- generating refinement briefs per skill
+- comparing baseline vs candidate runs after prompt/description changes
+
+Current model-specific snapshots are documented in [`evals/reports/README.md`](evals/reports/README.md), with separate results for Claude Code and Codex.
 
 ## Contributing
 

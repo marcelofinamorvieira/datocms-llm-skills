@@ -43,7 +43,7 @@ Silently examine the project:
 2. **Prerequisite: executeQuery wrapper** — Search for an existing `executeQuery` function that wraps `@datocms/cda-client`. This wrapper is the foundation for cache tags.
 
    **If executeQuery does not exist, STOP immediately and tell the user:**
-   > "The `executeQuery` wrapper must exist before setting up cache tags. Run `/setup-draft-mode` first — it creates the wrapper you need as a foundation."
+   > "The `executeQuery` wrapper must exist before setting up cache tags. Run `datocms-setup-draft-mode` first (Claude Code alias: `/setup-draft-mode`) — it creates the wrapper you need as a foundation."
 
 3. **Existing cache tag setup** — Check for signs that cache tags are already configured:
    - Next.js: Check if `executeQuery` already uses `rawExecuteQuery` with `queryId`, or if a `cache-tags-db` module exists
@@ -62,7 +62,7 @@ Silently examine the project:
 
 ### Stop conditions
 
-- If the `executeQuery` wrapper does not exist, stop and tell the user to run `/setup-draft-mode` first.
+- If the `executeQuery` wrapper does not exist, stop and tell the user to run `datocms-setup-draft-mode` first (Claude Code alias: `/setup-draft-mode`).
 - If cache tags are already configured, inform the user and ask if they want to replace them.
 
 ---

@@ -1,12 +1,12 @@
 ---
 name: datocms-plugin-builder
 description: >-
-  Build DatoCMS plugins using datocms-plugin-sdk. Use when users want to
-  create or modify a DatoCMS plugin, work with the connect() function,
-  field extensions, sidebar panels, custom pages, dropdown actions,
-  asset sources, lifecycle hooks, modals, config screens, inspectors,
-  outlets, upload sidebars, record presentation, structured text
-  customization, or any plugin SDK hooks.
+  Build or modify DatoCMS plugins with datocms-plugin-sdk and connect(). Use
+  when users ask to scaffold plugin projects or implement plugin hooks and UI
+  surfaces: field extensions/editors, renderItemFormSidebar panels, custom pages
+  (renderPage), item-form dropdown actions, asset sources, lifecycle hooks,
+  modal flows, renderConfigScreen settings pages, inspectors/outlets/upload
+  sidebars, record presentation, and structured text editor customization.
 ---
 
 # DatoCMS Plugin Builder

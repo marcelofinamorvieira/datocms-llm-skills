@@ -1,0 +1,120 @@
+# Skill Trigger Eval Loop (Test, Measure, Refine)
+
+This repo now includes a model-agnostic loop for improving skill trigger quality.
+
+It follows the same pattern described in Anthropic's skill-iteration article:
+1. Test with curated trigger/non-trigger prompts.
+2. Measure with stable metrics (recall, precision, F1, false negatives/positives).
+3. Refine skill descriptions, then re-test and compare.
+
+## Two Eval Tracks
+
+This repo now keeps two distinct model eval tracks:
+
+- **Claude Code eval track**: uses the existing Claude-style run outputs in `evals/results/*.json`.
+- **Codex eval track**: uses `evals/scripts/run_codex_trigger_eval.py` plus the analyzer/comparison scripts.
+
+Published snapshots and side-by-side metrics live in `evals/reports/README.md`.
+
+## What Is In This Folder
+
+- `*.json`: trigger test cases (`query`, `should_trigger`).
+- `results/*.json`: raw run outputs (JSON or text preamble + JSON).
+- `scripts/analyze_trigger_results.py`: computes metrics from raw outputs.
+- `scripts/generate_refinement_briefs.py`: writes per-skill refinement briefs from misses.
+- `scripts/compare_trigger_runs.py`: compares baseline vs candidate runs.
+- `scripts/run_codex_trigger_eval.py`: runs Codex-trigger classification directly from skill frontmatter descriptions.
+
+## Workflow
+
+### 1) Test
+
+Run one of these two tracks:
+
+Claude Code track:
+- Produce or update `evals/results/*-eval-results.json` with your Claude run process.
+- Keep the output contract below so analyzer scripts can read it.
+
+Codex track:
+- Run:
+
+```bash
+python3 evals/scripts/run_codex_trigger_eval.py \
+  --repo-root . \
+  --output-dir evals/runs/2026-03-06-candidate/raw
+```
+
+Important output contract for each query result:
+- `query`
+- `should_trigger`
+- `trigger_rate`
+- `triggers`
+- `runs`
+- `pass`
+
+You can keep human-readable preambles before JSON; the analyzer handles both pure JSON and mixed-output files.
+
+Recommended run layout:
+
+```text
+evals/runs/
+  2026-03-05-baseline/
+    raw/*.json
+  2026-03-06-candidate/
+    raw/*.json
+```
+
+### 2) Measure
+
+Analyze a run directory:
+
+```bash
+python3 evals/scripts/analyze_trigger_results.py \
+  --results-dir evals/runs/2026-03-06-candidate/raw \
+  --output-json evals/runs/2026-03-06-candidate/analysis.json \
+  --output-markdown evals/runs/2026-03-06-candidate/analysis.md
+```
+
+Analyze current repo baseline files:
+
+```bash
+python3 evals/scripts/analyze_trigger_results.py \
+  --results-dir evals/results \
+  --output-json evals/results/latest-analysis.json \
+  --output-markdown evals/results/latest-analysis.md
+```
+
+### 3) Refine
+
+Generate skill-specific briefs with concrete misses and suggested trigger boundary changes:
+
+```bash
+python3 evals/scripts/generate_refinement_briefs.py \
+  --analysis evals/runs/2026-03-06-candidate/analysis.json \
+  --skills-root . \
+  --output-dir evals/runs/2026-03-06-candidate/refinement-briefs
+```
+
+Refinement rule of thumb:
+- Edit frontmatter `description` first (small deltas).
+- Re-run evals before touching the body of `SKILL.md`.
+
+### 4) Compare
+
+Compare candidate vs baseline:
+
+```bash
+python3 evals/scripts/compare_trigger_runs.py \
+  --baseline evals/runs/2026-03-05-baseline/analysis.json \
+  --candidate evals/runs/2026-03-06-candidate/analysis.json \
+  --output-markdown evals/runs/2026-03-06-candidate/comparison.md \
+  --output-json evals/runs/2026-03-06-candidate/comparison.json
+```
+
+Keep changes only when they improve recall and keep precision within acceptable regression limits for your project.
+
+## Notes
+
+- Default classification threshold is `0.5` (`trigger_rate >= 0.5` means predicted trigger).
+- Use `--threshold` on `analyze_trigger_results.py` if your policy differs.
+- `compare_trigger_runs.py` expects both inputs to come from `analyze_trigger_results.py` output JSON.

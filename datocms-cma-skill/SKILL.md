@@ -1,18 +1,15 @@
 ---
 name: datocms-cma
 description: >-
-  Interact with the DatoCMS Content Management API (CMA) using the official
-  TypeScript/JavaScript REST clients. Use when users want to create, read,
-  update, or delete records (items), manage uploads and assets, define or
-  modify models and fields (schema), work with environments (fork, promote),
-  configure webhooks and build triggers, manage roles and API tokens,
-  schedule publication or unpublication, handle localized content,
-  build modular content with blocks and structured text, paginate and
-  filter records, write migration and seeding scripts, or generate
-  TypeScript types from your DatoCMS schema for type-safe record
-  operations. Covers the most commonly used CMA resources — records,
-  uploads, schema, environments, webhooks, access control, scheduling,
-  and workflows.
+  Interact with the DatoCMS Content Management API (CMA) using
+  @datocms/cma-client, @datocms/cma-client-node, or @datocms/cma-client-browser.
+  Use when users need programmatic CMA scripts: create/update/delete/publish
+  records, bulk import/export (including CSV pipelines), paginate through large
+  record sets, upload assets from URL/local files and set metadata, update
+  structured text or block payloads, create/modify schema (models/fields/blocks),
+  fork/promote environments, configure webhooks and build triggers, manage roles
+  and API tokens, schedule publish/unpublish workflows, and generate CMA schema
+  types for type-safe record operations.
 ---
 
 # DatoCMS Content Management API Skill

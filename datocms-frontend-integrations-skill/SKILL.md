@@ -1,19 +1,16 @@
 ---
 name: datocms-frontend-integrations
 description: >-
-  DatoCMS front-end integrations for existing projects. Covers two domains:
-  (1) Draft mode setup — authenticated endpoints with dual-token architecture,
-  Web Previews plugin integration, Content Link visual editing setup, and
-  real-time update subscriptions for Next.js (App Router), Nuxt, SvelteKit, and
-  Astro. (2) React, Vue, Svelte, and Astro component/hook/store usage from
-  react-datocms, vue-datocms, @datocms/svelte, and @datocms/astro — responsive
-  images, structured text rendering, video player (React/Vue/Svelte only),
-  SEO/meta tag utilities, real-time subscriptions, Content Link visual editing
-  (<ContentLink>), and site search (useSiteSearch, React/Vue only). Use when
-  users want to set up draft mode, web previews, content link, real-time
-  updates, display DatoCMS images/video, render structured text, handle SEO
-  meta tags, build search UIs, or enable visual editing in React-based,
-  Vue-based, Svelte-based, or Astro projects.
+  DatoCMS front-end integrations for existing web projects (Next.js App Router,
+  Nuxt, SvelteKit, Astro, plus React/Vue/Svelte component usage). Use when users
+  ask to set up draft mode endpoints, Web Previews preview-links APIs, Content
+  Link visual editing, real-time preview updates/subscriptions, or cache-tag
+  invalidation/revalidation flows (Next.js revalidateTag or CDN purge by tags).
+  Also use for framework component/hook wiring with react-datocms, vue-datocms,
+  @datocms/svelte, and @datocms/astro: Image/SRCImage/datocms-image,
+  StructuredText, VideoPlayer (React/Vue/Svelte), SEO/meta helpers
+  (renderMetaTags/toHead/Seo), QuerySubscription/QueryListener realtime patterns,
+  ContentLink components, and Site Search (React/Vue).
 ---
 
 # DatoCMS Front-End Integrations Skill

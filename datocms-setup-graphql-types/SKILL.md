@@ -279,7 +279,7 @@ Add placeholder values to `.env.example` (create if it doesn't exist) and `.env.
 
 ### For gql.tada / schema introspection
 
-The published CDA token is needed for schema generation. This is the same token used by `executeQuery` for published content — it may already exist if `/setup-draft-mode` was run.
+The published CDA token is needed for schema generation. This is the same token used by `executeQuery` for published content — it may already exist if `datocms-setup-draft-mode` was run (Claude Code alias: `/setup-draft-mode`).
 
 #### Next.js / Astro
 ```

@@ -35,7 +35,7 @@ Silently examine the project:
    - Astro: `src/pages/api/draft-mode/enable.ts`
 
    **If draft mode does not exist, STOP immediately and tell the user:**
-   > "Draft mode must be set up before configuring Content Link. Run `/setup-draft-mode` first."
+   > "Draft mode must be set up before configuring Content Link. Run `datocms-setup-draft-mode` first (Claude Code alias: `/setup-draft-mode`)."
 
 3. **Existing executeQuery wrapper** — Find the `executeQuery` function. It must exist (created by draft mode setup). Check if it already has `contentLink` and `baseEditingUrl` options.
 
@@ -51,7 +51,7 @@ Silently examine the project:
 
 ### Stop conditions
 
-- If draft mode does not exist, stop and tell the user to run `/setup-draft-mode` first.
+- If draft mode does not exist, stop and tell the user to run `datocms-setup-draft-mode` first (Claude Code alias: `/setup-draft-mode`).
 - If `executeQuery` already has `contentLink: 'v1'` and `baseEditingUrl`, inform the user that Content Link appears to be already configured and ask if they want to proceed anyway.
 
 ---
@@ -195,7 +195,7 @@ After generating all files, tell the user:
    ```
 
 4. **Suggested next steps:**
-   - Run `/setup-realtime` to enable real-time content updates in draft mode
+   - Run `datocms-setup-realtime` (Claude Code alias: `/setup-realtime`) to enable real-time content updates in draft mode
 
 ---
 

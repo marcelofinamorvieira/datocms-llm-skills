@@ -1,13 +1,13 @@
 ---
 name: datocms-cli
 description: >-
-  Work with the DatoCMS CLI tool (@datocms/cli) for migration scripting,
-  environment management, maintenance mode, content importing, and project
-  configuration. Use when users want to create or run migration scripts,
-  manage sandbox environments from the command line, toggle maintenance mode,
-  set up CLI profiles and configuration, import content from WordPress or
-  Contentful, or orchestrate deployment workflows with environment forking
-  and promotion.
+  Work with the DatoCMS CLI tool (@datocms/cli) for command-line migrations,
+  environment operations, and deployment workflows. Use when users ask for
+  datocms CLI commands or scripts such as migrations:new, migrations:run,
+  migrations:status, migration scaffolding for models/fields/blocks, CLI setup
+  with datocms.config.json and profiles, environment commands
+  (list/fork/promote/rename/destroy), maintenance-mode toggling, CI/CD migration
+  pipelines, and imports from WordPress or Contentful (including assets/content).
 ---
 
 # DatoCMS CLI Skill
