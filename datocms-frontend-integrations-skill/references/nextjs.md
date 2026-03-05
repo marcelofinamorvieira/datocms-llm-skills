@@ -796,7 +796,7 @@ Use cache tags when:
 - You want per-record or per-query granularity in cache invalidation
 - You are deploying on Vercel or any platform that supports Next.js `revalidateTag()`
 
-**Note:** This pattern is Next.js-specific. For CDN-level cache tags (Netlify, Cloudflare, Fastly, Bunny), see `datocms-cda-skill/references/draft-caching-environments.md` → "Cache Tags".
+**Note:** This section covers the Next.js-specific `revalidateTag()` approach. For the CDN-first approach (Netlify, Cloudflare, Fastly, Bunny), see the `## Cache Tags (Optional)` section in the respective framework reference (`nuxt.md`, `sveltekit.md`, `astro.md`).
 
 ### The 64-Tag Problem
 

@@ -767,3 +767,130 @@ Key points:
 
 - `@datocms/svelte` — For `querySubscription` store
 - `graphql` — For `print()` to serialize queries (needed by subscription)
+
+---
+
+## Cache Tags (Optional)
+
+CDN-first cache tag invalidation for SvelteKit. Instead of revalidating all content on every change, this forwards DatoCMS cache tags to your CDN, which purges only the affected pages when content changes.
+
+### When to Use
+
+- Your SvelteKit site is deployed behind a CDN that supports tag-based purging (Netlify, Cloudflare, Fastly, Bunny)
+- You want per-record granularity in cache invalidation
+
+For the webhook payload structure and CDN header table, see `datocms-cda-skill/references/draft-caching-environments.md` → "Cache Tags".
+
+### Modified Query Function
+
+Switch from `executeQuery` to `rawExecuteQuery` to access the `x-cache-tags` response header:
+
+**File:** `src/lib/datocms/queries.ts`
+
+```ts
+import { env as privateEnv } from '$env/dynamic/private';
+import { isDraftModeEnabled } from '$lib/draftMode.server';
+import { rawExecuteQuery } from '@datocms/cda-client';
+import type { RequestEvent } from '@sveltejs/kit';
+import type { TadaDocumentNode } from 'gql.tada';
+
+export async function performQueryWithCacheTags<Result, Variables>(
+  event: RequestEvent,
+  query: TadaDocumentNode<Result, Variables>,
+  variables?: Variables,
+) {
+  const draftModeEnabled = isDraftModeEnabled(event);
+
+  const [data, response] = await rawExecuteQuery(query, {
+    variables,
+    includeDrafts: draftModeEnabled,
+    excludeInvalid: true,
+    token: draftModeEnabled
+      ? privateEnv.PRIVATE_DATOCMS_DRAFT_CONTENT_CDA_TOKEN
+      : privateEnv.PRIVATE_DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN,
+    returnCacheTags: true,
+  });
+
+  const cacheTags = response.headers.get('x-cache-tags') ?? '';
+
+  return { data, cacheTags };
+}
+```
+
+### Setting CDN Headers
+
+In `+page.server.ts` or `+layout.server.ts`, use `setHeaders()` to set the CDN-specific header:
+
+```ts
+import { performQueryWithCacheTags } from '$lib/datocms/queries';
+import { myQuery } from './query';
+
+export async function load(event) {
+  const { data, cacheTags } = await performQueryWithCacheTags(event, myQuery);
+
+  // Set the CDN-specific header — choose the one matching your CDN:
+  // Netlify / Cloudflare: 'Cache-Tag'
+  // Fastly:               'Surrogate-Key'
+  // Bunny:                'CDN-Tag'
+  event.setHeaders({
+    'Cache-Tag': cacheTags,
+  });
+
+  return { data };
+}
+```
+
+### Webhook Handler
+
+**File:** `src/routes/api/invalidate-cache/+server.ts`
+
+Receives the DatoCMS cache tag invalidation webhook and calls your CDN's purge API:
+
+```ts
+import { env as privateEnv } from '$env/dynamic/private';
+import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
+
+export const POST: RequestHandler = async ({ request }) => {
+  const authHeader = request.headers.get('authorization');
+
+  if (authHeader !== `Bearer ${privateEnv.PRIVATE_CACHE_INVALIDATION_WEBHOOK_SECRET}`) {
+    return json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const body = await request.json();
+  const tags: string[] = body?.entity?.attributes?.tags ?? [];
+
+  if (tags.length === 0) {
+    return json({ purged: false });
+  }
+
+  // Call your CDN's purge API. Example for Fastly:
+  //
+  // await fetch(`https://api.fastly.com/service/${privateEnv.PRIVATE_FASTLY_SERVICE_ID}/purge`, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Fastly-Key': privateEnv.PRIVATE_FASTLY_KEY,
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({ surrogate_keys: tags }),
+  // });
+  //
+  // For Netlify, Cloudflare, or Bunny, use their respective purge APIs.
+
+  return json({ purged: true, tags });
+};
+```
+
+### Cache Tags Environment Variables
+
+```
+PRIVATE_CACHE_INVALIDATION_WEBHOOK_SECRET=   # Shared secret to verify webhook requests
+# CDN-specific vars (uncomment for your CDN):
+# PRIVATE_FASTLY_SERVICE_ID=                 # Fastly service ID
+# PRIVATE_FASTLY_KEY=                        # Fastly API key
+```
+
+### Cache Tags Dependencies
+
+No additional dependencies — `rawExecuteQuery` is provided by `@datocms/cda-client` which should already be installed.

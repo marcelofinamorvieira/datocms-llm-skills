@@ -826,3 +826,211 @@ Key points:
 ### Real-Time Dependencies
 
 - `vue-datocms` — For `useQuerySubscription` composable
+
+---
+
+## Cache Tags (Optional)
+
+CDN-first cache tag invalidation for Nuxt. Instead of revalidating all content on every change, this forwards DatoCMS cache tags to your CDN, which purges only the affected pages when content changes.
+
+### When to Use
+
+- Your Nuxt site is deployed behind a CDN that supports tag-based purging (Netlify, Cloudflare, Fastly, Bunny)
+- You want per-record granularity in cache invalidation
+
+For the webhook payload structure and CDN header table, see `datocms-cda-skill/references/draft-caching-environments.md` → "Cache Tags".
+
+### Modified Query Composable
+
+Switch from `executeQuery` to `rawExecuteQuery` to access the `x-cache-tags` response header. This version returns both data and cache tags:
+
+**File:** `composables/useQueryWithCacheTags.ts`
+
+```ts
+import { rawExecuteQuery } from '@datocms/cda-client';
+import type { TadaDocumentNode } from 'gql.tada';
+import { hash } from 'ohash';
+
+type Options<Variables> = {
+  variables?: Variables;
+};
+
+export async function useQueryWithCacheTags<Result, Variables>(
+  query: TadaDocumentNode<Result, Variables>,
+  options?: Options<Variables>,
+) {
+  const config = useRuntimeConfig();
+
+  const data = await useFetch('https://graphql.datocms.com/', {
+    ...buildRawRequestInit(query, config.public.datocmsPublishedContentCdaToken, options),
+    key: hash([query, options]),
+    transform: (response: { data: Result; errors?: any[] }) => {
+      if (response.errors)
+        throw new Error(
+          `Something went wrong while executing the query: ${JSON.stringify(response.errors)}`,
+        );
+      return response.data;
+    },
+  });
+
+  // For cache tags, make a parallel raw request to get the headers
+  const [, rawResponse] = await rawExecuteQuery(query, {
+    token: config.public.datocmsPublishedContentCdaToken,
+    excludeInvalid: true,
+    variables: options?.variables,
+    returnCacheTags: true,
+  });
+
+  const cacheTags = rawResponse.headers.get('x-cache-tags') ?? '';
+
+  return { data: data.data, cacheTags };
+}
+
+function buildRawRequestInit<Result, Variables>(
+  query: TadaDocumentNode<Result, Variables>,
+  token: string,
+  options?: Options<Variables>,
+) {
+  const { buildRequestInit } = require('@datocms/cda-client');
+  return buildRequestInit(query, {
+    token,
+    excludeInvalid: true,
+    variables: options?.variables,
+    returnCacheTags: true,
+  });
+}
+```
+
+Alternatively, use `rawExecuteQuery` directly in a Nuxt server route or server middleware to set CDN headers on the response:
+
+**File:** `server/middleware/cache-tags.ts` (example pattern)
+
+```ts
+import { rawExecuteQuery } from '@datocms/cda-client';
+import type { TadaDocumentNode } from 'gql.tada';
+
+export async function fetchWithCacheTags<Result, Variables>(
+  query: TadaDocumentNode<Result, Variables>,
+  variables?: Variables,
+) {
+  const config = useRuntimeConfig();
+
+  const [data, response] = await rawExecuteQuery(query, {
+    token: config.public.datocmsPublishedContentCdaToken,
+    excludeInvalid: true,
+    variables,
+    returnCacheTags: true,
+  });
+
+  const cacheTags = response.headers.get('x-cache-tags') ?? '';
+
+  return { data, cacheTags };
+}
+```
+
+### Setting CDN Headers
+
+In your Nuxt server routes or pages, set the CDN-specific header on the response:
+
+```ts
+// In a server route (server/api/...)
+export default eventHandler(async (event) => {
+  const { data, cacheTags } = await fetchWithCacheTags(myQuery);
+
+  // Set the CDN-specific header — choose the one matching your CDN:
+  // Netlify / Cloudflare: 'Cache-Tag'
+  // Fastly:               'Surrogate-Key'
+  // Bunny:                'CDN-Tag'
+  setResponseHeader(event, 'Cache-Tag', cacheTags);
+
+  return data;
+});
+```
+
+For pages using `useResponseHeaders` in Nitro:
+
+```ts
+// In a Nuxt page or layout (server-side rendering)
+const { data, cacheTags } = await fetchWithCacheTags(myQuery);
+
+// In server middleware or via useRequestEvent():
+const event = useRequestEvent();
+if (event) {
+  setResponseHeader(event, 'Cache-Tag', cacheTags);
+}
+```
+
+### Webhook Handler
+
+**File:** `server/api/invalidate-cache.ts`
+
+Receives the DatoCMS cache tag invalidation webhook and calls your CDN's purge API:
+
+```ts
+import { ensureHttpMethods } from '~/lib/api/utils';
+
+export default eventHandler(async (event) => {
+  ensureHttpMethods(event, 'POST');
+
+  const config = useRuntimeConfig();
+
+  const authHeader = getHeader(event, 'authorization');
+  if (authHeader !== `Bearer ${config.cacheInvalidationWebhookSecret}`) {
+    throw createError({ statusCode: 401, message: 'Unauthorized' });
+  }
+
+  const body = await readBody(event);
+  const tags: string[] = body?.entity?.attributes?.tags ?? [];
+
+  if (tags.length === 0) {
+    return { purged: false };
+  }
+
+  // Call your CDN's purge API. Example for Fastly:
+  //
+  // await fetch(`https://api.fastly.com/service/${config.fastlyServiceId}/purge`, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Fastly-Key': config.fastlyKey,
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({ surrogate_keys: tags }),
+  // });
+  //
+  // For Netlify, Cloudflare, or Bunny, use their respective purge APIs.
+
+  return { purged: true, tags };
+});
+```
+
+### Nuxt Config Cache Tags Addition
+
+Add the webhook secret and CDN-specific vars to `nuxt.config.ts`:
+
+```ts
+export default defineNuxtConfig({
+  runtimeConfig: {
+    // ... existing config ...
+    // set by NUXT_CACHE_INVALIDATION_WEBHOOK_SECRET env variable
+    cacheInvalidationWebhookSecret: '',
+    // CDN-specific (example for Fastly):
+    // set by NUXT_FASTLY_SERVICE_ID env variable
+    // fastlyServiceId: '',
+    // set by NUXT_FASTLY_KEY env variable
+    // fastlyKey: '',
+  },
+});
+```
+
+### Cache Tags Environment Variables
+
+```
+NUXT_CACHE_INVALIDATION_WEBHOOK_SECRET=   # Shared secret to verify webhook requests
+# CDN-specific vars (uncomment for your CDN):
+# NUXT_FASTLY_SERVICE_ID=                 # Fastly service ID
+# NUXT_FASTLY_KEY=                        # Fastly API key
+```
+
+### Cache Tags Dependencies
+
+No additional dependencies — `rawExecuteQuery` is provided by `@datocms/cda-client` which should already be installed.

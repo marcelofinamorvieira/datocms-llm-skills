@@ -96,7 +96,7 @@ There are two main approaches to consuming cache tags:
 | Approach | How it works | Best for |
 |---|---|---|
 | **CDN-first** | Forward `x-cache-tags` as a response header; CDN purges matching entries on webhook | Static sites behind Netlify, Cloudflare, Fastly, Bunny |
-| **Framework-centric** | Store tags in your app layer (DB or in-memory); webhook handler maps tags → framework cache keys and calls the framework's revalidation API | Next.js (`revalidateTag`), Nuxt, SvelteKit — any framework with its own caching layer |
+| **Framework-centric** | Store tags in your app layer (DB or in-memory); webhook handler maps tags → framework cache keys and calls the framework's revalidation API | Next.js (`revalidateTag`) |
 
 **CDN header names by provider:**
 

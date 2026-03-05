@@ -209,7 +209,7 @@ datocms-frontend-integrations-skill/
 
 These are action-oriented slash command skills that detect your framework, ask minimal questions, and generate all files. They reference the same reference docs as `datocms-frontend-integrations-skill` (no duplication) and use `disable-model-invocation: true` so they don't activate automatically — you invoke them explicitly via slash commands.
 
-**Prerequisites:** `/setup-web-previews`, `/setup-content-link`, and `/setup-realtime` all require draft mode to be set up first. Run `/setup-draft-mode` before using them.
+**Prerequisites:** `/setup-web-previews`, `/setup-content-link`, `/setup-realtime`, and `/setup-cache-tags` all require draft mode to be set up first. Run `/setup-draft-mode` before using them.
 
 #### `/setup-draft-mode` — `datocms-setup-draft-mode`
 
@@ -226,6 +226,14 @@ Enables Content Link visual editing — click-to-edit overlays that let editors 
 #### `/setup-realtime` — `datocms-setup-realtime`
 
 Adds real-time content updates in draft mode. Generates framework-specific subscription components: factory functions for Next.js (`generateRealtimeComponent` + `generatePageComponent`), `useQuerySubscription` usage for Nuxt, `querySubscription` store usage for SvelteKit, and `<QueryListener />` (page reload) for Astro.
+
+#### `/setup-cache-tags` — `datocms-setup-cache-tags`
+
+Sets up DatoCMS cache tag invalidation for granular content purging — only pages affected by a content change are purged, instead of revalidating everything. Next.js uses a framework-centric approach with `revalidateTag()` and a database for tag storage; Nuxt, SvelteKit, and Astro use CDN-first cache tags forwarded via response headers (supporting Netlify, Cloudflare, Fastly, and Bunny). Requires `executeQuery` to be already configured.
+
+#### `/setup-graphql-types` — `datocms-setup-graphql-types`
+
+Sets up TypeScript type generation for DatoCMS GraphQL queries using gql.tada or GraphQL Code Generator. Optionally generates CMA schema types for typed record operations. Detects the framework automatically, generates config files, installs dependencies, and runs the initial schema generation.
 
 ---
 

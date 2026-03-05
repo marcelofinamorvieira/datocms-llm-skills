@@ -799,3 +799,160 @@ Key points:
 ### Real-Time Dependencies
 
 - `@datocms/astro` — For `QueryListener` component
+
+---
+
+## Cache Tags (Optional)
+
+CDN-first cache tag invalidation for Astro. Instead of revalidating all content on every change, this forwards DatoCMS cache tags to your CDN, which purges only the affected pages when content changes.
+
+### When to Use
+
+- Your Astro site is deployed behind a CDN that supports tag-based purging (Netlify, Cloudflare, Fastly, Bunny)
+- You want per-record granularity in cache invalidation
+- Your Astro config uses `output: 'server'` or `output: 'hybrid'` (SSR is required to set response headers)
+
+For the webhook payload structure and CDN header table, see `datocms-cda-skill/references/draft-caching-environments.md` → "Cache Tags".
+
+### Modified Query Function
+
+Switch from `executeQuery` to `rawExecuteQuery` to access the `x-cache-tags` response header:
+
+**File:** `src/lib/datocms/executeQuery.ts`
+
+```ts
+import { rawExecuteQuery } from '@datocms/cda-client';
+import {
+  DATOCMS_DRAFT_CONTENT_CDA_TOKEN,
+  DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN,
+} from 'astro:env/server';
+import type { TadaDocumentNode } from 'gql.tada';
+
+export async function executeQueryWithCacheTags<Result, Variables>(
+  query: TadaDocumentNode<Result, Variables>,
+  options?: ExecuteQueryWithCacheTagsOptions<Variables>,
+) {
+  const [data, response] = await rawExecuteQuery(query, {
+    variables: options?.variables,
+    excludeInvalid: true,
+    includeDrafts: options?.includeDrafts,
+    token: options?.includeDrafts
+      ? DATOCMS_DRAFT_CONTENT_CDA_TOKEN
+      : DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN,
+    returnCacheTags: true,
+  });
+
+  const cacheTags = response.headers.get('x-cache-tags') ?? '';
+
+  return { data, cacheTags };
+}
+
+type ExecuteQueryWithCacheTagsOptions<Variables> = {
+  variables?: Variables;
+  includeDrafts?: boolean;
+};
+```
+
+### Setting CDN Headers
+
+In `.astro` pages (SSR mode), use `Astro.response.headers.set()` to set the CDN-specific header:
+
+```astro
+---
+import { executeQueryWithCacheTags } from '~/lib/datocms/executeQuery';
+import { isDraftModeEnabled } from '~/lib/draftMode';
+
+const { data, cacheTags } = await executeQueryWithCacheTags(myQuery, {
+  includeDrafts: isDraftModeEnabled(Astro.cookies),
+});
+
+// Set the CDN-specific header — choose the one matching your CDN:
+// Netlify / Cloudflare: 'Cache-Tag'
+// Fastly:               'Surrogate-Key'
+// Bunny:                'CDN-Tag'
+Astro.response.headers.set('Cache-Tag', cacheTags);
+---
+
+<!-- Render data -->
+```
+
+### Webhook Handler
+
+**File:** `src/pages/api/invalidate-cache.ts`
+
+Receives the DatoCMS cache tag invalidation webhook and calls your CDN's purge API:
+
+```ts
+import type { APIRoute } from 'astro';
+import { CACHE_INVALIDATION_WEBHOOK_SECRET } from 'astro:env/server';
+
+export const POST: APIRoute = async ({ request }) => {
+  const authHeader = request.headers.get('authorization');
+
+  if (authHeader !== `Bearer ${CACHE_INVALIDATION_WEBHOOK_SECRET}`) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+  }
+
+  const body = await request.json();
+  const tags: string[] = body?.entity?.attributes?.tags ?? [];
+
+  if (tags.length === 0) {
+    return new Response(JSON.stringify({ purged: false }));
+  }
+
+  // Call your CDN's purge API. Example for Fastly:
+  //
+  // await fetch(`https://api.fastly.com/service/${FASTLY_SERVICE_ID}/purge`, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Fastly-Key': FASTLY_KEY,
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({ surrogate_keys: tags }),
+  // });
+  //
+  // For Netlify, Cloudflare, or Bunny, use their respective purge APIs.
+
+  return new Response(JSON.stringify({ purged: true, tags }));
+};
+```
+
+### Astro Config Cache Tags Addition
+
+Add the webhook secret and CDN-specific env vars to `astro.config.mjs`:
+
+```js
+export default defineConfig({
+  env: {
+    schema: {
+      // ... existing schema ...
+      CACHE_INVALIDATION_WEBHOOK_SECRET: envField.string({
+        context: 'server',
+        access: 'secret',
+      }),
+      // CDN-specific (example for Fastly):
+      // FASTLY_SERVICE_ID: envField.string({
+      //   context: 'server',
+      //   access: 'secret',
+      // }),
+      // FASTLY_KEY: envField.string({
+      //   context: 'server',
+      //   access: 'secret',
+      // }),
+    },
+  },
+});
+```
+
+### Cache Tags Environment Variables
+
+```
+CACHE_INVALIDATION_WEBHOOK_SECRET=   # Shared secret to verify webhook requests
+# CDN-specific vars (uncomment for your CDN):
+# FASTLY_SERVICE_ID=                 # Fastly service ID
+# FASTLY_KEY=                        # Fastly API key
+```
+
+### Cache Tags Dependencies
+
+No additional dependencies — `rawExecuteQuery` is provided by `@datocms/cda-client` which should already be installed.
