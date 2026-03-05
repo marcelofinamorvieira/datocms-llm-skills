@@ -187,3 +187,67 @@ Before presenting the final code, verify:
 6. Draft links use the enable endpoint URL with correct parameters
 7. CSP header `frame-ancestors 'self' https://plugins-cdn.datocms.com` is configured
 8. All generated TypeScript follows the mandatory rules (no `as unknown as`, inferred types, `import type`)
+
+---
+
+## LLM Failure Observer and Self-Heal Routing
+
+The runtime LLM using this skill is the failure observer. The skill file does not self-detect failures.
+
+### Hard Failure Classes (detect continuously)
+
+1. `knowledge_gap`
+2. `inaccuracy_or_conflict`
+3. `context_bloat_or_ambiguity`
+4. `missing_dependency_or_file`
+5. `invalid_output_contract`
+
+### Trigger Rule
+
+On the first hard failure:
+
+1. Stop normal execution immediately.
+2. Emit a `Skill Failure Packet v1`.
+3. Invoke `$skill-self-heal`.
+4. Resume this skill only after a `Skill Repair Report v1` is returned.
+
+### Skill Failure Packet v1
+
+```json
+{
+  "packet_version": "v1",
+  "source_skill": "string",
+  "timestamp": "ISO-8601 string",
+  "hard_failure_type": "knowledge_gap|inaccuracy_or_conflict|context_bloat_or_ambiguity|missing_dependency_or_file|invalid_output_contract",
+  "failing_step": "string",
+  "user_request": "string",
+  "attempted_actions": ["string"],
+  "evidence": ["string"],
+  "candidate_files": ["/absolute/path"],
+  "confidence": 0.0,
+  "stop_reason": "string"
+}
+```
+
+### Skill Repair Report v1
+
+```json
+{
+  "report_version": "v1",
+  "source_packet_id": "string",
+  "files_changed": ["/absolute/path"],
+  "validation_results": [
+    { "name": "string", "pass": true, "evidence": "string" }
+  ],
+  "rolled_back": false,
+  "root_cause": "string",
+  "fix_summary": "string",
+  "followups": ["string"]
+}
+```
+
+### Routing Requirements
+
+1. Keep `candidate_files` limited to absolute paths inside this repository.
+2. Include concrete evidence in `evidence` (errors, missing paths, contradictions).
+3. Set `confidence` from `0.0` to `1.0`.
