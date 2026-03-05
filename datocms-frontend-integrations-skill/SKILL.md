@@ -90,7 +90,7 @@ Classify the user's request into one or more categories:
 | **Real-Time Updates** | User wants live content updates via subscriptions (React / Vue / Svelte / Astro) |
 | **Visual Editing / Content Link** | User wants click-to-edit overlays for editors (React / Vue / Svelte / Astro) |
 | **Site Search** | User wants to build a search UI with DatoCMS Site Search (React / Vue only — not available in @datocms/svelte or @datocms/astro) |
-| **Cache Tags** | User wants granular per-record cache invalidation using DatoCMS cache tags (Next.js only for now) |
+| **Cache Tags** | User wants granular per-record cache invalidation using DatoCMS cache tags |
 
 Multiple categories can apply (e.g., "set up draft mode with content link and real-time updates", or "display images and render structured text with visual editing overlays").
 
@@ -111,7 +111,7 @@ When the task is classified as **Draft Mode Setup**, ask these additional questi
 
 4. **Content models** (only if Web Previews was selected): "What are your main content models and their frontend URL patterns? For example: `blog_post` → `/blog/[slug]`, `page` → `/[slug]`."
 
-5. **Cache tags** (only if the framework is Next.js): "Do you want granular cache invalidation using DatoCMS cache tags? Instead of revalidating all content on every change, this invalidates only the pages affected by the specific records that changed. Requires a small database (e.g., Turso, Vercel Postgres) to store tag mappings."
+5. **Cache tags**: "Do you want granular cache invalidation using DatoCMS cache tags? Instead of revalidating all content on every change, this invalidates only the pages affected by the specific records that changed." Mention the prerequisites: Next.js needs a small database for tag mappings; other frameworks need a CDN with tag-based purging (Netlify, Cloudflare, Fastly, Bunny).
 
 ---
 
@@ -284,14 +284,10 @@ Before presenting the final code, check the items relevant to what was generated
 14. **Subscription setup** — Passes correct token, `includeDrafts`, and `excludeInvalid` options
 15. **Dependencies** — All required subscription packages listed for installation
 
-#### If Cache Tags was selected (Next.js only)
-16. **queryId parameter** — `executeQuery` calls on cached pages pass a stable `queryId`
-17. **DB persistence** — `cache-tags-db.ts` stores the mapping from Query ID → DatoCMS tags after each query
-18. **Webhook handler** — `POST /api/revalidate/route.ts` verifies auth, parses `entity.attributes.tags`, looks up affected Query IDs, and calls `revalidateTag()` for each
-19. **force-static pages** — Pages using `queryId` export `dynamic = 'force-static'`
-20. **Backward compatibility** — `executeQuery` without `queryId` still works (falls back to the simple `cacheTag = 'datocms'` approach)
-21. **Environment variables** — `CACHE_INVALIDATION_WEBHOOK_SECRET`, DB connection vars (e.g., `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`)
-22. **Dependencies** — DB client package listed for installation (e.g., `@libsql/client`)
+#### If Cache Tags was selected
+16. **Query function** — Next.js: `rawExecuteQuery` with `queryId` indirection and DB persistence. Other frameworks: `rawExecuteQuery` with `returnCacheTags: true`, forwarding tags as CDN headers.
+17. **Webhook handler** — Verifies auth, reads `entity.attributes.tags`, triggers invalidation (Next.js: `revalidateTag()`; others: CDN purge API)
+18. **Environment variables** — Webhook secret + framework-specific vars (Next.js: DB connection; others: CDN API credentials)
 
 ### React Component/Hook Checks
 
