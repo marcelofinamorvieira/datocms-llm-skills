@@ -13,6 +13,23 @@ guide for the repo.
 - `datocms-plugin-builder`: build or modify DatoCMS plugins.
 - `datocms-setup`: one-time setup orchestrator for frontend, migrations, onboarding imports, and platform automation.
 
+## Public Skill Prompt Examples
+
+Use the skill name in the prompt when you want to route to a specific public
+skill on purpose.
+
+```text
+$datocms-cda write a GraphQL query for blog posts with title, slug, and SEO fields
+$datocms-cma write a script that publishes all records in a model
+$datocms-cli scaffold a migration workflow for this project
+$datocms-frontend-integrations show how to wire DatoCMS draft mode into this Next.js app
+$datocms-plugin-builder build a sidebar panel plugin for this project
+$datocms-setup install content link in this project
+```
+
+`datocms-frontend-integrations` and `datocms-setup` are especially good
+explicit-call candidates because they do not auto-trigger from broad requests.
+
 ## Setup Skill Behavior
 
 `datocms-setup` is meant to be called explicitly.
@@ -22,6 +39,11 @@ auto-trigger from a generic request like "install visual editing in my
 project". Use `$datocms-setup` when you want the setup wizard to inspect the
 repo, choose the right internal recipe, and queue prerequisites automatically.
 
+After you call `$datocms-setup`, write the prompt as the outcome you want in
+plain language. You do not need to know the internal recipe ids, but using
+terms like `content link`, `visual editing`, `click-to-edit`, or `draft mode`
+helps the router land on the smallest matching setup bundle.
+
 Examples:
 
 ```text
@@ -29,6 +51,18 @@ $datocms-setup install visual editing in this project
 $datocms-setup set up draft mode and web previews
 $datocms-setup add migrations and a release workflow
 ```
+
+For Content Link specifically, prompts like these are a good fit:
+
+```text
+$datocms-setup install content link in this project
+$datocms-setup add visual editing to this app
+$datocms-setup set up click-to-edit overlays for draft pages
+$datocms-setup enable content-link for this repo and wire any missing prerequisites
+```
+
+If draft mode is missing, `datocms-setup` should queue that prerequisite in the
+same run instead of requiring a second explicit setup call.
 
 Inside `datocms-setup`, setup work is organized into five internal lanes:
 
@@ -53,10 +87,13 @@ Recommended local development install:
 <summary>Codex</summary>
 
 ```bash
-mkdir -p /Users/marcelofinamorvieira/.codex/skills
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+skills_dir="${CODEX_HOME:-$HOME/.codex}/skills"
+
+mkdir -p "$skills_dir"
 
 for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-setup; do
-  ln -s "/Users/marcelofinamorvieira/datoCMS/skills/skills/$skill" "/Users/marcelofinamorvieira/.codex/skills/$skill"
+  ln -sfn "$repo_root/skills/$skill" "$skills_dir/$skill"
 done
 ```
 
@@ -66,14 +103,20 @@ done
 <summary>Claude Code</summary>
 
 ```bash
-mkdir -p /Users/marcelofinamorvieira/.claude/skills
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+skills_dir="$HOME/.claude/skills"
+
+mkdir -p "$skills_dir"
 
 for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-setup; do
-  ln -s "/Users/marcelofinamorvieira/datoCMS/skills/skills/$skill" "/Users/marcelofinamorvieira/.claude/skills/$skill"
+  ln -sfn "$repo_root/skills/$skill" "$skills_dir/$skill"
 done
 ```
 
 </details>
+
+These commands resolve the repo root dynamically, so they work from any
+directory inside the cloned repository.
 
 If you only need one area, symlink or copy just that skill folder.
 `datocms-setup` already contains its internal recipes, shared references, and

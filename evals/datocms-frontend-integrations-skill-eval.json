@@ -1,7 +1,9 @@
 [
   {
     "query": "I need to set up draft mode for my Next.js App Router site with DatoCMS. I want enable/disable route handlers, a dual-token executeQuery wrapper, and the cookie-based draft detection. Can you generate all the files?",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "overlap",
+    "boundary_with": ["datocms-setup"]
   },
   {
     "query": "how do i use the react-datocms Image component to show responsive images with blur-up placeholders? i have the graphql fragment but im not sure how to wire it up in my Next.js page component",
@@ -9,7 +11,9 @@
   },
   {
     "query": "I'm building a Nuxt 3 site with DatoCMS and I need to set up the Web Previews plugin integration. Editors should be able to click 'Open preview' in the CMS and see the draft page. I need the preview-links API endpoint.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "overlap",
+    "boundary_with": ["datocms-setup"]
   },
   {
     "query": "Can you help me set up Content Link for my SvelteKit site? I want editors in draft mode to be able to click on content elements and jump directly to the corresponding record in DatoCMS for editing.",
@@ -33,7 +37,9 @@
   },
   {
     "query": "How do I set up cache tag invalidation for my Next.js site with DatoCMS? I want granular revalidation so when a blog post changes, only that page gets revalidated, not the entire site.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "overlap",
+    "boundary_with": ["datocms-cda", "datocms-setup"]
   },
   {
     "query": "i need to render the SEO meta tags from datocms in my nuxt 3 app. the _seoMetaTags field returns title, description, og:image etc. how do i use the useHead composable with the toHead helper from vue-datocms?",

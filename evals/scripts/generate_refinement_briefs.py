@@ -10,6 +10,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+DEFAULT_QUERY_MODE = "implicit"
+
 STOPWORDS = {
     "a",
     "about",
@@ -129,7 +131,6 @@ def _extract_name_from_skill_md(path: Path) -> str | None:
     if not text.startswith("---\n"):
         return None
 
-    # Read only frontmatter block
     end = text.find("\n---\n", 4)
     if end == -1:
         return None
@@ -192,6 +193,21 @@ def _preview(text: str, limit: int = 180) -> str:
     return f"{normalized[: limit - 3]}..."
 
 
+def _mode_label(item: dict[str, Any]) -> str:
+    query_mode = str(item.get("query_mode", DEFAULT_QUERY_MODE))
+    if query_mode == DEFAULT_QUERY_MODE:
+        return ""
+    return f"[{query_mode}] "
+
+
+def _mode_breakdown(queries: list[dict[str, Any]]) -> list[str]:
+    counts = Counter(str(query.get("query_mode", DEFAULT_QUERY_MODE)) for query in queries)
+    rows: list[str] = []
+    for query_mode, count in sorted(counts.items()):
+        rows.append(f"- `{query_mode}`: {count}")
+    return rows
+
+
 def _render_brief(skill: dict[str, Any], skill_file: Path | None, threshold: float) -> str:
     false_negatives = [
         query
@@ -207,7 +223,10 @@ def _render_brief(skill: dict[str, Any], skill_file: Path | None, threshold: flo
     false_negatives.sort(key=lambda row: float(row.get("trigger_rate", 0.0)))
     false_positives.sort(key=lambda row: float(row.get("trigger_rate", 0.0)), reverse=True)
 
-    positive_terms = _top_terms(false_negatives, str(skill.get("description", "")))
+    fn_for_terms = [
+        query for query in false_negatives if query.get("query_mode", DEFAULT_QUERY_MODE) != "explicit"
+    ]
+    positive_terms = _top_terms(fn_for_terms, str(skill.get("description", "")))
     negative_terms = _top_terms(false_positives, str(skill.get("description", "")))
 
     lines: list[str] = []
@@ -232,6 +251,10 @@ def _render_brief(skill: dict[str, Any], skill_file: Path | None, threshold: flo
     lines.append("")
 
     lines.append(f"Classification threshold used: `{threshold}`")
+    lines.append("")
+    lines.append("## Query Mode Mix")
+    lines.append("")
+    lines.extend(_mode_breakdown(skill.get("queries", [])))
 
     if false_negatives:
         lines.append("")
@@ -239,7 +262,7 @@ def _render_brief(skill: dict[str, Any], skill_file: Path | None, threshold: flo
         lines.append("")
         for item in false_negatives[:12]:
             lines.append(
-                f"- rate={float(item['trigger_rate']):.3f}: {_preview(str(item['query']))}"
+                f"- {_mode_label(item)}rate={float(item['trigger_rate']):.3f}: {_preview(str(item['query']))}"
             )
 
     if false_positives:
@@ -248,7 +271,7 @@ def _render_brief(skill: dict[str, Any], skill_file: Path | None, threshold: flo
         lines.append("")
         for item in false_positives[:12]:
             lines.append(
-                f"- rate={float(item['trigger_rate']):.3f}: {_preview(str(item['query']))}"
+                f"- {_mode_label(item)}rate={float(item['trigger_rate']):.3f}: {_preview(str(item['query']))}"
             )
 
     lines.append("")
@@ -262,7 +285,9 @@ def _render_brief(skill: dict[str, Any], skill_file: Path | None, threshold: flo
             + "."
         )
     else:
-        lines.append("- Positive trigger coverage looks broad; focus on reducing ambiguity in boundaries.")
+        lines.append(
+            "- Positive trigger coverage looks broad, or the remaining misses are mostly explicit-invocation cases."
+        )
 
     if negative_terms:
         lines.append(
@@ -272,6 +297,14 @@ def _render_brief(skill: dict[str, Any], skill_file: Path | None, threshold: flo
         )
     else:
         lines.append("- False-positive pressure is low; prioritize recall-oriented refinements first.")
+
+    explicit_misses = [
+        query for query in false_negatives if query.get("query_mode", DEFAULT_QUERY_MODE) == "explicit"
+    ]
+    if explicit_misses:
+        lines.append(
+            "- Separate explicit skill-name misses from natural-language routing misses before editing scope wording."
+        )
 
     lines.append(
         "- Change only the frontmatter `description` first, re-run evals, then compare before editing the body."

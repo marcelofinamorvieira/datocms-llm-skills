@@ -17,7 +17,11 @@ If you only need one skill, link just that folder by its canonical name.
 Example:
 
 ```bash
-ln -s /Users/marcelofinamorvieira/datoCMS/skills/skills/datocms-cda /Users/marcelofinamorvieira/.codex/skills/datocms-cda
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+skills_dir="${CODEX_HOME:-$HOME/.codex}/skills"
+
+mkdir -p "$skills_dir"
+ln -sfn "$repo_root/skills/datocms-cda" "$skills_dir/datocms-cda"
 ```
 
 The folder names inside `skills/` match each skill's `name:` field, so the repo
@@ -31,7 +35,11 @@ skill folders instead of symlinking them.
 Example:
 
 ```bash
-cp -R /Users/marcelofinamorvieira/datoCMS/skills/skills/datocms-cda /Users/marcelofinamorvieira/.codex/skills/datocms-cda
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+skills_dir="${CODEX_HOME:-$HOME/.codex}/skills"
+
+mkdir -p "$skills_dir/datocms-cda"
+cp -R "$repo_root/skills/datocms-cda/." "$skills_dir/datocms-cda"
 ```
 
 ## Canonical Skill Paths

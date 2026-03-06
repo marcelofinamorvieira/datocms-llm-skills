@@ -14,6 +14,22 @@ keeps the fuller catalog and the internal setup matrix.
 | `datocms-frontend-integrations` | `skills/datocms-frontend-integrations` | Framework integration patterns for draft mode, previews, live updates, rendering, and search |
 | `datocms-setup` | `skills/datocms-setup` | One-time setup orchestrator that routes to internal recipes for frontend, migrations, onboarding, and platform work |
 
+## Public Prompt Examples
+
+These are good explicit prompt shapes for the shipped public skills:
+
+```text
+$datocms-cda write a GraphQL query for blog posts with title, slug, and SEO fields
+$datocms-cma write a script that publishes all records in a model
+$datocms-cli scaffold a migration workflow for this project
+$datocms-frontend-integrations show how to wire DatoCMS draft mode into this Next.js app
+$datocms-plugin-builder build a sidebar panel plugin for this project
+$datocms-setup install content link in this project
+```
+
+`datocms-frontend-integrations` and `datocms-setup` are the two public skills
+that are most important to call explicitly when you want deterministic routing.
+
 ## Internal Setup Recipes
 
 `datocms-setup` is the public setup entrypoint. It owns the following internal
@@ -32,3 +48,16 @@ recipe groups:
 - `draft-mode` is queued automatically before `web-previews`, `content-link`, `realtime`, or `cache-tags` when that foundation is missing.
 - `migrations` is queued automatically before `migration-release-workflow`, `blueprint-sync`, `sandbox-iteration`, or `migration-autogenerate` when that baseline is missing.
 - The setup skill keeps setup self-contained: shared references, scripts, and assets all live inside `skills/datocms-setup`.
+
+## Explicit Prompt Examples
+
+Call `datocms-setup` explicitly, then describe the outcome in plain language.
+For Content Link, prompts like these should route to the `content-link` recipe
+and queue `draft-mode` first when needed:
+
+```text
+$datocms-setup install content link in this project
+$datocms-setup add visual editing to this app
+$datocms-setup set up click-to-edit overlays for draft pages
+$datocms-setup enable content-link for this repo and wire any missing prerequisites
+```
