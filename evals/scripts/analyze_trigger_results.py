@@ -17,6 +17,7 @@ from typing import Any
 DEFAULT_QUERY_MODE = "implicit"
 KNOWN_QUERY_MODES = ("implicit", "explicit", "overlap")
 RESULTS_MANIFEST_NAME = "manifest.json"
+DEFAULT_RESULTS_DIR = "evals/results"
 
 
 @dataclass
@@ -517,8 +518,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Analyze skill trigger-eval result files")
     parser.add_argument(
         "--results-dir",
-        default="evals/results",
-        help="Directory containing result files (default: evals/results)",
+        default=DEFAULT_RESULTS_DIR,
+        help=f"Directory containing result files (default: {DEFAULT_RESULTS_DIR})",
     )
     parser.add_argument(
         "--pattern",
