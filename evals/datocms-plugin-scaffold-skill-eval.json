@@ -1,0 +1,34 @@
+[
+  {
+    "query": "Scaffold a new DatoCMS plugin project from scratch with the right package.json, Vite files, and connect() entrypoint.",
+    "should_trigger": true
+  },
+  {
+    "query": "Create a new private DatoCMS plugin folder that starts with a sidebar panel for SEO checks.",
+    "should_trigger": true
+  },
+  {
+    "query": "Bootstrap a marketplace DatoCMS plugin package with a config screen and the correct datocms-plugin npm metadata.",
+    "should_trigger": true
+  },
+  {
+    "query": "Start a fresh DatoCMS plugin project that adds an asset source for Unsplash imports.",
+    "should_trigger": true
+  },
+  {
+    "query": "Patch this existing DatoCMS plugin config screen to remove one setting field.",
+    "should_trigger": false
+  },
+  {
+    "query": "Add one more dropdown action to our current DatoCMS plugin project.",
+    "should_trigger": false
+  },
+  {
+    "query": "Write a DatoCMS CMA script to upload images from URLs.",
+    "should_trigger": false
+  },
+  {
+    "query": "Show how to render DatoCMS structured text in a React front end.",
+    "should_trigger": false
+  }
+]

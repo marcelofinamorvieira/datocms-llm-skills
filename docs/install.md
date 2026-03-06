@@ -49,6 +49,7 @@ cp -R "$repo_root/skills/datocms-cda/." "$skills_dir/datocms-cda"
 - `skills/datocms-cma`
 - `skills/datocms-frontend-integrations`
 - `skills/datocms-plugin-builder`
+- `skills/datocms-plugin-scaffold`
 - `skills/datocms-setup`
 
 `datocms-setup` already contains its internal recipes, shared references, and

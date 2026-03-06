@@ -1,5 +1,14 @@
 # Dropdown Actions Reference
 
+## Quick Navigation
+
+- Choose the correct dropdown scope
+- Shared action and action-group shapes
+- Field actions
+- Record and record-form actions
+- Upload and schema actions
+- Grouped action menus
+
 Dropdown actions add custom actions to context menus throughout DatoCMS. Each scope has a declaration hook (returns the actions) and an execute hook (runs when clicked).
 
 ## Five Action Scopes

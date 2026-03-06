@@ -12,6 +12,7 @@ skills/
   datocms-cma/
   datocms-frontend-integrations/
   datocms-plugin-builder/
+  datocms-plugin-scaffold/
   datocms-setup/
     agents/
     references/

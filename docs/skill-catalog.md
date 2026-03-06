@@ -7,7 +7,8 @@ keeps the fuller catalog and the internal setup matrix.
 
 | Skill | Repo path | Scope |
 |---|---|---|
-| `datocms-plugin-builder` | `skills/datocms-plugin-builder` | Build or extend DatoCMS plugins |
+| `datocms-plugin-builder` | `skills/datocms-plugin-builder` | Patch and maintain existing DatoCMS plugins |
+| `datocms-plugin-scaffold` | `skills/datocms-plugin-scaffold` | Scaffold new DatoCMS plugin projects |
 | `datocms-cma` | `skills/datocms-cma` | Content management scripts, records, schema, environments, and webhooks |
 | `datocms-cli` | `skills/datocms-cli` | CLI workflows, migrations, environments, and imports |
 | `datocms-cda` | `skills/datocms-cda` | Content delivery queries, GraphQL reads, media, SEO, and typed queries |
@@ -23,7 +24,8 @@ $datocms-cda write a GraphQL query for blog posts with title, slug, and SEO fiel
 $datocms-cma write a script that publishes all records in a model
 $datocms-cli scaffold a migration workflow for this project
 $datocms-frontend-integrations show how to wire DatoCMS draft mode into this Next.js app
-$datocms-plugin-builder build a sidebar panel plugin for this project
+$datocms-plugin-builder patch the config screen in this plugin
+$datocms-plugin-scaffold scaffold a new sidebar panel plugin for this project
 $datocms-setup install content link in this project
 ```
 

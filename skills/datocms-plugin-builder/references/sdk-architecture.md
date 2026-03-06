@@ -1,5 +1,17 @@
 # DatoCMS Plugin SDK — Core Architecture
 
+## Quick Navigation
+
+- `connect()` entrypoint rules
+- Hook catalog by category
+- Shared render and `Canvas` patterns
+- Frame sizing model
+- Base `ctx` properties and methods
+- Partial repositories and iframe `ctx` recreation
+- `formValues`, CMA access, and async error handling
+- Parameter migration and declaration/render pairing rules
+- Type exports, CSS variables, and field-type tables
+
 ## Entry Point: `connect()`
 
 Every DatoCMS plugin has a single entry point — the `connect()` function from `datocms-plugin-sdk`. You pass it an object whose keys are hook names and whose values are hook implementations.

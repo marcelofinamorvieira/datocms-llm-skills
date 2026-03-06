@@ -1,5 +1,13 @@
 # Custom Pages Reference
 
+## Quick Navigation
+
+- Choose where the page lives: main nav, settings area, or content sidebar
+- Page declaration shapes for each location
+- `renderPage` and imposed-size frame behavior
+- `ctx.navigateTo()` and environment-aware paths
+- Shared page rendering notes
+
 Plugins can add full custom pages to DatoCMS in three locations: the top navigation bar, the settings area sidebar, and the content area sidebar. All custom pages are rendered via the shared `renderPage` hook.
 
 ## Top Navigation Tabs: `mainNavigationTabs`

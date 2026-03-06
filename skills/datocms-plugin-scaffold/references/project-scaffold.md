@@ -1,5 +1,14 @@
 # Project Scaffold Reference
 
+## Quick Navigation
+
+- Recommended directory structure
+- `package.json`, optional dependencies, and permissions
+- TypeScript config files
+- Vite and `index.html` setup
+- `src/utils/render.tsx` and `src/main.tsx` starters
+- Styling, local development, build, and publishing notes
+
 This reference provides the standard project structure and configuration files for creating a new DatoCMS plugin from scratch.
 
 ## Recommended Directory Structure
