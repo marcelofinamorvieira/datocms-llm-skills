@@ -1,5 +1,15 @@
 # Field Extensions Reference
 
+## Quick Navigation
+
+- Manual vs override selection
+- `manualFieldExtensions` declaration
+- `overrideFieldExtensions` declaration
+- `asSidebarPanel` usage
+- `renderFieldExtension` patterns
+- Localized-field handling
+- Configurable extension patterns and gotchas
+
 Field extensions replace or augment the default field editor in the record editing form. There are two types: **editors** (replace the default editor) and **addons** (appear below the editor).
 
 ## Choosing Between Manual and Override

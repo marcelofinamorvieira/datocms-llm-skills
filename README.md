@@ -10,7 +10,8 @@ guide for the repo.
 - `datocms-cma`: write records, manage schema, environments, and automation.
 - `datocms-cli`: handle CLI workflows such as migrations, environments, and imports.
 - `datocms-frontend-integrations`: patch or extend existing frontend integrations.
-- `datocms-plugin-builder`: build or modify DatoCMS plugins.
+- `datocms-plugin-builder`: patch and maintain existing DatoCMS plugins.
+- `datocms-plugin-scaffold`: scaffold new DatoCMS plugin projects.
 - `datocms-setup`: one-time setup orchestrator for frontend, migrations, onboarding imports, and platform automation.
 
 ## Setup Skill Behavior
@@ -75,7 +76,7 @@ skills_dir="${CODEX_HOME:-$HOME/.codex}/skills"
 
 mkdir -p "$skills_dir"
 
-for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-setup; do
+for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-plugin-scaffold datocms-setup; do
   ln -sfn "$repo_root/skills/$skill" "$skills_dir/$skill"
 done
 ```
@@ -91,7 +92,7 @@ skills_dir="$HOME/.claude/skills"
 
 mkdir -p "$skills_dir"
 
-for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-setup; do
+for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-plugin-scaffold datocms-setup; do
   ln -sfn "$repo_root/skills/$skill" "$skills_dir/$skill"
 done
 ```
@@ -114,6 +115,7 @@ skills/
   datocms-cma/
   datocms-frontend-integrations/
   datocms-plugin-builder/
+  datocms-plugin-scaffold/
   datocms-setup/
     agents/
     references/
