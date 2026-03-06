@@ -7,35 +7,34 @@ It follows the same pattern described in Anthropic's skill-iteration article:
 2. Measure with stable metrics (recall, precision, F1, false negatives/positives).
 3. Refine skill descriptions, then re-test and compare.
 
-## Two Eval Tracks
+## Result Layout
 
-This repo now keeps two distinct model eval tracks:
+This repo now keeps all eval outputs under one root:
 
-- **Claude Code eval track**: uses the existing Claude-style run outputs in `evals/results/*.json`.
-- **Codex eval track**: uses `evals/scripts/run_codex_trigger_eval.py` plus the analyzer/comparison scripts.
-
-Published snapshots and side-by-side metrics live in `evals/reports/README.md`.
+- `evals/results/`: the canonical latest accepted result snapshot.
+- `evals/results/historicalRuns/`: published historical snapshots.
+- `evals/results/adHocRuns/`: exploratory reruns, one-off checks, and side-by-side experiments.
 
 ## What Is In This Folder
 
 - `*.json`: trigger test cases (`query`, `should_trigger`).
 - Fixtures may also declare `query_mode` (`implicit`, `explicit`, `overlap`) and `boundary_with` for overlap cases.
 - Canonical fixture naming is `evals/<skill-name>-skill-eval.json` for every shipped skill.
-- `results/*.json`: raw run outputs (JSON or text preamble + JSON).
-- `results/manifest.json`: declares which checked-in result files are intentionally published and which skills are explicitly excluded.
+- `results/*.json`: canonical current raw run outputs (JSON or text preamble + JSON).
+- `results/manifest.json`: declares which checked-in current result files are intentionally published.
 - `scripts/analyze_trigger_results.py`: computes metrics from raw outputs.
 - `scripts/generate_refinement_briefs.py`: writes per-skill refinement briefs from misses.
 - `scripts/compare_trigger_runs.py`: compares baseline vs candidate runs.
-- `scripts/run_codex_trigger_eval.py`: runs Codex-trigger classification directly from skill frontmatter descriptions.
+- `scripts/run_codex_trigger_eval.py`: runs the local trigger classifier directly from skill frontmatter descriptions.
 - `scripts/validate_skill_repo.py`: validates repo invariants that the skill docs depend on, including metadata sync checks.
 
 ## Prerequisites
 
-Before using the Codex eval track:
+Before using the local trigger harness:
 
-- the `codex` CLI must be installed
+- the local trigger CLI must be installed
 - the CLI must already be authenticated
-- the `codex` binary must be available on `PATH`
+- the executable must be available on `PATH`
 
 You can verify the local docs, metadata, and routing invariants at any time with:
 
@@ -56,19 +55,12 @@ python3 evals/scripts/validate_skill_repo.py --repo-root . --require-clean-git
 
 ### 1) Test
 
-Run one of these two tracks:
-
-Claude Code track:
-- Produce or update `evals/results/*-eval-results.json` with your Claude run process.
-- Keep the output contract below so analyzer scripts can read it.
-
-Codex track:
-- Run:
+To produce a fresh exploratory run, write into `evals/results/adHocRuns/<date>-<label>/`:
 
 ```bash
 python3 evals/scripts/run_codex_trigger_eval.py \
   --repo-root . \
-  --output-dir evals/runs/2026-03-06-candidate/raw
+  --output-dir evals/results/adHocRuns/2026-03-06-candidate/raw
 ```
 
 The runner auto-discovers every public `SKILL.md` in `skills/` and expects a
@@ -91,17 +83,17 @@ Important output contract for each query result:
 
 You can keep human-readable preambles before JSON; the analyzer handles both pure JSON and mixed-output files.
 
-Recommended run layout:
+Recommended ad hoc run layout:
 
 ```text
-evals/runs/
+evals/results/adHocRuns/
   2026-03-05-baseline/
     raw/*.json
   2026-03-06-candidate/
     raw/*.json
 ```
 
-The Codex runner now performs a preflight check and fails fast with a clear error if `codex exec` is unavailable.
+The local runner now performs a preflight check and fails fast with a clear error if the classifier executable is unavailable.
 
 ### 2) Measure
 
@@ -109,22 +101,22 @@ Analyze a run directory:
 
 ```bash
 python3 evals/scripts/analyze_trigger_results.py \
-  --results-dir evals/runs/2026-03-06-candidate/raw \
-  --output-json evals/runs/2026-03-06-candidate/analysis.json \
-  --output-markdown evals/runs/2026-03-06-candidate/analysis.md
+  --results-dir evals/results/adHocRuns/2026-03-06-candidate/raw \
+  --output-json evals/results/adHocRuns/2026-03-06-candidate/analysis.json \
+  --output-markdown evals/results/adHocRuns/2026-03-06-candidate/analysis.md
 ```
 
-Analyze current repo baseline files:
+Analyze the canonical current snapshot:
 
-```bash
-python3 evals/scripts/analyze_trigger_results.py \
+  ```bash
+  python3 evals/scripts/analyze_trigger_results.py \
   --results-dir evals/results \
-  --output-json evals/results/latest-analysis.json \
-  --output-markdown evals/results/latest-analysis.md
-```
+  --output-json evals/results/analysis.json \
+  --output-markdown evals/results/analysis.md
+  ```
 
 When `evals/results/manifest.json` is present, the analysis report includes the
-published result coverage and any explicit exclusions.
+published current-result coverage.
 
 ### 3) Refine
 
@@ -132,9 +124,9 @@ Generate skill-specific briefs with concrete misses and suggested trigger bounda
 
 ```bash
 python3 evals/scripts/generate_refinement_briefs.py \
-  --analysis evals/runs/2026-03-06-candidate/analysis.json \
+  --analysis evals/results/adHocRuns/2026-03-06-candidate/analysis.json \
   --skills-root . \
-  --output-dir evals/runs/2026-03-06-candidate/refinement-briefs
+  --output-dir evals/results/adHocRuns/2026-03-06-candidate/refinement-briefs
 ```
 
 Refinement rule of thumb:
@@ -147,10 +139,10 @@ Compare candidate vs baseline:
 
 ```bash
 python3 evals/scripts/compare_trigger_runs.py \
-  --baseline evals/runs/2026-03-05-baseline/analysis.json \
-  --candidate evals/runs/2026-03-06-candidate/analysis.json \
-  --output-markdown evals/runs/2026-03-06-candidate/comparison.md \
-  --output-json evals/runs/2026-03-06-candidate/comparison.json
+  --baseline evals/results/adHocRuns/2026-03-05-baseline/analysis.json \
+  --candidate evals/results/adHocRuns/2026-03-06-candidate/analysis.json \
+  --output-markdown evals/results/adHocRuns/2026-03-06-candidate/comparison.md \
+  --output-json evals/results/adHocRuns/2026-03-06-candidate/comparison.json
 ```
 
 Keep changes only when they improve recall and keep precision within acceptable regression limits for your project.
