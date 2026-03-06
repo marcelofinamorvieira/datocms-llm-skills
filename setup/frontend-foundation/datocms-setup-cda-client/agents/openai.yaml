@@ -1,0 +1,8 @@
+# synced_from_name: datocms-setup-cda-client
+# synced_from_description_sha256: 94ba14919111d3d42f243e4faee5f27064335714c3f8ebec324a8cf503efb80d
+interface:
+  display_name: "DatoCMS CDA Client Setup"
+  short_description: "Set up a thin DatoCMS CDA client baseline"
+  default_prompt: "Use $datocms-setup-cda-client to scaffold a minimal published-content DatoCMS CDA query utility in this project."
+policy:
+  allow_implicit_invocation: false

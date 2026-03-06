@@ -1,0 +1,8 @@
+# synced_from_name: datocms-setup-video-player
+# synced_from_description_sha256: dcb4f3f87cfa0aa56b3edaf70d71dfc8e8f4fc5c2e5fd3773a9a819a0ed7d7a3
+interface:
+  display_name: "DatoCMS Video Player Setup"
+  short_description: "Set up DatoCMS video playback"
+  default_prompt: "Use $datocms-setup-video-player to scaffold DatoCMS video-player rendering in this project."
+policy:
+  allow_implicit_invocation: false

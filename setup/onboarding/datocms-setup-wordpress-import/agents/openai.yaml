@@ -1,0 +1,8 @@
+# synced_from_name: datocms-setup-wordpress-import
+# synced_from_description_sha256: 069afa48d98c009062734d84504c533538794713ff3154f400bd59686d669e3a
+interface:
+  display_name: "DatoCMS WordPress Import Setup"
+  short_description: "Set up a WordPress import workflow"
+  default_prompt: "Use $datocms-setup-wordpress-import to scaffold a lean DatoCMS CLI WordPress import helper."
+policy:
+  allow_implicit_invocation: false

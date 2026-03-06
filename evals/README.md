@@ -24,6 +24,27 @@ Published snapshots and side-by-side metrics live in `evals/reports/README.md`.
 - `scripts/generate_refinement_briefs.py`: writes per-skill refinement briefs from misses.
 - `scripts/compare_trigger_runs.py`: compares baseline vs candidate runs.
 - `scripts/run_codex_trigger_eval.py`: runs Codex-trigger classification directly from skill frontmatter descriptions.
+- `scripts/validate_skill_repo.py`: validates repo invariants that the skill docs depend on, including metadata sync checks.
+
+## Prerequisites
+
+Before using the Codex eval track:
+
+- the `codex` CLI must be installed
+- the CLI must already be authenticated
+- the `codex` binary must be available on `PATH`
+
+You can verify the local docs, metadata, and routing invariants at any time with:
+
+```bash
+python3 evals/scripts/validate_skill_repo.py --repo-root .
+```
+
+Before publishing, run the same validator with the clean-tree gate enabled:
+
+```bash
+python3 evals/scripts/validate_skill_repo.py --repo-root . --require-clean-git
+```
 
 ## Workflow
 
@@ -63,6 +84,8 @@ evals/runs/
   2026-03-06-candidate/
     raw/*.json
 ```
+
+The Codex runner now performs a preflight check and fails fast with a clear error if `codex exec` is unavailable.
 
 ### 2) Measure
 

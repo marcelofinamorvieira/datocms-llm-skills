@@ -1,0 +1,8 @@
+# synced_from_name: datocms-plugin-builder
+# synced_from_description_sha256: 5364ab6b638aceec1ee2c477a532da5d8558e0629f9aa0f681cd12d301a74689
+interface:
+  display_name: "DatoCMS Plugin Builder"
+  short_description: "Build or update DatoCMS plugins"
+  default_prompt: "Use $datocms-plugin-builder to build or update this DatoCMS plugin."
+policy:
+  allow_implicit_invocation: true

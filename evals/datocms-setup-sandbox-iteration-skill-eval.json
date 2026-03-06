@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Use datocms-setup-sandbox-iteration to add a helper that destroys and reforks a DatoCMS sandbox, then reruns migrations in place while I iterate locally.",
+    "should_trigger": true
+  },
+  {
+    "query": "Please run datocms-setup-sandbox-iteration in this repo. I already have CLI migrations set up and I want a reusable sandbox reset loop.",
+    "should_trigger": true
+  },
+  {
+    "query": "Invoke datocms-setup-sandbox-iteration and wire a datocms:sandbox:reset package script for local migration development.",
+    "should_trigger": true
+  },
+  {
+    "query": "Use datocms-setup-migration-release-workflow so I can promote a migrated sandbox to primary with maintenance mode.",
+    "should_trigger": false
+  },
+  {
+    "query": "How do I manually fork a DatoCMS environment and run migrations in place?",
+    "should_trigger": false
+  },
+  {
+    "query": "I want to import Contentful content into DatoCMS using the CLI.",
+    "should_trigger": false
+  }
+]

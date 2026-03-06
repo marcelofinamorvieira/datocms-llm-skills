@@ -1,0 +1,9 @@
+# synced_from_name: datocms-setup-robots-sitemaps
+# synced_from_description_sha256: 1a6d42125e6dd4207324edef4187af06d2c484a39780dfb77af898352185ce7c
+interface:
+  display_name: "DatoCMS Robots and Sitemaps Setup"
+  short_description: "Set up DatoCMS robots and sitemaps"
+  default_prompt: "Use $datocms-setup-robots-sitemaps to scaffold DatoCMS robots.txt and sitemap setup in this project."
+policy:
+  allow_implicit_invocation: false
+

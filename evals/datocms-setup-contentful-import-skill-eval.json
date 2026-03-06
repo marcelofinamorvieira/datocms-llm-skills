@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Use datocms-setup-contentful-import to install the DatoCMS Contentful import plugin, add env placeholders, and scaffold a local helper.",
+    "should_trigger": true
+  },
+  {
+    "query": "Please run datocms-setup-contentful-import in this repo. I want a lean one-shot Contentful onboarding flow into DatoCMS.",
+    "should_trigger": true
+  },
+  {
+    "query": "Invoke datocms-setup-contentful-import and add a datocms:import:contentful script that validates env vars before running.",
+    "should_trigger": true
+  },
+  {
+    "query": "Use datocms-setup-wordpress-import to wire a WordPress import helper.",
+    "should_trigger": false
+  },
+  {
+    "query": "How do I import Contentful content into DatoCMS with the CLI?",
+    "should_trigger": false
+  },
+  {
+    "query": "Set up named DatoCMS CLI profiles for staging and production.",
+    "should_trigger": false
+  }
+]

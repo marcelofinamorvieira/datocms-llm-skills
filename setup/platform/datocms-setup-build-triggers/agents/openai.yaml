@@ -1,0 +1,8 @@
+# synced_from_name: datocms-setup-build-triggers
+# synced_from_description_sha256: 394a95c86e285cb2c889dabd5507f4572d2e701a27ab687bdfc9ee0d63cd8f77
+interface:
+  display_name: "DatoCMS Build Triggers Setup"
+  short_description: "Set up DatoCMS build trigger management"
+  default_prompt: "Use $datocms-setup-build-triggers to scaffold declarative DatoCMS build-trigger management in this project."
+policy:
+  allow_implicit_invocation: false

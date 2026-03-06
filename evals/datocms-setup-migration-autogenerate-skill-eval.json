@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Use datocms-setup-migration-autogenerate to add a helper around migrations:new --autogenerate for this repo.",
+    "should_trigger": true
+  },
+  {
+    "query": "Please run datocms-setup-migration-autogenerate. I want a local script that turns DatoCMS environment diffs into migration files.",
+    "should_trigger": true
+  },
+  {
+    "query": "Invoke datocms-setup-migration-autogenerate and wire a datocms:migrations:diff script that accepts --from and --to.",
+    "should_trigger": true
+  },
+  {
+    "query": "Use datocms-setup-migration-release-workflow so I can safely deploy migrations to production.",
+    "should_trigger": false
+  },
+  {
+    "query": "How do I autogenerate a DatoCMS migration by diffing two environments?",
+    "should_trigger": false
+  },
+  {
+    "query": "Add a reusable sandbox reset helper for my DatoCMS migrations.",
+    "should_trigger": false
+  }
+]

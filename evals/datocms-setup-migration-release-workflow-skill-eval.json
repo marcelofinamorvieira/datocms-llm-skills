@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Use datocms-setup-migration-release-workflow to add a local release helper for DatoCMS migrations with maintenance mode and promotion.",
+    "should_trigger": true
+  },
+  {
+    "query": "Please invoke datocms-setup-migration-release-workflow. I already have datocms CLI migrations working and now I want a repeatable production release flow.",
+    "should_trigger": true
+  },
+  {
+    "query": "Run datocms-setup-migration-release-workflow and also scaffold the optional GitHub Actions workflow for the release helper.",
+    "should_trigger": true
+  },
+  {
+    "query": "How do I use maintenance:on, migrations:run, and environments:promote from the DatoCMS CLI?",
+    "should_trigger": false
+  },
+  {
+    "query": "Use datocms-setup-migrations to prepare this repo for CLI migrations.",
+    "should_trigger": false
+  },
+  {
+    "query": "I need to query blog posts from DatoCMS in my React app.",
+    "should_trigger": false
+  }
+]

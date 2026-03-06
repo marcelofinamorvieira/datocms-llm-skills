@@ -1,0 +1,9 @@
+# synced_from_name: datocms-setup-site-search
+# synced_from_description_sha256: 855c03f26e9a637b64248881124f271db2bef993e09f9f52ed805f4e3988d118
+interface:
+  display_name: "DatoCMS Site Search Setup"
+  short_description: "Set up DatoCMS site search"
+  default_prompt: "Use $datocms-setup-site-search to scaffold DatoCMS Site Search in this project."
+policy:
+  allow_implicit_invocation: false
+

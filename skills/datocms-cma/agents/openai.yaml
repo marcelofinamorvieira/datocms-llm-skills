@@ -1,0 +1,8 @@
+# synced_from_name: datocms-cma
+# synced_from_description_sha256: 5fdf09b137370c79654cd33b6a9657a3f9b1704567c051a747fae7d686912ffe
+interface:
+  display_name: "DatoCMS CMA"
+  short_description: "Work with the DatoCMS management API"
+  default_prompt: "Use $datocms-cma to write a DatoCMS management API script or schema update."
+policy:
+  allow_implicit_invocation: true

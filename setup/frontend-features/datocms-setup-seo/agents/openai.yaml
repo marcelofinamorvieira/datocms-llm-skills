@@ -1,0 +1,9 @@
+# synced_from_name: datocms-setup-seo
+# synced_from_description_sha256: 7576bbe3885a60d3ecc09d36f12b1240f99beb2d180a062d56b8bbc448d647b1
+interface:
+  display_name: "DatoCMS SEO Setup"
+  short_description: "Set up DatoCMS SEO metadata"
+  default_prompt: "Use $datocms-setup-seo to scaffold DatoCMS SEO metadata in this project."
+policy:
+  allow_implicit_invocation: false
+
