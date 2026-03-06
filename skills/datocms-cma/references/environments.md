@@ -2,6 +2,18 @@
 
 Covers sandbox environment management: listing, forking, promoting, renaming, and deleting environments.
 
+## Quick Navigation
+
+- [Overview](#overview)
+- [Listing Environments](#listing-environments)
+- [Finding an Environment](#finding-an-environment)
+- [Forking (Creating a Sandbox)](#forking-creating-a-sandbox)
+- [Promoting a Sandbox](#promoting-a-sandbox)
+- [Renaming an Environment](#renaming-an-environment)
+- [Deleting an Environment](#deleting-an-environment)
+- [Environment-Aware Client](#environment-aware-client)
+- [CI/CD Pattern: Fork → Migrate → Promote](#cicd-pattern-fork--migrate--promote)
+
 ---
 
 ## Overview

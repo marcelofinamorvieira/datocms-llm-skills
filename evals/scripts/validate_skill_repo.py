@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import re
 import subprocess
 from dataclasses import dataclass
@@ -38,21 +39,14 @@ ALLOW_IMPLICIT_RE = re.compile(
 
 SKILL_GLOB_PATTERNS = (
     "skills/*/SKILL.md",
-    "setup/*/*/SKILL.md",
 )
+RECIPE_GLOB_PATTERN = "skills/datocms-setup/recipes/*/*/recipe.md"
+EVAL_FIXTURE_SUFFIX = "-skill-eval.json"
+EVAL_RESULT_SUFFIX = "-eval-results.json"
 
 SCAFFOLD_CAPABLE_SKILLS = {
     "datocms-frontend-integrations",
-    "datocms-setup-cache-tags",
-    "datocms-setup-responsive-images",
-    "datocms-setup-structured-text",
-    "datocms-setup-video-player",
-    "datocms-setup-site-search",
-    "datocms-setup-seo",
-    "datocms-setup-robots-sitemaps",
-    "datocms-setup-web-previews",
-    "datocms-setup-webhooks",
-    "datocms-setup-build-triggers",
+    "datocms-setup",
 }
 
 STALE_SCAFFOLD_MARKETING_PATTERNS = (
@@ -196,6 +190,34 @@ def _iter_skill_files(repo_root: Path) -> list[Path]:
     return skill_files
 
 
+def _iter_recipe_files(repo_root: Path) -> list[Path]:
+    return sorted(repo_root.glob(RECIPE_GLOB_PATTERN))
+
+
+def _extract_json_payload(raw: str, source: Path) -> dict[str, object]:
+    first_brace = raw.find("{")
+    if first_brace < 0:
+        raise ValueError(f"{source}: no JSON object found")
+
+    decoder = json.JSONDecoder()
+    last_error: ValueError | None = None
+    cursor = first_brace
+
+    while cursor >= 0:
+        try:
+            parsed, _end = decoder.raw_decode(raw[cursor:])
+            if isinstance(parsed, dict):
+                return parsed
+            raise ValueError(f"{source}: JSON root is not an object")
+        except ValueError as exc:
+            last_error = exc
+            cursor = raw.find("{", cursor + 1)
+
+    if last_error is not None:
+        raise ValueError(f"{source}: could not parse JSON payload") from last_error
+    raise ValueError(f"{source}: could not parse JSON payload")
+
+
 def _validate_reference_paths(skill_file: Path, errors: list[str]) -> None:
     text = skill_file.read_text(encoding="utf-8")
     for rel_path, _prefix in REFERENCE_PATH_RE.findall(text):
@@ -288,6 +310,92 @@ def _validate_scaffold_marketing(repo_root: Path, errors: list[str]) -> None:
             errors.append(f"README.md: stale scaffold wording `{pattern}`")
 
 
+def _validate_eval_fixture_payload(path: Path, errors: list[str]) -> None:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        errors.append(f"{path}: invalid JSON ({exc})")
+        return
+
+    if not isinstance(payload, list) or not payload:
+        errors.append(f"{path}: eval fixture must be a non-empty JSON array")
+        return
+
+    true_count = 0
+    false_count = 0
+
+    for index, row in enumerate(payload):
+        if not isinstance(row, dict):
+            errors.append(f"{path}: eval row {index} must be an object")
+            continue
+
+        query = row.get("query")
+        should_trigger = row.get("should_trigger")
+
+        if not isinstance(query, str) or not query.strip():
+            errors.append(f"{path}: eval row {index} must include a non-empty string `query`")
+
+        if not isinstance(should_trigger, bool):
+            errors.append(f"{path}: eval row {index} must include boolean `should_trigger`")
+            continue
+
+        if should_trigger:
+            true_count += 1
+        else:
+            false_count += 1
+
+    if true_count == 0 or false_count == 0:
+        errors.append(f"{path}: eval fixture must include both positive and negative cases")
+
+
+def _validate_eval_fixture_coverage(
+    repo_root: Path,
+    canonical_skill_names: set[str],
+    errors: list[str],
+) -> None:
+    eval_dir = repo_root / "evals"
+    actual_paths = sorted(eval_dir.glob(f"*{EVAL_FIXTURE_SUFFIX}"))
+    actual_names = set()
+
+    for path in actual_paths:
+        skill_name = path.name[: -len(EVAL_FIXTURE_SUFFIX)]
+        actual_names.add(skill_name)
+
+        if skill_name not in canonical_skill_names:
+            errors.append(
+                f"{path}: eval fixture filename does not match any canonical skill name"
+            )
+
+        _validate_eval_fixture_payload(path, errors)
+
+    missing_names = sorted(canonical_skill_names - actual_names)
+    for skill_name in missing_names:
+        errors.append(
+            f"evals/{skill_name}{EVAL_FIXTURE_SUFFIX}: missing canonical eval fixture"
+        )
+
+
+def _validate_eval_result_names(repo_root: Path, errors: list[str]) -> None:
+    results_dir = repo_root / "evals" / "results"
+    for path in sorted(results_dir.glob(f"*{EVAL_RESULT_SUFFIX}")):
+        try:
+            payload = _extract_json_payload(path.read_text(encoding="utf-8"), path)
+        except ValueError as exc:
+            errors.append(str(exc))
+            continue
+
+        skill_name = payload.get("skill_name")
+        if not isinstance(skill_name, str) or not skill_name.strip():
+            errors.append(f"{path}: result file must include string `skill_name`")
+            continue
+
+        expected_name = f"{skill_name}{EVAL_RESULT_SUFFIX}"
+        if path.name != expected_name:
+            errors.append(
+                f"{path}: result filename should be `{expected_name}` to match canonical skill name"
+            )
+
+
 def _validate_astro_imports(repo_root: Path, errors: list[str]) -> None:
     astro_refs = sorted(
         (repo_root / "skills" / "datocms-frontend-integrations" / "references").glob("astro*.md")
@@ -298,6 +406,121 @@ def _validate_astro_imports(repo_root: Path, errors: list[str]) -> None:
             errors.append(
                 f"{astro_ref}: Astro references must use subpath imports, not `from '@datocms/astro'`"
             )
+
+
+def _validate_setup_manifest(repo_root: Path, errors: list[str]) -> None:
+    skill_root = repo_root / "skills" / "datocms-setup"
+    if not skill_root.exists():
+        return
+
+    manifest_path = skill_root / "references" / "recipe-manifest.json"
+    if not manifest_path.exists():
+        errors.append(f"{manifest_path}: missing setup recipe manifest")
+        return
+
+    try:
+        payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        errors.append(f"{manifest_path}: invalid JSON ({exc})")
+        return
+
+    if not isinstance(payload, dict):
+        errors.append(f"{manifest_path}: manifest root must be an object")
+        return
+
+    recipes = payload.get("recipes")
+    if not isinstance(recipes, list) or not recipes:
+        errors.append(f"{manifest_path}: manifest must include a non-empty `recipes` array")
+        return
+
+    recipe_ids: set[str] = set()
+    manifest_recipe_paths: set[str] = set()
+
+    for index, recipe in enumerate(recipes):
+        if not isinstance(recipe, dict):
+            errors.append(f"{manifest_path}: recipe {index} must be an object")
+            continue
+
+        recipe_id = recipe.get("id")
+        recipe_path = recipe.get("path")
+        prerequisites = recipe.get("prerequisites")
+        assets = recipe.get("assets")
+        scripts = recipe.get("scripts")
+        shared_references = recipe.get("shared_references")
+
+        if not isinstance(recipe_id, str) or not recipe_id.strip():
+            errors.append(f"{manifest_path}: recipe {index} must include non-empty string `id`")
+            continue
+
+        if recipe_id in recipe_ids:
+            errors.append(f"{manifest_path}: duplicate recipe id `{recipe_id}`")
+        recipe_ids.add(recipe_id)
+
+        if not isinstance(recipe_path, str) or not recipe_path.strip():
+            errors.append(f"{manifest_path}: recipe `{recipe_id}` must include non-empty string `path`")
+        else:
+            manifest_recipe_paths.add(recipe_path)
+            resolved_recipe = skill_root / recipe_path
+            if not resolved_recipe.exists():
+                errors.append(f"{manifest_path}: recipe `{recipe_id}` points to missing path `{recipe_path}`")
+
+        if not isinstance(prerequisites, list) or any(not isinstance(item, str) for item in prerequisites):
+            errors.append(f"{manifest_path}: recipe `{recipe_id}` must include string array `prerequisites`")
+
+        if not isinstance(shared_references, list) or any(
+            not isinstance(item, str) for item in shared_references
+        ):
+            errors.append(
+                f"{manifest_path}: recipe `{recipe_id}` must include string array `shared_references`"
+            )
+        else:
+            for rel_path in shared_references:
+                if not (skill_root / rel_path).exists():
+                    errors.append(
+                        f"{manifest_path}: recipe `{recipe_id}` references missing shared reference `{rel_path}`"
+                    )
+
+        for field_name, entries in (("assets", assets), ("scripts", scripts)):
+            if not isinstance(entries, list) or any(not isinstance(item, str) for item in entries):
+                errors.append(f"{manifest_path}: recipe `{recipe_id}` must include string array `{field_name}`")
+                continue
+            for rel_path in entries:
+                if not (skill_root / rel_path).exists():
+                    errors.append(
+                        f"{manifest_path}: recipe `{recipe_id}` references missing {field_name[:-1]} `{rel_path}`"
+                    )
+
+    for recipe in recipes:
+        if not isinstance(recipe, dict):
+            continue
+        recipe_id = recipe.get("id")
+        prerequisites = recipe.get("prerequisites")
+        if not isinstance(recipe_id, str) or not isinstance(prerequisites, list):
+            continue
+        for prerequisite in prerequisites:
+            if prerequisite not in recipe_ids:
+                errors.append(
+                    f"{manifest_path}: recipe `{recipe_id}` references unknown prerequisite `{prerequisite}`"
+                )
+
+    actual_recipe_paths = {
+        path.relative_to(skill_root).as_posix() for path in _iter_recipe_files(repo_root)
+    }
+    missing_recipe_paths = sorted(actual_recipe_paths - manifest_recipe_paths)
+    for recipe_path in missing_recipe_paths:
+        errors.append(f"{manifest_path}: missing manifest entry for `{recipe_path}`")
+
+    extra_recipe_paths = sorted(manifest_recipe_paths - actual_recipe_paths)
+    for recipe_path in extra_recipe_paths:
+        errors.append(f"{manifest_path}: manifest lists unknown recipe path `{recipe_path}`")
+
+    forbidden_skill_files = sorted((skill_root / "recipes").glob("**/SKILL.md"))
+    for forbidden_path in forbidden_skill_files:
+        errors.append(f"{forbidden_path}: internal recipe folders must not ship `SKILL.md`")
+
+    forbidden_metadata = sorted((skill_root / "recipes").glob("**/agents/openai.yaml"))
+    for forbidden_path in forbidden_metadata:
+        errors.append(f"{forbidden_path}: internal recipe folders must not ship `agents/openai.yaml`")
 
 
 def _validate_clean_git(repo_root: Path, errors: list[str]) -> None:
@@ -353,6 +576,7 @@ def main() -> int:
 
     frontmatter_by_path = {path: _extract_frontmatter(path) for path in skill_files}
     canonical_skill_names = {frontmatter.name for frontmatter in frontmatter_by_path.values()}
+    recipe_files = _iter_recipe_files(repo_root)
 
     errors: list[str] = []
 
@@ -363,8 +587,15 @@ def main() -> int:
         _validate_metadata(skill_file, frontmatter, errors)
         _validate_scaffold_contract(skill_file, frontmatter, errors)
 
+    for recipe_file in recipe_files:
+        _validate_reference_paths(recipe_file, errors)
+        _validate_banned_skill_body_patterns(recipe_file, errors)
+
     _validate_scaffold_marketing(repo_root, errors)
+    _validate_eval_fixture_coverage(repo_root, canonical_skill_names, errors)
+    _validate_eval_result_names(repo_root, errors)
     _validate_astro_imports(repo_root, errors)
+    _validate_setup_manifest(repo_root, errors)
 
     if args.require_clean_git:
         _validate_clean_git(repo_root, errors)
@@ -376,12 +607,16 @@ def main() -> int:
         return 1
 
     print(f"[ok] validated {len(skill_files)} skills")
+    print(f"[ok] validated {len(recipe_files)} internal setup recipes")
     print("[ok] reference paths resolve")
     print("[ok] metadata files are present and synced")
     print("[ok] routed skill names match frontmatter names")
     print("[ok] scaffold-capable skills declare scaffolded vs production-ready states")
+    print("[ok] canonical eval fixtures cover every skill and contain positive/negative cases")
+    print("[ok] checked-in eval result filenames match canonical skill names")
     print("[ok] banned host-specific labels are absent from skill bodies")
     print("[ok] Astro references use subpath imports")
+    print("[ok] datocms-setup manifest paths, prerequisites, references, scripts, and assets are valid")
     if args.require_clean_git:
         print("[ok] git status is clean (ignoring local-only excluded paths)")
     return 0

@@ -14,7 +14,7 @@ description: >-
 
 # DatoCMS Content Management API Skill
 
-You are an expert at writing code that interacts with the DatoCMS Content Management API (CMA). Follow these steps in order. Do not skip steps.
+You are an expert at writing code that interacts with the DatoCMS Content Management API (CMA). Use this workflow as a default. Reorder or skip steps when the task is purely diagnostic, advisory, or the user only needs an explanation.
 
 ---
 
@@ -44,22 +44,21 @@ Silently examine the project to determine the runtime and which CMA client packa
 
 ## Step 2: Understand the Task
 
-Ask the user clarifying questions to classify their task into one or more categories:
+Classify the user's task into one or more categories. Ask follow-up questions only when the request is ambiguous or the risk of a wrong assumption is high.
 
-| Category | Examples |
-|---|---|
-| **Content operations** | Create, read, update, delete, publish, unpublish records |
-| **Upload operations** | Upload files, manage assets, update metadata, bulk tag |
-| **Schema operations** | Create/modify models, fields, fieldsets, block models |
-| **Filtering & querying** | Search records, filter by fields, paginate large collections |
-| **Localization** | Work with localized field values, multi-locale content |
-| **Blocks & structured text** | Modular content, inline blocks, DAST structured text |
-| **Environment operations** | Fork, promote, rename, delete sandbox environments |
-| **Webhook & deploy operations** | Configure webhooks, build triggers, deploy management |
-| **Access control** | Create roles, manage API tokens, invite users |
-| **Scheduling** | Schedule publish/unpublish, manage workflows |
-| **Migration & scripting** | Bulk data operations, content seeding, field migrations |
-| **Type generation** | Generate CMA schema types, set up typed record operations, configure `@datocms/cli` |
+- **Content operations** — Create, read, update, delete, publish, or unpublish records
+- **Upload operations** — Upload files, manage assets, update metadata, bulk tag
+- **Schema operations** — Create or modify models, fields, fieldsets, block models
+- **Filtering & querying** — Search records, filter by fields, paginate large collections
+- **Localization** — Work with localized field values and multi-locale content
+- **Blocks & modular content** — Modular content fields, single-block fields, nested block payloads
+- **Structured text & block tooling** — DAST payloads, embedded blocks, block traversal, debugging helpers
+- **Environment operations** — Fork, promote, rename, delete sandbox environments
+- **Webhook & deploy operations** — Configure webhooks, build triggers, deploy management
+- **Access control** — Create roles, manage API tokens, invite users
+- **Scheduling** — Schedule publish/unpublish, manage workflows
+- **Migration & scripting** — Bulk data operations, content seeding, field migrations
+- **Type generation** — Generate CMA schema types or wire typed record operations
 
 If the user's request is clear and falls into an obvious category, skip the clarifying questions and proceed directly.
 
@@ -67,61 +66,62 @@ If the user's request is clear and falls into an obvious category, skip the clar
 
 ## Step 3: Load References
 
-Based on the task classification, read the appropriate reference files from the `references/` directory next to this skill file. **Always** load the core client reference. Only load what is relevant — do not load everything.
+Based on the task classification, read the appropriate reference files from the `references/` directory next to this skill file. Prefer section-level reads inside long references by using each file's Quick Navigation section first. Only load what is relevant.
 
 **Always load:**
-- `references/client-and-types.md` — Client setup, type system, error handling, configuration
+- `references/client-setup-and-errors.md` — Package choice, client setup, token/environment config, error handling
 
 **Load per category:**
 
-| Task category | Reference file |
-|---|---|
-| Content operations (records CRUD) | `references/records.md` |
-| Upload operations | `references/uploads.md` |
-| Schema operations (models, fields) | `references/schema.md` |
-| Filtering & querying | `references/filtering-and-pagination.md` |
-| Localization | `references/localization.md` |
-| Blocks & structured text | `references/blocks-and-structured-text.md` |
-| Environment operations | `references/environments.md` |
-| Webhooks & deploy | `references/webhooks-and-triggers.md` |
-| Access control | `references/access-control.md` |
-| Scheduling & workflows | `references/scheduling.md` |
-| Migration & scripting | `references/migration-patterns.md` |
-| Type generation (CMA schema types, `@datocms/cli`) | `references/type-generation.md` |
+- `Content operations` → `references/records.md`
+- `Upload operations` → `references/uploads.md`
+- `Schema operations` → `references/schema.md`
+- `Filtering & querying` → `references/filtering-and-pagination.md`
+- `Localization` → `references/localization.md`
+- `Blocks & modular content` → `references/block-records-and-modular-content.md`
+- `Structured text & block tooling` → `references/structured-text-and-block-tools.md`
+- `Environment operations` → `references/environments.md`
+- `Webhook & deploy operations` → `references/webhooks-and-triggers.md`
+- `Access control` → `references/access-control.md`
+- `Scheduling` → `references/scheduling.md`
+- `Migration & scripting` → `references/migration-patterns.md`
+- `Type generation` → `references/type-generation.md`
 
 **Load cross-cutting references when needed:**
 - If the task involves localized fields in any context → also load `references/localization.md`
-- If the task involves modular content or structured text fields → also load `references/blocks-and-structured-text.md`
+- If the task uses `raw*()` methods, generated CMA types, advanced client behavior, or platform limits → also load `references/client-types-and-behaviors.md`
+- If the task involves modular content or single-block fields → also load `references/block-records-and-modular-content.md`
+- If the task involves DAST structured text, `SchemaRepository`, `inspectItem()`, or block traversal utilities → also load `references/structured-text-and-block-tools.md`
 - If the task involves listing many records → also load `references/filtering-and-pagination.md`
 - If the task is a migration script → also load `references/migration-patterns.md` plus whatever domain refs are needed
 
 ---
 
-## Step 4: Generate Code
+## Step 4: Generate the Solution
 
-Write the code following these mandatory rules:
+When the response includes code, follow these default rules:
 
 ### Client Setup
-- Always use `buildClient()` from the detected package (Step 1)
+- Default to `buildClient()` from the detected package (Step 1)
 - Store the API token in an environment variable, never hardcode it
 - Set the `environment` option when working with sandbox environments
 
 ### API Surface
 - Default to the simplified API (e.g., `client.items.create()`) because it handles serialization/deserialization automatically
-- Switch to `raw*()` methods only when the task explicitly needs raw JSON:API payloads or when generated CMA schema types are intentionally part of the solution
+- Switch to `raw*()` methods only when the task explicitly needs raw JSON:API payloads, relationship metadata, or generated CMA schema types are intentionally part of the solution
 
 ### Pagination
-- **Always use `client.items.listPagedIterator()`** (or the equivalent for other resources) when iterating over collections
-- Never manually implement offset/limit pagination loops
-- Use `for await...of` to consume the async iterator
+- Prefer `*.listPagedIterator()` (for example `client.items.listPagedIterator()`) when iterating over collections
+- Avoid manual offset/limit pagination loops unless a resource genuinely lacks an iterator
+- Use `for await...of` to consume async iterators
 
 ### Blocks
-- **Always use `buildBlockRecord()`** when creating block records for the simplified API
+- Prefer `buildBlockRecord()` when creating block records for the simplified API
 - Import it from the same package as `buildClient`
 
 ### Error Handling
 - Catch `ApiError` for API failures — it provides `.errors` getter and `.findError()` method
-- Catch `TimeoutError` for request timeouts
+- Catch `TimeoutError` for request timeouts in long-running or request-heavy flows
 - Import both from the same package as `buildClient`
 
 ### TypeScript
@@ -138,10 +138,10 @@ Before presenting the final code:
 1. **Token permissions** — CMA operations need a token with CMA access enabled and appropriate role permissions (not a CDA-only read-only token). Schema changes require a role with `can_edit_schema: true`.
 2. **Environment targeting** — If working with a sandbox, ensure the `environment` config option is set
 3. **Error handling** — Ensure `ApiError` is caught at appropriate boundaries
-4. **Pagination** — Ensure `listPagedIterator()` is used for any collection that could exceed a single page
+4. **Pagination** — If the solution iterates a collection that could exceed a single page, prefer `listPagedIterator()`
 5. **Type safety** — Ensure no type assertions (`as`) are used to silence errors
 6. **Imports** — Ensure all imports come from the correct package (the one detected in Step 1)
-7. **Generated types** — If the solution is intentionally using generated CMA types (`cma-types.ts`), ensure code uses them with `raw*()` method generics and `RawApiTypes.Item<>` instead of untyped access
+7. **Generated types** — If the solution intentionally uses generated CMA types (`cma-types.ts`), ensure `raw*()` method generics and `RawApiTypes.Item<>` usage are deliberate and typed end to end
 
 If the generated code is a script (migration, seeding, etc.), wrap it in an async function with proper error handling and progress reporting.
 
@@ -153,6 +153,7 @@ This skill covers **content management via the REST CMA** (mutations, schema, up
 
 | Condition | Route to |
 |---|---|
+| CLI commands, migration scaffolding, `datocms schema:generate`, or environment operations via `npx datocms` | **datocms-cli** |
 | Querying content with GraphQL for frontend display | **datocms-cda** |
 | Setting up draft mode, Web Previews, Content Link, real-time subscriptions, or framework integration | **datocms-frontend-integrations** |
 | Building a DatoCMS plugin | **datocms-plugin-builder** |

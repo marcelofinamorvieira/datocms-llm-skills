@@ -1,8 +1,0 @@
-# synced_from_name: datocms-setup-structured-text
-# synced_from_description_sha256: 44556a57802d7ce5d42a5725376b4995b35a98d51a8b62a3e8afce21046dbdce
-interface:
-  display_name: "DatoCMS Structured Text Setup"
-  short_description: "Set up DatoCMS Structured Text"
-  default_prompt: "Use $datocms-setup-structured-text to scaffold DatoCMS Structured Text rendering in this project."
-policy:
-  allow_implicit_invocation: false

@@ -2,6 +2,14 @@
 
 Covers scheduled publication/unpublication and workflow management.
 
+## Quick Navigation
+
+- [Scheduled Publication](#scheduled-publication)
+- [Scheduled Unpublishing](#scheduled-unpublishing)
+- [Combining Publish and Unpublish Schedules](#combining-publish-and-unpublish-schedules)
+- [Workflows](#workflows)
+- [Complete Example: Set Up Editorial Workflow](#complete-example-set-up-editorial-workflow)
+
 ---
 
 ## Scheduled Publication

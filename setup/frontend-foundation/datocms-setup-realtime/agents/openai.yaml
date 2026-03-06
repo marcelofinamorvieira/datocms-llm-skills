@@ -1,8 +1,0 @@
-# synced_from_name: datocms-setup-realtime
-# synced_from_description_sha256: 19c00f3470ffb5994e62f758fa7c0b62bb35cf6e1663efa17f8ebf5d26ed1b85
-interface:
-  display_name: "DatoCMS Realtime Setup"
-  short_description: "Set up DatoCMS realtime preview updates"
-  default_prompt: "Use $datocms-setup-realtime to scaffold DatoCMS realtime preview updates in this project."
-policy:
-  allow_implicit_invocation: false

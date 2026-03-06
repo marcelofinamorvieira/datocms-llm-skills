@@ -1,8 +1,0 @@
-# synced_from_name: datocms-setup-draft-mode
-# synced_from_description_sha256: 45a078a047d650ef1f2214357b2ed049a37e4b89344effa4798862bd95f87492
-interface:
-  display_name: "DatoCMS Draft Mode Setup"
-  short_description: "Set up DatoCMS draft mode"
-  default_prompt: "Use $datocms-setup-draft-mode to scaffold DatoCMS draft mode in this project."
-policy:
-  allow_implicit_invocation: false

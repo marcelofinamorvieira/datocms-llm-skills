@@ -1,8 +1,0 @@
-# synced_from_name: datocms-setup-migration-autogenerate
-# synced_from_description_sha256: 2019eb2f90b49dbd60cd1a2ca9a5650d1af1a3e021e3884df901fcc971ef1c6a
-interface:
-  display_name: "DatoCMS Migration Diff Setup"
-  short_description: "Set up CLI migration autogenerate"
-  default_prompt: "Use $datocms-setup-migration-autogenerate to scaffold a DatoCMS CLI helper for autogenerating migrations from environment diffs."
-policy:
-  allow_implicit_invocation: false

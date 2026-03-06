@@ -1,6 +1,6 @@
 # Trigger Eval Analysis
 
-Generated at: 2026-03-05T15:01:03.926017+00:00
+Generated at: 2026-03-06T13:48:19.446929+00:00
 Threshold: `0.5`
 
 Overall: 51/91 reported-pass (56.0%), precision 100.0%, recall 13.0%, F1 23.1%.
