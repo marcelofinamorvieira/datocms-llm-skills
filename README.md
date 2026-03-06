@@ -49,14 +49,31 @@ the smoothest cross-skill routing.
 
 Recommended local development install:
 
+<details>
+<summary>Codex</summary>
+
 ```bash
-ln -s /absolute/path/to/repo/skills/datocms-cda <skills-root>/datocms-cda
-ln -s /absolute/path/to/repo/skills/datocms-cli <skills-root>/datocms-cli
-ln -s /absolute/path/to/repo/skills/datocms-cma <skills-root>/datocms-cma
-ln -s /absolute/path/to/repo/skills/datocms-frontend-integrations <skills-root>/datocms-frontend-integrations
-ln -s /absolute/path/to/repo/skills/datocms-plugin-builder <skills-root>/datocms-plugin-builder
-ln -s /absolute/path/to/repo/skills/datocms-setup <skills-root>/datocms-setup
+mkdir -p /Users/marcelofinamorvieira/.codex/skills
+
+for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-setup; do
+  ln -s "/Users/marcelofinamorvieira/datoCMS/skills/skills/$skill" "/Users/marcelofinamorvieira/.codex/skills/$skill"
+done
 ```
+
+</details>
+
+<details>
+<summary>Claude Code</summary>
+
+```bash
+mkdir -p /Users/marcelofinamorvieira/.claude/skills
+
+for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-setup; do
+  ln -s "/Users/marcelofinamorvieira/datoCMS/skills/skills/$skill" "/Users/marcelofinamorvieira/.claude/skills/$skill"
+done
+```
+
+</details>
 
 If you only need one area, symlink or copy just that skill folder.
 `datocms-setup` already contains its internal recipes, shared references, and
@@ -75,9 +92,11 @@ skills/
     agents/
     references/
     recipes/
-docs/   # lightweight pointers; keep the root README canonical
-evals/  # trigger fixtures, validation scripts, and reports
-local/  # optional ignored scratch space
+docs/   # deeper guides and longer repo notes
+evals/
+  results/  # checked-in raw eval outputs
+  reports/  # analyzed snapshots and comparisons
+  scripts/  # validation and eval tooling
 ```
 
 ## Validate
