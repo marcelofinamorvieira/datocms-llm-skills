@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run trigger evals using codex exec as a classifier.
 
-This evaluates each skill's current frontmatter description against the prompt sets
+This evaluates each skill's current routing surface against the prompt sets
 in evals/*.json and emits result files compatible with analyze_trigger_results.py.
 """
 
@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 import subprocess
 import tempfile
@@ -17,6 +18,25 @@ from pathlib import Path
 from typing import Any
 
 DEFAULT_QUERY_MODE = "implicit"
+SOURCE_FRONTMATTER = "frontmatter"
+SOURCE_METADATA = "metadata"
+SOURCE_COMBINED = "combined"
+VALID_SOURCES = (
+    SOURCE_FRONTMATTER,
+    SOURCE_METADATA,
+    SOURCE_COMBINED,
+)
+
+DISPLAY_NAME_RE = re.compile(r'^  display_name: "(?P<value>(?:[^"\\]|\\.)*)"$', re.MULTILINE)
+SHORT_DESCRIPTION_RE = re.compile(
+    r'^  short_description: "(?P<value>(?:[^"\\]|\\.)*)"$',
+    re.MULTILINE,
+)
+DEFAULT_PROMPT_RE = re.compile(r'^  default_prompt: "(?P<value>(?:[^"\\]|\\.)*)"$', re.MULTILINE)
+ALLOW_IMPLICIT_RE = re.compile(
+    r"^  allow_implicit_invocation: (?P<value>true|false)$",
+    re.MULTILINE,
+)
 
 
 @dataclass
@@ -24,6 +44,14 @@ class SkillEvalConfig:
     skill_name: str
     eval_file: str
     skill_file: str
+
+
+@dataclass
+class SkillMetadata:
+    display_name: str
+    short_description: str
+    default_prompt: str
+    allow_implicit_invocation: bool
 
 
 SKILL_GLOB_PATTERNS = (
@@ -45,6 +73,10 @@ def _iter_skill_files(repo_root: Path) -> list[Path]:
     for pattern in SKILL_GLOB_PATTERNS:
         skill_files.extend(sorted(repo_root.glob(pattern)))
     return skill_files
+
+
+def _decode_double_quoted_yaml(value: str) -> str:
+    return bytes(value, "utf-8").decode("unicode_escape")
 
 
 def _extract_frontmatter(skill_path: Path) -> tuple[str, str]:
@@ -101,6 +133,39 @@ def _extract_frontmatter(skill_path: Path) -> tuple[str, str]:
     return name, description
 
 
+def _extract_metadata(skill_path: Path) -> SkillMetadata:
+    metadata_path = skill_path.parent / "agents" / "openai.yaml"
+    if not metadata_path.exists():
+        raise ValueError(f"{metadata_path}: missing metadata file")
+
+    text = metadata_path.read_text(encoding="utf-8")
+    display_name_match = DISPLAY_NAME_RE.search(text)
+    short_description_match = SHORT_DESCRIPTION_RE.search(text)
+    default_prompt_match = DEFAULT_PROMPT_RE.search(text)
+    allow_implicit_match = ALLOW_IMPLICIT_RE.search(text)
+
+    missing_fields: list[str] = []
+    if display_name_match is None:
+        missing_fields.append("interface.display_name")
+    if short_description_match is None:
+        missing_fields.append("interface.short_description")
+    if default_prompt_match is None:
+        missing_fields.append("interface.default_prompt")
+    if allow_implicit_match is None:
+        missing_fields.append("policy.allow_implicit_invocation")
+
+    if missing_fields:
+        missing_text = ", ".join(missing_fields)
+        raise ValueError(f"{metadata_path}: missing metadata fields: {missing_text}")
+
+    return SkillMetadata(
+        display_name=_decode_double_quoted_yaml(display_name_match.group("value")),
+        short_description=_decode_double_quoted_yaml(short_description_match.group("value")),
+        default_prompt=_decode_double_quoted_yaml(default_prompt_match.group("value")),
+        allow_implicit_invocation=allow_implicit_match.group("value") == "true",
+    )
+
+
 def _discover_eval_configs(repo_root: Path) -> list[SkillEvalConfig]:
     configs: list[SkillEvalConfig] = []
     missing_fixtures: list[str] = []
@@ -129,10 +194,35 @@ def _discover_eval_configs(repo_root: Path) -> list[SkillEvalConfig]:
     return sorted(configs, key=lambda config: config.skill_name)
 
 
-def _build_prompt(skill_name: str, description: str, queries: list[str]) -> str:
-    query_lines = "\n".join(f"{idx + 1}. {query}" for idx, query in enumerate(queries))
+def _filter_eval_configs(configs: list[SkillEvalConfig], skill_name: str | None) -> list[SkillEvalConfig]:
+    if skill_name is None:
+        return configs
+
+    filtered = [config for config in configs if config.skill_name == skill_name]
+    if not filtered:
+        raise ValueError(f"unknown skill for eval filter: {skill_name}")
+    return filtered
+
+
+def _case_line(index: int, row: dict[str, Any]) -> str:
+    query_mode = str(row.get("query_mode", DEFAULT_QUERY_MODE))
+    boundary_with = row.get("boundary_with", [])
+    boundary_text = ""
+    if isinstance(boundary_with, list) and boundary_with:
+        boundary_text = f" boundary_with={','.join(str(item) for item in boundary_with)}"
+    return f"{index}. [mode={query_mode}{boundary_text}] {str(row['query'])}"
+
+
+def _build_frontmatter_prompt(
+    skill_name: str,
+    description: str,
+    eval_rows: list[dict[str, Any]],
+) -> str:
+    query_lines = "\n".join(_case_line(idx + 1, row) for idx, row in enumerate(eval_rows))
 
     return f"""You are a strict skill-trigger classifier.
+
+Evaluation source: frontmatter description only.
 
 Target skill name: {skill_name}
 Target skill description:
@@ -145,16 +235,122 @@ Rules:
 - Return true only when the query directly falls within this target skill scope.
 - Return false when the query is better handled by a different DatoCMS skill domain.
 - If uncertain, prefer false.
+- Treat `mode=explicit` as an explicit named-skill invocation test.
+- Treat `mode=implicit` as a natural-language routing test.
+- Treat `mode=overlap` as a boundary case where the query may plausibly fit multiple skills.
 
 Output:
 Return exactly one JSON object with this shape:
 {{"predictions":[boolean,...]}}
-The predictions array must contain exactly {len(queries)} booleans, in the same order as the queries.
+The predictions array must contain exactly {len(eval_rows)} booleans, in the same order as the queries.
 No explanation.
 
 Queries:
 {query_lines}
 """
+
+
+def _build_metadata_prompt(
+    skill_name: str,
+    metadata: SkillMetadata,
+    eval_rows: list[dict[str, Any]],
+) -> str:
+    query_lines = "\n".join(_case_line(idx + 1, row) for idx, row in enumerate(eval_rows))
+    implicit_policy = "true" if metadata.allow_implicit_invocation else "false"
+
+    return f"""You are a strict skill-trigger classifier.
+
+Evaluation source: agent metadata only.
+
+Target skill name: {skill_name}
+Display name: {metadata.display_name}
+Short description: {metadata.short_description}
+Default prompt: {metadata.default_prompt}
+Allow implicit invocation: {implicit_policy}
+
+Task:
+For each user query below, decide if this TARGET skill should trigger.
+
+Rules:
+- Use only the metadata above to decide the skill boundary.
+- Return true only when the query clearly fits this target better than other DatoCMS skills.
+- If `mode=implicit` and allow implicit invocation is false, return false.
+- If `mode=explicit`, treat the case as an explicit named-skill invocation; this can return true even when allow implicit invocation is false.
+- If `mode=overlap`, treat the case as a natural-language boundary test unless the query itself explicitly invokes the skill.
+- If uncertain, prefer false.
+
+Output:
+Return exactly one JSON object with this shape:
+{{"predictions":[boolean,...]}}
+The predictions array must contain exactly {len(eval_rows)} booleans, in the same order as the queries.
+No explanation.
+
+Queries:
+{query_lines}
+"""
+
+
+def _build_combined_prompt(
+    skill_name: str,
+    description: str,
+    metadata: SkillMetadata,
+    eval_rows: list[dict[str, Any]],
+) -> str:
+    query_lines = "\n".join(_case_line(idx + 1, row) for idx, row in enumerate(eval_rows))
+    implicit_policy = "true" if metadata.allow_implicit_invocation else "false"
+
+    return f"""You are a strict skill-trigger classifier.
+
+Evaluation source: frontmatter plus agent metadata.
+
+Target skill name: {skill_name}
+
+Frontmatter description:
+{description}
+
+Agent metadata:
+- display_name: {metadata.display_name}
+- short_description: {metadata.short_description}
+- default_prompt: {metadata.default_prompt}
+- allow_implicit_invocation: {implicit_policy}
+
+Task:
+For each user query below, decide if this TARGET skill should trigger.
+
+Rules:
+- Use the frontmatter description for the full scope boundary.
+- Use the agent metadata as the routing surface and policy signal.
+- Return true only when the query clearly fits this target better than other DatoCMS skills.
+- If `mode=implicit` and allow implicit invocation is false, return false.
+- If `mode=explicit`, treat the case as an explicit named-skill invocation; this can return true even when allow implicit invocation is false.
+- If `mode=overlap`, treat the case as a boundary test where another listed skill may also be reasonable.
+- If uncertain, prefer false.
+
+Output:
+Return exactly one JSON object with this shape:
+{{"predictions":[boolean,...]}}
+The predictions array must contain exactly {len(eval_rows)} booleans, in the same order as the queries.
+No explanation.
+
+Queries:
+{query_lines}
+"""
+
+
+def _build_prompt(
+    source: str,
+    skill_name: str,
+    description: str,
+    metadata: SkillMetadata,
+    eval_rows: list[dict[str, Any]],
+) -> str:
+    if source == SOURCE_FRONTMATTER:
+        return _build_frontmatter_prompt(skill_name, description, eval_rows)
+    if source == SOURCE_METADATA:
+        return _build_metadata_prompt(skill_name, metadata, eval_rows)
+    if source == SOURCE_COMBINED:
+        return _build_combined_prompt(skill_name, description, metadata, eval_rows)
+    raise ValueError(f"unsupported source: {source}")
 
 
 def _run_codex_predictions(repo_root: Path, prompt: str, expected_len: int, model: str | None) -> list[bool]:
@@ -240,6 +436,7 @@ def _evaluate_skill(
     config: SkillEvalConfig,
     output_dir: Path,
     model: str | None,
+    source: str,
 ) -> dict[str, Any]:
     eval_path = repo_root / config.eval_file
     skill_path = repo_root / config.skill_file
@@ -249,13 +446,14 @@ def _evaluate_skill(
         raise ValueError(
             f"{skill_path}: discovered skill name `{config.skill_name}` does not match frontmatter `{skill_name}`"
         )
+    metadata = _extract_metadata(skill_path)
     eval_queries = json.loads(eval_path.read_text(encoding="utf-8"))
 
     if not isinstance(eval_queries, list):
         raise ValueError(f"{eval_path}: expected array of eval cases")
 
-    queries: list[str] = [str(row["query"]) for row in eval_queries]
-    predictions = _run_codex_predictions(repo_root, _build_prompt(skill_name, description, queries), len(queries), model)
+    prompt = _build_prompt(source, skill_name, description, metadata, eval_queries)
+    predictions = _run_codex_predictions(repo_root, prompt, len(eval_queries), model)
 
     results: list[dict[str, Any]] = []
     passed = 0
@@ -283,7 +481,8 @@ def _evaluate_skill(
 
     payload = {
         "skill_name": skill_name,
-        "description": description,
+        "description": description if source != SOURCE_METADATA else metadata.short_description,
+        "evaluation_source": source,
         "results": results,
         "summary": {
             "total": len(results),
@@ -305,7 +504,7 @@ def _evaluate_skill(
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run codex-based trigger eval for skill descriptions")
+    parser = argparse.ArgumentParser(description="Run codex-based trigger eval for skill routing")
     parser.add_argument(
         "--repo-root",
         default=".",
@@ -320,6 +519,16 @@ def parse_args() -> argparse.Namespace:
         "--model",
         help="Optional codex model override",
     )
+    parser.add_argument(
+        "--source",
+        default=SOURCE_FRONTMATTER,
+        choices=VALID_SOURCES,
+        help="Routing source to evaluate: frontmatter, metadata, or combined (default: frontmatter)",
+    )
+    parser.add_argument(
+        "--skill",
+        help="Optional single skill name to evaluate",
+    )
     return parser.parse_args()
 
 
@@ -329,11 +538,11 @@ def main() -> int:
     repo_root = Path(args.repo_root).resolve()
     output_dir = Path(args.output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
-    configs = _discover_eval_configs(repo_root)
+    configs = _filter_eval_configs(_discover_eval_configs(repo_root), args.skill)
 
     summaries: list[dict[str, Any]] = []
     for config in configs:
-        summary = _evaluate_skill(repo_root, config, output_dir, args.model)
+        summary = _evaluate_skill(repo_root, config, output_dir, args.model, args.source)
         summaries.append(summary)
         print(
             f"[done] {summary['skill_name']}: {summary['passed']}/{summary['total']} "
