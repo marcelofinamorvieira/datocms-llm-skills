@@ -2,6 +2,21 @@
 
 Uploads are the files and media assets in DatoCMS. The CMA provides both low-level upload primitives and high-level convenience methods (Node.js only) for common upload workflows.
 
+## Quick Navigation
+
+- [Node.js Convenience Methods](#nodejs-convenience-methods)
+- [The Raw Upload Flow (Any Environment)](#the-raw-upload-flow-any-environment)
+- [Browser Upload Helper](#browser-upload-helper)
+- [Upload Metadata](#upload-metadata)
+- [Listing and Finding Uploads](#listing-and-finding-uploads)
+- [Updating Upload Metadata](#updating-upload-metadata)
+- [Deleting Uploads](#deleting-uploads)
+- [Bulk Operations](#bulk-operations)
+- [Upload Collections (Folders)](#upload-collections-folders)
+- [Using Uploads in Record Fields](#using-uploads-in-record-fields)
+- [Finding Records That Use an Upload](#finding-records-that-use-an-upload)
+- [Complete Example: Upload and Use in Record](#complete-example-upload-and-use-in-record)
+
 ---
 
 ## Node.js Convenience Methods
@@ -226,13 +241,7 @@ Per-locale metadata for the asset. Each locale key contains:
 
 ## Listing and Finding Uploads
 
-### List with Pagination
-
-```ts
-for await (const upload of client.uploads.listPagedIterator()) {
-  console.log(upload.id, upload.filename);
-}
-```
+Upload pagination uses the same iterator pattern as records. See `references/filtering-and-pagination.md` for iterator options and page-size guidance.
 
 ### Filter Uploads
 

@@ -1,11 +1,11 @@
 {
-  "generated_at_utc": "2026-03-05T15:01:03.926017+00:00",
+  "generated_at_utc": "2026-03-06T13:48:19.446929+00:00",
   "threshold": 0.5,
   "skills": [
     {
       "skill_name": "datocms-cda",
       "description": "Query the DatoCMS Content Delivery API (CDA) \u2014 a read-only GraphQL API \u2014 using the official @datocms/cda-client TypeScript/JavaScript library. Use when users want to fetch records, filter and paginate collections, query localized content with fallbacks, work with modular content blocks, render structured text (DAST), display responsive images with imgix transformations and placeholders, handle SEO meta tags and favicons, query Mux videos, use draft/preview mode, target sandbox environments, integrate cache tags for CDN invalidation, enable Content Link for visual editing, or perform any client-side or server-side DatoCMS content reading operation. Also use when users want to set up type generation for fully typed queries using gql.tada or GraphQL Code Generator.",
-      "source_file": "evals/results/cda-eval-results.json",
+      "source_file": "evals/results/datocms-cda-eval-results.json",
       "total": 19,
       "reported_passed": 11,
       "reported_accuracy": 0.5789473684210527,
@@ -235,7 +235,7 @@
     {
       "skill_name": "datocms-cli",
       "description": "Work with the DatoCMS CLI tool (@datocms/cli) for migration scripting, environment management, maintenance mode, content importing, and project configuration. Use when users want to create or run migration scripts, manage sandbox environments from the command line, toggle maintenance mode, set up CLI profiles and configuration, import content from WordPress or Contentful, or orchestrate deployment workflows with environment forking and promotion.",
-      "source_file": "evals/results/cli-eval-results.json",
+      "source_file": "evals/results/datocms-cli-eval-results.json",
       "total": 18,
       "reported_passed": 9,
       "reported_accuracy": 0.5,
@@ -454,7 +454,7 @@
     {
       "skill_name": "datocms-cma",
       "description": "Interact with the DatoCMS Content Management API (CMA) using the official TypeScript/JavaScript REST clients. Use when users want to create, read, update, or delete records (items), manage uploads and assets, define or modify models and fields (schema), work with environments (fork, promote), configure webhooks and build triggers, manage roles and API tokens, schedule publication or unpublication, handle localized content, build modular content with blocks and structured text, paginate and filter records, write migration and seeding scripts, or generate TypeScript types from your DatoCMS schema for type-safe record operations. Covers the most commonly used CMA resources \u2014 records, uploads, schema, environments, webhooks, access control, scheduling, and workflows.",
-      "source_file": "evals/results/cma-eval-results.json",
+      "source_file": "evals/results/datocms-cma-eval-results.json",
       "total": 18,
       "reported_passed": 10,
       "reported_accuracy": 0.5555555555555556,
@@ -673,7 +673,7 @@
     {
       "skill_name": "datocms-frontend-integrations",
       "description": "DatoCMS front-end integrations for existing projects. Covers two domains: (1) Draft mode setup \u2014 authenticated endpoints with dual-token architecture, Web Previews plugin integration, Content Link visual editing setup, and real-time update subscriptions for Next.js (App Router), Nuxt, SvelteKit, and Astro. (2) React, Vue, Svelte, and Astro component/hook/store usage from react-datocms, vue-datocms, @datocms/svelte, and @datocms/astro \u2014 responsive images, structured text rendering, video player (React/Vue/Svelte only), SEO/meta tag utilities, real-time subscriptions, Content Link visual editing (<ContentLink>), and site search (useSiteSearch, React/Vue only). Use when users want to set up draft mode, web previews, content link, real-time updates, display DatoCMS images/video, render structured text, handle SEO meta tags, build search UIs, or enable visual editing in React-based, Vue-based, Svelte-based, or Astro projects.",
-      "source_file": "evals/results/frontend-eval-results.json",
+      "source_file": "evals/results/datocms-frontend-integrations-eval-results.json",
       "total": 18,
       "reported_passed": 10,
       "reported_accuracy": 0.5555555555555556,
@@ -892,7 +892,7 @@
     {
       "skill_name": "datocms-plugin-builder",
       "description": "Build DatoCMS plugins using datocms-plugin-sdk. Use when users want to create or modify a DatoCMS plugin, work with the connect() function, field extensions, sidebar panels, custom pages, dropdown actions, asset sources, lifecycle hooks, modals, config screens, inspectors, outlets, upload sidebars, record presentation, structured text customization, or any plugin SDK hooks.",
-      "source_file": "evals/results/pluginsdk-eval-results.json",
+      "source_file": "evals/results/datocms-plugin-builder-eval-results.json",
       "total": 18,
       "reported_passed": 11,
       "reported_accuracy": 0.6111111111111112,

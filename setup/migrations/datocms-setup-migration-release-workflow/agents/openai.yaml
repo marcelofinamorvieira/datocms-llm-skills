@@ -1,8 +1,0 @@
-# synced_from_name: datocms-setup-migration-release-workflow
-# synced_from_description_sha256: 0d72197e7c03f5e6ec6959748849f4f197fe85e1cf4470afbc2ebb103cb95df0
-interface:
-  display_name: "DatoCMS Migration Release Setup"
-  short_description: "Set up DatoCMS migration releases"
-  default_prompt: "Use $datocms-setup-migration-release-workflow to scaffold a safe DatoCMS migration release workflow."
-policy:
-  allow_implicit_invocation: false

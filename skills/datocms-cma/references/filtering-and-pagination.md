@@ -2,6 +2,18 @@
 
 Covers querying patterns for listing records: pagination, filtering by fields, text search, sorting, and efficient counting.
 
+## Quick Navigation
+
+- [Pagination Basics](#pagination-basics)
+- [`listPagedIterator()` — Auto-Pagination](#listpagediterator--auto-pagination)
+- [Filtering Records](#filtering-records)
+- [Field-Specific Filters](#field-specific-filters)
+- [Meta Filters](#meta-filters)
+- [Sorting](#sorting)
+- [Getting Total Count](#getting-total-count)
+- [Locale-Specific Filtering](#locale-specific-filtering)
+- [Complete Example: Advanced Querying](#complete-example-advanced-querying)
+
 ---
 
 ## Pagination Basics

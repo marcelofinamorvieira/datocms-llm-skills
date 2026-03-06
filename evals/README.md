@@ -19,6 +19,7 @@ Published snapshots and side-by-side metrics live in `evals/reports/README.md`.
 ## What Is In This Folder
 
 - `*.json`: trigger test cases (`query`, `should_trigger`).
+- Canonical fixture naming is `evals/<skill-name>-skill-eval.json` for every shipped skill.
 - `results/*.json`: raw run outputs (JSON or text preamble + JSON).
 - `scripts/analyze_trigger_results.py`: computes metrics from raw outputs.
 - `scripts/generate_refinement_briefs.py`: writes per-skill refinement briefs from misses.
@@ -39,6 +40,9 @@ You can verify the local docs, metadata, and routing invariants at any time with
 ```bash
 python3 evals/scripts/validate_skill_repo.py --repo-root .
 ```
+
+That validator now also checks that every shipped skill has a canonically named eval
+fixture and that the checked-in baseline result filenames match canonical skill names.
 
 Before publishing, run the same validator with the clean-tree gate enabled:
 
@@ -64,6 +68,9 @@ python3 evals/scripts/run_codex_trigger_eval.py \
   --repo-root . \
   --output-dir evals/runs/2026-03-06-candidate/raw
 ```
+
+The runner auto-discovers every public `SKILL.md` in `skills/` and expects a
+matching `evals/<skill-name>-skill-eval.json` fixture for each one.
 
 Important output contract for each query result:
 - `query`

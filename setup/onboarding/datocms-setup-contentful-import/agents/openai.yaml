@@ -1,8 +1,0 @@
-# synced_from_name: datocms-setup-contentful-import
-# synced_from_description_sha256: c8aae40af85328a638cbc32d350cc75fd31224df6156be0d35abef08b74fe6a5
-interface:
-  display_name: "DatoCMS Contentful Import Setup"
-  short_description: "Set up a Contentful import workflow"
-  default_prompt: "Use $datocms-setup-contentful-import to scaffold a lean DatoCMS CLI Contentful import helper."
-policy:
-  allow_implicit_invocation: false

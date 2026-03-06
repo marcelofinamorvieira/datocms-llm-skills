@@ -2,6 +2,21 @@
 
 Records are the content entries in DatoCMS. They are instances of models (item types). This is the most-used resource in the CMA.
 
+## Quick Navigation
+
+- [Creating Records](#creating-records)
+- [Retrieving Records](#retrieving-records)
+- [Listing Records](#listing-records)
+- [Updating Records](#updating-records)
+- [Publishing and Unpublishing](#publishing-and-unpublishing)
+- [Deleting Records](#deleting-records)
+- [Duplicating Records](#duplicating-records)
+- [Bulk Operations](#bulk-operations)
+- [Finding References](#finding-references)
+- [Record Versions](#record-versions)
+- [Field Value Formats](#field-value-formats)
+- [Complete Example: Create, Publish, Update, Delete](#complete-example-create-publish-update-delete)
+
 ---
 
 ## Creating Records
@@ -92,49 +107,7 @@ const records = await client.items.list({
 });
 ```
 
-### Auto-Paginated Iteration
-
-**Always use `listPagedIterator()` when iterating over collections.** It handles pagination automatically:
-
-```ts
-for await (const record of client.items.listPagedIterator({
-  filter: { type: "blog_post" },
-})) {
-  console.log(record.id, record.title);
-}
-```
-
-### Collecting All Records into an Array
-
-```ts
-const allRecords = [];
-
-for await (const record of client.items.listPagedIterator({
-  filter: { type: "blog_post" },
-})) {
-  allRecords.push(record);
-}
-```
-
-### Iterator Options
-
-Control pagination concurrency and page size:
-
-```ts
-for await (const record of client.items.listPagedIterator(
-  { filter: { type: "blog_post" } },
-  { concurrency: 5, perPage: 100 },
-)) {
-  // Process record...
-}
-```
-
-| Option | Type | Default | Description |
-|---|---|---|---|
-| `concurrency` | `number` | `1` | Number of concurrent page requests (1–10) |
-| `perPage` | `number` | `30` | Records per page (max 500) |
-
-**Important:** Higher concurrency fetches pages faster but consumes API rate limits faster. Use `concurrency: 1` for scripts that also perform writes.
+For auto-pagination, iterator options, counting, and filtering patterns, see `references/filtering-and-pagination.md`. Use that reference whenever a record query may span multiple pages.
 
 ---
 
@@ -401,23 +374,7 @@ Array of file objects (same shape as single file):
 
 ### Modular Content, Structured Text, Single Block
 
-These are complex field types — see `references/blocks-and-structured-text.md`.
-
----
-
-## Localized Field Values
-
-When a field is localized, its value is an object keyed by locale code instead of a plain value:
-
-```ts
-// Non-localized
-{ title: "Hello" }
-
-// Localized
-{ title: { en: "Hello", it: "Ciao" } }
-```
-
-See `references/localization.md` for full details.
+These are complex field types — see `references/block-records-and-modular-content.md` and `references/structured-text-and-block-tools.md`.
 
 ---
 

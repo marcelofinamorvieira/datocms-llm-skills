@@ -19,75 +19,14 @@ from typing import Any
 
 @dataclass
 class SkillEvalConfig:
+    skill_name: str
     eval_file: str
     skill_file: str
 
 
-SKILL_EVAL_CONFIGS: list[SkillEvalConfig] = [
-    SkillEvalConfig("evals/datocms-cda-skill-eval.json", "skills/datocms-cda/SKILL.md"),
-    SkillEvalConfig("evals/datocms-cli-skill-eval.json", "skills/datocms-cli/SKILL.md"),
-    SkillEvalConfig("evals/datocms-cma-skill-eval.json", "skills/datocms-cma/SKILL.md"),
-    SkillEvalConfig(
-        "evals/datocms-frontend-integrations-skill-eval.json",
-        "skills/datocms-frontend-integrations/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-pluginsdk-skill-eval.json",
-        "skills/datocms-plugin-builder/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-setup-migrations-skill-eval.json",
-        "setup/migrations/datocms-setup-migrations/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-setup-migration-release-workflow-skill-eval.json",
-        "setup/migrations/datocms-setup-migration-release-workflow/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-setup-blueprint-sync-skill-eval.json",
-        "setup/migrations/datocms-setup-blueprint-sync/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-setup-sandbox-iteration-skill-eval.json",
-        "setup/migrations/datocms-setup-sandbox-iteration/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-setup-cli-profiles-skill-eval.json",
-        "setup/migrations/datocms-setup-cli-profiles/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-setup-migration-autogenerate-skill-eval.json",
-        "setup/migrations/datocms-setup-migration-autogenerate/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-setup-graphql-types-skill-eval.json",
-        "setup/frontend-foundation/datocms-setup-graphql-types/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-setup-cda-client-skill-eval.json",
-        "setup/frontend-foundation/datocms-setup-cda-client/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-setup-contentful-import-skill-eval.json",
-        "setup/onboarding/datocms-setup-contentful-import/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-setup-wordpress-import-skill-eval.json",
-        "setup/onboarding/datocms-setup-wordpress-import/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-setup-cma-types-skill-eval.json",
-        "setup/platform/datocms-setup-cma-types/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-setup-webhooks-skill-eval.json",
-        "setup/platform/datocms-setup-webhooks/SKILL.md",
-    ),
-    SkillEvalConfig(
-        "evals/datocms-setup-build-triggers-skill-eval.json",
-        "setup/platform/datocms-setup-build-triggers/SKILL.md",
-    ),
-]
+SKILL_GLOB_PATTERNS = (
+    "skills/*/SKILL.md",
+)
 
 
 def _ensure_codex_cli_available() -> None:
@@ -97,6 +36,13 @@ def _ensure_codex_cli_available() -> None:
             "codex CLI not found on PATH. Install it, authenticate it, and verify "
             "`codex exec --help` works before running the Codex eval track."
         )
+
+
+def _iter_skill_files(repo_root: Path) -> list[Path]:
+    skill_files: list[Path] = []
+    for pattern in SKILL_GLOB_PATTERNS:
+        skill_files.extend(sorted(repo_root.glob(pattern)))
+    return skill_files
 
 
 def _extract_frontmatter(skill_path: Path) -> tuple[str, str]:
@@ -151,6 +97,34 @@ def _extract_frontmatter(skill_path: Path) -> tuple[str, str]:
         raise ValueError(f"{skill_path}: missing description in frontmatter")
 
     return name, description
+
+
+def _discover_eval_configs(repo_root: Path) -> list[SkillEvalConfig]:
+    configs: list[SkillEvalConfig] = []
+    missing_fixtures: list[str] = []
+
+    for skill_path in _iter_skill_files(repo_root):
+        skill_name, _description = _extract_frontmatter(skill_path)
+        eval_file = Path("evals") / f"{skill_name}-skill-eval.json"
+        eval_path = repo_root / eval_file
+
+        if not eval_path.exists():
+            missing_fixtures.append(f"{skill_name}: expected {eval_file.as_posix()}")
+            continue
+
+        configs.append(
+            SkillEvalConfig(
+                skill_name=skill_name,
+                eval_file=eval_file.as_posix(),
+                skill_file=skill_path.relative_to(repo_root).as_posix(),
+            )
+        )
+
+    if missing_fixtures:
+        lines = "\n".join(f"- {item}" for item in missing_fixtures)
+        raise ValueError(f"missing canonical trigger-eval fixtures:\n{lines}")
+
+    return sorted(configs, key=lambda config: config.skill_name)
 
 
 def _build_prompt(skill_name: str, description: str, queries: list[str]) -> str:
@@ -269,6 +243,10 @@ def _evaluate_skill(
     skill_path = repo_root / config.skill_file
 
     skill_name, description = _extract_frontmatter(skill_path)
+    if skill_name != config.skill_name:
+        raise ValueError(
+            f"{skill_path}: discovered skill name `{config.skill_name}` does not match frontmatter `{skill_name}`"
+        )
     eval_queries = json.loads(eval_path.read_text(encoding="utf-8"))
 
     if not isinstance(eval_queries, list):
@@ -347,9 +325,10 @@ def main() -> int:
     repo_root = Path(args.repo_root).resolve()
     output_dir = Path(args.output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
+    configs = _discover_eval_configs(repo_root)
 
     summaries: list[dict[str, Any]] = []
-    for config in SKILL_EVAL_CONFIGS:
+    for config in configs:
         summary = _evaluate_skill(repo_root, config, output_dir, args.model)
         summaries.append(summary)
         print(

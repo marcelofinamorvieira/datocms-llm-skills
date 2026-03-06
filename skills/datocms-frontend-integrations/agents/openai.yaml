@@ -1,8 +1,8 @@
 # synced_from_name: datocms-frontend-integrations
-# synced_from_description_sha256: eadcdbc38e7c752403d00d749e79fcf45136ca7a5b86ff5db999a84913c385f5
+# synced_from_description_sha256: f06ae05f1e7d3e94aea2397eb794c327039c9825828b3603ae004a9a6385cabc
 interface:
   display_name: "DatoCMS Front-End Integrations"
-  short_description: "Set up DatoCMS web app integrations"
-  default_prompt: "Use $datocms-frontend-integrations to set up DatoCMS draft mode or front-end integrations in this app."
+  short_description: "Shared DatoCMS front-end references"
+  default_prompt: "Use $datocms-frontend-integrations for DatoCMS front-end integration guidance or shared reference loading."
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

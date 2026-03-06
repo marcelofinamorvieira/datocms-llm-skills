@@ -2,6 +2,17 @@
 
 Covers working with localized field values and the normalized field value utilities.
 
+## Quick Navigation
+
+- [Localized vs Non-Localized Values](#localized-vs-non-localized-values)
+- [Getting Available Locales](#getting-available-locales)
+- [Creating Records with Localized Fields](#creating-records-with-localized-fields)
+- [Updating Localized Fields](#updating-localized-fields)
+- [Localized File Fields](#localized-file-fields)
+- [Checking if a Field is Localized](#checking-if-a-field-is-localized)
+- [Normalized Field Value Utilities](#normalized-field-value-utilities)
+- [Complete Example: Migrate Content to a New Locale](#complete-example-migrate-content-to-a-new-locale)
+
 ---
 
 ## Localized vs Non-Localized Values

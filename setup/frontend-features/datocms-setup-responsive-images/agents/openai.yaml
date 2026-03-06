@@ -1,8 +1,0 @@
-# synced_from_name: datocms-setup-responsive-images
-# synced_from_description_sha256: 6e5e3ad841740ad8f65834e329cfe471bc0dd17816240a99cb0838c9d1b3543f
-interface:
-  display_name: "DatoCMS Responsive Images Setup"
-  short_description: "Set up DatoCMS responsive images"
-  default_prompt: "Use $datocms-setup-responsive-images to scaffold DatoCMS responsive-image rendering in this project."
-policy:
-  allow_implicit_invocation: false

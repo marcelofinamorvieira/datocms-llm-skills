@@ -2,6 +2,16 @@
 
 Covers common scripting patterns for data migrations, bulk operations, upload migrations, field type migrations, and resumable migration patterns.
 
+## Quick Navigation
+
+- [Migration Script Boilerplate](#migration-script-boilerplate)
+- [Iterating All Records with Progress](#iterating-all-records-with-progress)
+- [Bulk Content Updates](#bulk-content-updates)
+- [Upload Migration from External URLs](#upload-migration-from-external-urls)
+- [Field Type Migration](#field-type-migration)
+- [Resumable / Idempotent Migrations](#resumable--idempotent-migrations)
+- [Common Migration Checklist](#common-migration-checklist)
+
 ---
 
 ## Migration Script Boilerplate

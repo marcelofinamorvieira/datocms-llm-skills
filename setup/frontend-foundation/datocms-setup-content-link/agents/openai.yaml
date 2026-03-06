@@ -1,8 +1,0 @@
-# synced_from_name: datocms-setup-content-link
-# synced_from_description_sha256: 10475739571402d3332178da71badd47b2e7a245635461a2ab0961a3e6ad46d9
-interface:
-  display_name: "DatoCMS Content Link Setup"
-  short_description: "Set up DatoCMS visual editing"
-  default_prompt: "Use $datocms-setup-content-link to scaffold DatoCMS Content Link visual editing in this project."
-policy:
-  allow_implicit_invocation: false

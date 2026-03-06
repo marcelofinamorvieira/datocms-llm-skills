@@ -1,8 +1,0 @@
-# synced_from_name: datocms-setup-graphql-types
-# synced_from_description_sha256: 504dbd947bd7b4737be2484ae97af86e7abe55b8d1a7b31394b86ecadd65098a
-interface:
-  display_name: "DatoCMS GraphQL Types Setup"
-  short_description: "Set up DatoCMS GraphQL type generation"
-  default_prompt: "Use $datocms-setup-graphql-types to scaffold DatoCMS GraphQL query type generation in this project."
-policy:
-  allow_implicit_invocation: false
