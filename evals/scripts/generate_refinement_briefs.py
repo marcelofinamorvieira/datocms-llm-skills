@@ -145,7 +145,11 @@ def _extract_name_from_skill_md(path: Path) -> str | None:
 
 def _discover_skill_files(skills_root: Path) -> dict[str, Path]:
     mapping: dict[str, Path] = {}
-    for path in sorted(skills_root.glob("*/SKILL.md")):
+    for path in sorted(
+        path
+        for path in skills_root.rglob("SKILL.md")
+        if ".git" not in path.parts and "node_modules" not in path.parts
+    ):
         name = _extract_name_from_skill_md(path)
         if name:
             mapping[name] = path
@@ -294,7 +298,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--skills-root",
         default=".",
-        help="Repository root containing */SKILL.md folders (default: .)",
+        help="Repository root containing skill folders (default: .)",
     )
     parser.add_argument(
         "--output-dir",

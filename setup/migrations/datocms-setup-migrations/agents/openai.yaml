@@ -1,0 +1,8 @@
+# synced_from_name: datocms-setup-migrations
+# synced_from_description_sha256: f4e1a16e3b7a0356c7ca107dde30ec1e36f0f9ebcb4398657d5e1d69f5c4f252
+interface:
+  display_name: "DatoCMS Migrations Setup"
+  short_description: "Set up DatoCMS CLI migrations"
+  default_prompt: "Use $datocms-setup-migrations to scaffold the baseline DatoCMS CLI migrations setup."
+policy:
+  allow_implicit_invocation: false

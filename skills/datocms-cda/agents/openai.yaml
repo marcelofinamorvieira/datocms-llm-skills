@@ -1,0 +1,8 @@
+# synced_from_name: datocms-cda
+# synced_from_description_sha256: f907ac4c3533b5caea6be958afb7a99b5865d0ec0662a59fdf277be6ad2006f4
+interface:
+  display_name: "DatoCMS CDA"
+  short_description: "Query the DatoCMS delivery API"
+  default_prompt: "Use $datocms-cda to write or review a DatoCMS GraphQL content query."
+policy:
+  allow_implicit_invocation: true

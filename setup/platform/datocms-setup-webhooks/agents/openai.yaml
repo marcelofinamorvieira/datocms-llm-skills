@@ -1,0 +1,8 @@
+# synced_from_name: datocms-setup-webhooks
+# synced_from_description_sha256: a6dc9354f5c4665722edca9edf3a4aba57ab37c6f456bccb83e0325d1ea7ca8f
+interface:
+  display_name: "DatoCMS Webhooks Setup"
+  short_description: "Set up DatoCMS webhook management"
+  default_prompt: "Use $datocms-setup-webhooks to scaffold declarative DatoCMS webhook management in this project."
+policy:
+  allow_implicit_invocation: false

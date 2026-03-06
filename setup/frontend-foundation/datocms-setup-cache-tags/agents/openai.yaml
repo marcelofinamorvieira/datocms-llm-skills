@@ -1,0 +1,8 @@
+# synced_from_name: datocms-setup-cache-tags
+# synced_from_description_sha256: 019162b15bc8317b85bf082cfb9ceb1ae7695e93d6932986b59a2f51d1505e14
+interface:
+  display_name: "DatoCMS Cache Tags Setup"
+  short_description: "Set up DatoCMS cache invalidation"
+  default_prompt: "Use $datocms-setup-cache-tags to scaffold DatoCMS cache tag invalidation in this project."
+policy:
+  allow_implicit_invocation: false

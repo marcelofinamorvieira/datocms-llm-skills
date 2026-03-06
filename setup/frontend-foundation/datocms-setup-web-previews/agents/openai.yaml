@@ -1,0 +1,8 @@
+# synced_from_name: datocms-setup-web-previews
+# synced_from_description_sha256: b6a0b7b4cb056977096abdc892d14e2fc26ef9064e4fcd1b3aa5db2a6598fdf3
+interface:
+  display_name: "DatoCMS Web Previews Setup"
+  short_description: "Set up DatoCMS Web Previews"
+  default_prompt: "Use $datocms-setup-web-previews to scaffold DatoCMS Web Previews routing and endpoint support."
+policy:
+  allow_implicit_invocation: false

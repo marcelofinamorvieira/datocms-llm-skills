@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Use datocms-setup-cma-types to add generate-cma-types, the CMA token env placeholder, and the cma-types.ts output path for this project.",
+    "should_trigger": true
+  },
+  {
+    "query": "Please run datocms-setup-cma-types. I want standalone DatoCMS schema types for raw CMA operations but I do not want GraphQL query codegen.",
+    "should_trigger": true
+  },
+  {
+    "query": "Invoke datocms-setup-cma-types in this SvelteKit repo and configure the framework-specific CMA token plus output file.",
+    "should_trigger": true
+  },
+  {
+    "query": "How do I set up gql.tada for DatoCMS GraphQL queries?",
+    "should_trigger": false
+  },
+  {
+    "query": "I need to create records in DatoCMS using @datocms/cma-client-node.",
+    "should_trigger": false
+  },
+  {
+    "query": "Use datocms-setup-graphql-types to configure GraphQL query types.",
+    "should_trigger": false
+  }
+]

@@ -1,0 +1,8 @@
+# synced_from_name: datocms-setup-cli-profiles
+# synced_from_description_sha256: 9e585f1f807e8842cb43e59230536b209f20ebd46bd73cbe5f27df99ea3f17b1
+interface:
+  display_name: "DatoCMS CLI Profiles Setup"
+  short_description: "Set up named DatoCMS CLI profiles"
+  default_prompt: "Use $datocms-setup-cli-profiles to scaffold reusable named DatoCMS CLI profiles in this project."
+policy:
+  allow_implicit_invocation: false

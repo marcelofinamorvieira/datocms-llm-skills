@@ -1,0 +1,8 @@
+# synced_from_name: datocms-setup-sandbox-iteration
+# synced_from_description_sha256: 5e20b039bde1013429a5b0d22f2a284c6720747edda785270a3351c6e29389bb
+interface:
+  display_name: "DatoCMS Sandbox Iteration Setup"
+  short_description: "Set up a DatoCMS sandbox reset loop"
+  default_prompt: "Use $datocms-setup-sandbox-iteration to scaffold a reusable DatoCMS CLI sandbox reset workflow."
+policy:
+  allow_implicit_invocation: false

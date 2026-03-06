@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Use datocms-setup-graphql-types to configure gql.tada for typed DatoCMS GraphQL queries in this Next.js project.",
+    "should_trigger": true
+  },
+  {
+    "query": "Please invoke datocms-setup-graphql-types and set up GraphQL Code Generator for my DatoCMS query documents.",
+    "should_trigger": true
+  },
+  {
+    "query": "Run datocms-setup-graphql-types in this Astro repo. I only want typed CDA queries, not CMA schema types.",
+    "should_trigger": true
+  },
+  {
+    "query": "I want standalone DatoCMS CMA schema types for raw client operations. Use datocms-setup-cma-types.",
+    "should_trigger": false
+  },
+  {
+    "query": "How do I generate cma-types.ts from my DatoCMS schema with @datocms/cli?",
+    "should_trigger": false
+  },
+  {
+    "query": "Set up a preview-links endpoint for the DatoCMS Web Previews plugin.",
+    "should_trigger": false
+  }
+]

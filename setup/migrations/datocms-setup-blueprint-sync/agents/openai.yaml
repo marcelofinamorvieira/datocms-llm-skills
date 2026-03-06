@@ -1,0 +1,8 @@
+# synced_from_name: datocms-setup-blueprint-sync
+# synced_from_description_sha256: bb840b859455b4bc0e5119092b64714ea5ec6f3dd49da4339621412f29db523e
+interface:
+  display_name: "DatoCMS Blueprint Sync Setup"
+  short_description: "Set up shared DatoCMS CLI profiles"
+  default_prompt: "Use $datocms-setup-blueprint-sync to scaffold shared DatoCMS blueprint sync across multiple projects."
+policy:
+  allow_implicit_invocation: false
