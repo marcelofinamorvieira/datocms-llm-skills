@@ -13,23 +13,6 @@ guide for the repo.
 - `datocms-plugin-builder`: build or modify DatoCMS plugins.
 - `datocms-setup`: one-time setup orchestrator for frontend, migrations, onboarding imports, and platform automation.
 
-## Public Skill Prompt Examples
-
-Use the skill name in the prompt when you want to route to a specific public
-skill on purpose.
-
-```text
-$datocms-cda write a GraphQL query for blog posts with title, slug, and SEO fields
-$datocms-cma write a script that publishes all records in a model
-$datocms-cli scaffold a migration workflow for this project
-$datocms-frontend-integrations show how to wire DatoCMS draft mode into this Next.js app
-$datocms-plugin-builder build a sidebar panel plugin for this project
-$datocms-setup install content link in this project
-```
-
-`datocms-frontend-integrations` and `datocms-setup` are especially good
-explicit-call candidates because they do not auto-trigger from broad requests.
-
 ## Setup Skill Behavior
 
 `datocms-setup` is meant to be called explicitly.

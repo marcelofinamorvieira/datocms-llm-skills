@@ -1,15 +1,18 @@
 ---
 name: datocms-frontend-integrations
 description: >-
-  Shared reference bundle for DatoCMS front-end integrations in existing web
-  projects (Next.js App Router, Nuxt, SvelteKit, Astro, plus React/Vue/Svelte
-  component usage). Use when users ask for framework-specific guidance,
-  mixed-feature integration work, component API differences, or partial patching
-  across draft mode architecture, Web Previews, Content Link, real-time
-  updates, cache tags, responsive images, Structured Text, SEO, video,
-  low-level site search, or robots/sitemap patterns. Prefer `datocms-setup`
-  when the user wants full one-shot scaffolding for a specific setup outcome.
-disable-model-invocation: true
+  DatoCMS front-end integrations for existing web projects (Next.js App Router,
+  Nuxt, SvelteKit, Astro, plus React/Vue/Svelte component usage). Use when
+  users ask to set up draft mode endpoints, Web Previews preview-links APIs,
+  Content Link visual editing, real-time preview updates/subscriptions, or
+  cache-tag invalidation/revalidation flows (Next.js revalidateTag or CDN purge
+  by tags). Also use for framework component/hook wiring with react-datocms,
+  vue-datocms, @datocms/svelte, and @datocms/astro: Image/SRCImage/datocms-image,
+  StructuredText, VideoPlayer (React/Vue/Svelte), SEO/meta helpers
+  (renderMetaTags/toHead/Seo), QuerySubscription/QueryListener realtime patterns,
+  ContentLink components, and Site Search (React/Vue). Prefer `datocms-setup`
+  when the user explicitly wants one-shot setup orchestration for a specific
+  outcome.
 ---
 
 # DatoCMS Front-End Integrations Skill
