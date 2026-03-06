@@ -43,6 +43,13 @@ SKILL_GLOB_PATTERNS = (
 RECIPE_GLOB_PATTERN = "skills/datocms-setup/recipes/*/*/recipe.md"
 EVAL_FIXTURE_SUFFIX = "-skill-eval.json"
 EVAL_RESULT_SUFFIX = "-eval-results.json"
+RESULTS_MANIFEST_NAME = "manifest.json"
+DEFAULT_QUERY_MODE = "implicit"
+ALLOWED_QUERY_MODES = {
+    "implicit",
+    "explicit",
+    "overlap",
+}
 
 SCAFFOLD_CAPABLE_SKILLS = {
     "datocms-frontend-integrations",
@@ -310,7 +317,12 @@ def _validate_scaffold_marketing(repo_root: Path, errors: list[str]) -> None:
             errors.append(f"README.md: stale scaffold wording `{pattern}`")
 
 
-def _validate_eval_fixture_payload(path: Path, errors: list[str]) -> None:
+def _validate_eval_fixture_payload(
+    path: Path,
+    skill_name: str,
+    canonical_skill_names: set[str],
+    errors: list[str],
+) -> None:
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
@@ -331,6 +343,8 @@ def _validate_eval_fixture_payload(path: Path, errors: list[str]) -> None:
 
         query = row.get("query")
         should_trigger = row.get("should_trigger")
+        query_mode = row.get("query_mode", DEFAULT_QUERY_MODE)
+        boundary_with = row.get("boundary_with", [])
 
         if not isinstance(query, str) or not query.strip():
             errors.append(f"{path}: eval row {index} must include a non-empty string `query`")
@@ -338,6 +352,48 @@ def _validate_eval_fixture_payload(path: Path, errors: list[str]) -> None:
         if not isinstance(should_trigger, bool):
             errors.append(f"{path}: eval row {index} must include boolean `should_trigger`")
             continue
+
+        if not isinstance(query_mode, str) or query_mode not in ALLOWED_QUERY_MODES:
+            allowed_modes = ", ".join(sorted(ALLOWED_QUERY_MODES))
+            errors.append(
+                f"{path}: eval row {index} has invalid `query_mode`; expected one of {allowed_modes}"
+            )
+            query_mode = DEFAULT_QUERY_MODE
+
+        if not isinstance(boundary_with, list) or any(
+            not isinstance(item, str) or not item.strip() for item in boundary_with
+        ):
+            errors.append(f"{path}: eval row {index} must use string array `boundary_with`")
+            boundary_with = []
+
+        normalized_boundary_with = []
+        seen_boundary_names: set[str] = set()
+        for boundary_name in boundary_with:
+            if not isinstance(boundary_name, str):
+                continue
+            normalized_name = boundary_name.strip()
+            if not normalized_name or normalized_name in seen_boundary_names:
+                continue
+            seen_boundary_names.add(normalized_name)
+            normalized_boundary_with.append(normalized_name)
+
+            if normalized_name == skill_name:
+                errors.append(
+                    f"{path}: eval row {index} `boundary_with` must not reference the owning skill"
+                )
+            elif normalized_name not in canonical_skill_names:
+                errors.append(
+                    f"{path}: eval row {index} references unknown boundary skill `{normalized_name}`"
+                )
+
+        if query_mode == "overlap" and not normalized_boundary_with:
+            errors.append(
+                f"{path}: eval row {index} uses `query_mode: overlap` but has no `boundary_with` skills"
+            )
+        if query_mode != "overlap" and normalized_boundary_with:
+            errors.append(
+                f"{path}: eval row {index} may use `boundary_with` only with `query_mode: overlap`"
+            )
 
         if should_trigger:
             true_count += 1
@@ -366,7 +422,7 @@ def _validate_eval_fixture_coverage(
                 f"{path}: eval fixture filename does not match any canonical skill name"
             )
 
-        _validate_eval_fixture_payload(path, errors)
+        _validate_eval_fixture_payload(path, skill_name, canonical_skill_names, errors)
 
     missing_names = sorted(canonical_skill_names - actual_names)
     for skill_name in missing_names:
@@ -375,8 +431,97 @@ def _validate_eval_fixture_coverage(
         )
 
 
-def _validate_eval_result_names(repo_root: Path, errors: list[str]) -> None:
+def _load_results_manifest(
+    results_dir: Path,
+    canonical_skill_names: set[str],
+    errors: list[str],
+) -> tuple[set[str], dict[str, str]] | None:
+    manifest_path = results_dir / RESULTS_MANIFEST_NAME
+    if not manifest_path.exists():
+        return None
+
+    try:
+        payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        errors.append(f"{manifest_path}: invalid JSON ({exc})")
+        return None
+
+    if not isinstance(payload, dict):
+        errors.append(f"{manifest_path}: manifest root must be an object")
+        return None
+
+    included_skills = payload.get("included_skills")
+    excluded_skills = payload.get("excluded_skills")
+
+    if not isinstance(included_skills, list) or any(
+        not isinstance(item, str) or not item.strip() for item in included_skills
+    ):
+        errors.append(f"{manifest_path}: `included_skills` must be a string array")
+        return None
+
+    if not isinstance(excluded_skills, dict) or any(
+        not isinstance(key, str)
+        or not key.strip()
+        or not isinstance(value, str)
+        or not value.strip()
+        for key, value in excluded_skills.items()
+    ):
+        errors.append(f"{manifest_path}: `excluded_skills` must map skill names to reasons")
+        return None
+
+    included_set: set[str] = set()
+    for skill_name in included_skills:
+        normalized = skill_name.strip()
+        if normalized in included_set:
+            errors.append(f"{manifest_path}: duplicate included skill `{normalized}`")
+            continue
+        included_set.add(normalized)
+        if normalized not in canonical_skill_names:
+            errors.append(f"{manifest_path}: unknown included skill `{normalized}`")
+
+    excluded_map: dict[str, str] = {}
+    for skill_name, reason in excluded_skills.items():
+        normalized = skill_name.strip()
+        if normalized in excluded_map:
+            errors.append(f"{manifest_path}: duplicate excluded skill `{normalized}`")
+            continue
+        excluded_map[normalized] = reason.strip()
+        if normalized not in canonical_skill_names:
+            errors.append(f"{manifest_path}: unknown excluded skill `{normalized}`")
+
+    overlap = sorted(included_set & set(excluded_map))
+    for skill_name in overlap:
+        errors.append(f"{manifest_path}: skill `{skill_name}` cannot be both included and excluded")
+
+    manifest_skill_names = included_set | set(excluded_map)
+    missing_skills = sorted(canonical_skill_names - manifest_skill_names)
+    for skill_name in missing_skills:
+        errors.append(
+            f"{manifest_path}: missing coverage decision for canonical skill `{skill_name}`"
+        )
+
+    extra_skills = sorted(manifest_skill_names - canonical_skill_names)
+    for skill_name in extra_skills:
+        errors.append(f"{manifest_path}: unknown skill `{skill_name}` listed in coverage manifest")
+
+    return included_set, excluded_map
+
+
+def _validate_eval_result_names(
+    repo_root: Path,
+    canonical_skill_names: set[str],
+    errors: list[str],
+) -> None:
     results_dir = repo_root / "evals" / "results"
+    manifest = _load_results_manifest(results_dir, canonical_skill_names, errors)
+
+    if manifest is None:
+        expected_included_skills = canonical_skill_names
+        expected_excluded_skills: dict[str, str] = {}
+    else:
+        expected_included_skills, expected_excluded_skills = manifest
+
+    actual_result_skills: set[str] = set()
     for path in sorted(results_dir.glob(f"*{EVAL_RESULT_SUFFIX}")):
         try:
             payload = _extract_json_payload(path.read_text(encoding="utf-8"), path)
@@ -389,11 +534,29 @@ def _validate_eval_result_names(repo_root: Path, errors: list[str]) -> None:
             errors.append(f"{path}: result file must include string `skill_name`")
             continue
 
-        expected_name = f"{skill_name}{EVAL_RESULT_SUFFIX}"
+        normalized_skill_name = skill_name.strip()
+        actual_result_skills.add(normalized_skill_name)
+
+        expected_name = f"{normalized_skill_name}{EVAL_RESULT_SUFFIX}"
         if path.name != expected_name:
             errors.append(
                 f"{path}: result filename should be `{expected_name}` to match canonical skill name"
             )
+
+        if normalized_skill_name in expected_excluded_skills:
+            errors.append(
+                f"{path}: result file exists for explicitly excluded skill `{normalized_skill_name}`"
+            )
+        elif normalized_skill_name not in expected_included_skills:
+            errors.append(
+                f"{path}: result file is not covered by the published results manifest"
+            )
+
+    missing_results = sorted(expected_included_skills - actual_result_skills)
+    for skill_name in missing_results:
+        errors.append(
+            f"evals/results/{skill_name}{EVAL_RESULT_SUFFIX}: missing checked-in result for included skill"
+        )
 
 
 def _validate_astro_imports(repo_root: Path, errors: list[str]) -> None:
@@ -593,7 +756,7 @@ def main() -> int:
 
     _validate_scaffold_marketing(repo_root, errors)
     _validate_eval_fixture_coverage(repo_root, canonical_skill_names, errors)
-    _validate_eval_result_names(repo_root, errors)
+    _validate_eval_result_names(repo_root, canonical_skill_names, errors)
     _validate_astro_imports(repo_root, errors)
     _validate_setup_manifest(repo_root, errors)
 
@@ -613,7 +776,7 @@ def main() -> int:
     print("[ok] routed skill names match frontmatter names")
     print("[ok] scaffold-capable skills declare scaffolded vs production-ready states")
     print("[ok] canonical eval fixtures cover every skill and contain positive/negative cases")
-    print("[ok] checked-in eval result filenames match canonical skill names")
+    print("[ok] checked-in eval results match canonical names and declared coverage")
     print("[ok] banned host-specific labels are absent from skill bodies")
     print("[ok] Astro references use subpath imports")
     print("[ok] datocms-setup manifest paths, prerequisites, references, scripts, and assets are valid")

@@ -1,99 +1,123 @@
 [
   {
     "query": "Use datocms-setup to configure one blueprint profile and two destination profiles that share the same migrations directory.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add declarative DatoCMS build trigger config plus sync and smoke scripts.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to wire granular DatoCMS cache invalidation for this Next.js app with revalidateTag() and persistent tag storage.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to install @datocms/cda-client, add the published CDA token placeholder, and scaffold the shared query utility for this Astro project.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add staging and production profiles to datocms.config.json and wire the per-profile token placeholders.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add generate-cma-types, the CMA token env placeholder, and the cma-types.ts output path for this project.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to enable stega encoding and add click-to-edit overlays to this Next.js draft site.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to install the DatoCMS Contentful import plugin, add env placeholders, and scaffold a local helper.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add enable and disable endpoints, dual-token executeQuery wiring, and the required env placeholders for this Next.js app.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to configure gql.tada for typed DatoCMS GraphQL queries in this Next.js project.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add a helper around migrations:new --autogenerate for this repo.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add a local release helper for DatoCMS migrations with maintenance mode and promotion.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to scaffold @datocms/cli in this project, create datocms.config.json, add a migrations folder, and wire the baseline scripts.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add live DatoCMS preview updates over SSE to this Next.js draft site.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add a shared Dato image wrapper and patch one real image field in this Next.js project.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add framework-native robots.txt and sitemap routes for this Next.js site with shared public URL mapping.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add a helper that destroys and reforks a DatoCMS sandbox, then reruns migrations in place while I iterate locally.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to wire _seoMetaTags, favicon meta tags, and canonical URL helpers into this Next.js project.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to provision DatoCMS Site Search, scaffold the least-privilege token env vars, and mount a search route in this Next.js repo.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add a shared renderer and patch one real Structured Text field in this Next.js repo.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add a shared Mux video wrapper and patch one real Dato video field in this Next.js repo.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add a preview-links endpoint, CORS handling, and record-to-URL routing for this Next.js repo.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add a declarative webhook config, a sync helper, and a local authenticated DatoCMS webhook receiver.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to install the DatoCMS WordPress import plugin, add env placeholders, and scaffold a local helper.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "explicit"
   },
   {
     "query": "I need to pull all blog posts from my DatoCMS project and display them on my Next.js site. They have a title, slug, cover image, and a rich text body. Can you write the GraphQL query and the page component?",

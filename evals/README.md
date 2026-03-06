@@ -19,8 +19,10 @@ Published snapshots and side-by-side metrics live in `evals/reports/README.md`.
 ## What Is In This Folder
 
 - `*.json`: trigger test cases (`query`, `should_trigger`).
+- Fixtures may also declare `query_mode` (`implicit`, `explicit`, `overlap`) and `boundary_with` for overlap cases.
 - Canonical fixture naming is `evals/<skill-name>-skill-eval.json` for every shipped skill.
 - `results/*.json`: raw run outputs (JSON or text preamble + JSON).
+- `results/manifest.json`: declares which checked-in result files are intentionally published and which skills are explicitly excluded.
 - `scripts/analyze_trigger_results.py`: computes metrics from raw outputs.
 - `scripts/generate_refinement_briefs.py`: writes per-skill refinement briefs from misses.
 - `scripts/compare_trigger_runs.py`: compares baseline vs candidate runs.
@@ -72,9 +74,16 @@ python3 evals/scripts/run_codex_trigger_eval.py \
 The runner auto-discovers every public `SKILL.md` in `skills/` and expects a
 matching `evals/<skill-name>-skill-eval.json` fixture for each one.
 
+Fixture metadata guidelines:
+- Use `query_mode: implicit` for natural-language routing cases.
+- Use `query_mode: explicit` when the user directly names the target skill.
+- Use `query_mode: overlap` plus `boundary_with` when a prompt intentionally sits on a skill boundary.
+
 Important output contract for each query result:
 - `query`
 - `should_trigger`
+- `query_mode`
+- `boundary_with`
 - `trigger_rate`
 - `triggers`
 - `runs`
@@ -113,6 +122,9 @@ python3 evals/scripts/analyze_trigger_results.py \
   --output-json evals/results/latest-analysis.json \
   --output-markdown evals/results/latest-analysis.md
 ```
+
+When `evals/results/manifest.json` is present, the analysis report includes the
+published result coverage and any explicit exclusions.
 
 ### 3) Refine
 

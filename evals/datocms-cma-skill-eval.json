@@ -25,7 +25,9 @@
   },
   {
     "query": "How do I fork a DatoCMS environment, make some schema changes (add a new field to the blog_post model), and then promote it to primary? Using the CMA client programmatically.",
-    "should_trigger": true
+    "should_trigger": true,
+    "query_mode": "overlap",
+    "boundary_with": ["datocms-cli"]
   },
   {
     "query": "I want to set up a webhook in DatoCMS that triggers when any record is published. Can you show me how to create the webhook configuration using the CMA client?",

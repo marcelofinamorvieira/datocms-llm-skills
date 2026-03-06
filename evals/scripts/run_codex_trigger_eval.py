@@ -16,6 +16,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+DEFAULT_QUERY_MODE = "implicit"
+
 
 @dataclass
 class SkillEvalConfig:
@@ -270,6 +272,8 @@ def _evaluate_skill(
             {
                 "query": str(row["query"]),
                 "should_trigger": should_trigger,
+                "query_mode": str(row.get("query_mode", DEFAULT_QUERY_MODE)),
+                "boundary_with": row.get("boundary_with", []),
                 "trigger_rate": trigger_rate,
                 "triggers": triggers,
                 "runs": 1,

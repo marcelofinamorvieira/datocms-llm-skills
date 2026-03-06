@@ -18,6 +18,8 @@ Aggregate:
 - Precision: `100.0%`
 - Recall: `13.0%`
 - F1: `23.1%`
+- Coverage manifest: `evals/results/manifest.json`
+- Explicitly excluded from this published snapshot: `datocms-setup`
 
 Per skill:
 - `datocms-cda`: `11/19` (`57.9%`), recall `11.1%`
