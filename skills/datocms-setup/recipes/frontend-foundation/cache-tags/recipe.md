@@ -9,9 +9,7 @@ You are an expert at setting up DatoCMS cache tag invalidation. This recipe gene
 - **Next.js (framework-centric):** Uses `rawExecuteQuery` with `queryId` to get cache tags, stores them in a database (Turso, Vercel Postgres, etc.), and calls `revalidateTag()` on webhook events.
 - **Nuxt / SvelteKit / Astro (CDN-first):** Uses `rawExecuteQuery` to get cache tags, forwards them as CDN response headers, and a webhook handler calls the CDN's purge API.
 
-**Output states:**
-- `scaffolded` — the concrete database, CDN, or purge adapter details are still missing.
-- `production-ready` — a concrete database or CDN strategy is configured and no placeholder adapter logic remains.
+See `../../../patterns/OUTPUT_STATUS.md` for output status definitions.
 
 **CDN header names:**
 
@@ -215,22 +213,19 @@ Generate framework-specific cache tag invalidation files following the patterns 
 - Webhook handlers should return 401 for invalid secrets
 
 #### TypeScript
-- No `as unknown as` — this is a forbidden anti-pattern
-- No unnecessary `as SomeType` casts
-- Let TypeScript infer types wherever possible
-- Use `import type { ... }` for type-only imports
+Follow the TypeScript rules in `../../../patterns/MANDATORY_RULES.md`.
 
 #### Env var naming conventions
-- Next.js: `process.env.*` (e.g., `CACHE_INVALIDATION_WEBHOOK_SECRET`, `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`)
-- Nuxt: `useRuntimeConfig()` with `NUXT_*` env vars (e.g., `NUXT_CACHE_INVALIDATION_WEBHOOK_SECRET`, `NUXT_FASTLY_SERVICE_ID`)
-- SvelteKit: `$env/dynamic/private` with `PRIVATE_*` env vars (e.g., `PRIVATE_CACHE_INVALIDATION_WEBHOOK_SECRET`, `PRIVATE_FASTLY_SERVICE_ID`)
-- Astro: `astro:env/server` (e.g., `CACHE_INVALIDATION_WEBHOOK_SECRET`, `FASTLY_SERVICE_ID`)
+Follow the env conventions in `../../../patterns/MANDATORY_RULES.md`.
+
+Recipe-specific env var names:
+- Next.js: `CACHE_INVALIDATION_WEBHOOK_SECRET`, `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`
+- Nuxt: `NUXT_CACHE_INVALIDATION_WEBHOOK_SECRET`, `NUXT_FASTLY_SERVICE_ID`
+- SvelteKit: `PRIVATE_CACHE_INVALIDATION_WEBHOOK_SECRET`, `PRIVATE_FASTLY_SERVICE_ID`
+- Astro: `CACHE_INVALIDATION_WEBHOOK_SECRET`, `FASTLY_SERVICE_ID`
 
 #### File conflicts
-- Read existing files before modifying them
-- Make targeted additions, not full rewrites
-- Skip if already configured
-- Preserve working existing behavior and patch toward the recommended pattern instead of replacing entire files by default
+Follow the file conflict rules in `../../../patterns/MANDATORY_RULES.md`.
 
 #### Output status
 - Report `scaffolded` if the database selection is still `Other`, the CDN choice is still `Other`, or any placeholder database/purge adapter logic remains
@@ -249,7 +244,7 @@ Install missing packages:
 
 For Nuxt, SvelteKit, and Astro: no additional dependencies — `rawExecuteQuery` is provided by `@datocms/cda-client` which should already be installed.
 
-Use the project's package manager (check for `pnpm-lock.yaml`, `yarn.lock`, `bun.lockb`, or default to `npm`).
+Use the project's package manager (see `../../../patterns/MANDATORY_RULES.md`).
 
 ---
 

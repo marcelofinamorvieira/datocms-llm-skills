@@ -2,6 +2,8 @@
 
 Astro component for progressive/responsive images from DatoCMS, designed to work with the `responsiveImage` GraphQL query. Unlike React (which offers `<SRCImage />` and `<Image />`) and Svelte (which offers `<NakedImage />` and `<Image />`), `@datocms/astro` provides a **single `<Image />`** component that is completely native with zero JavaScript footprint.
 
+See `image-concepts.md` for the shared GraphQL query, ResponsiveImage fields, and best practices.
+
 
 ## Contents
 
@@ -37,56 +39,7 @@ import { Image } from '@datocms/astro/Image';
 
 ## GraphQL Query
 
-```graphql
-query {
-  blogPost {
-    cover {
-      responsiveImage(
-        imgixParams: { fit: crop, w: 300, h: 300, auto: format }
-      ) {
-        # Always required
-        src
-        width
-        height
-
-        # Strongly suggested
-        alt
-        title
-
-        # Placeholder (pick ONE — base64 takes precedence if both present)
-        base64    # blur-up placeholder, JPEG, base64-encoded
-        # bgColor # OR background color placeholder
-
-        # Optional (can be omitted to reduce response size)
-        # srcSet  # omit to let component auto-generate from src
-        # sizes   # omit if passing sizes prop to component
-      }
-    }
-  }
-}
-```
-
-### `ResponsiveImage` Object Fields
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `src` | string | Yes | The `src` attribute for the image |
-| `width` | integer | Yes | The width of the image |
-| `height` | integer | Yes | The height of the image |
-| `alt` | string | No | Alternate text (strongly suggested) |
-| `title` | string | No | Title attribute (strongly suggested) |
-| `sizes` | string | No | HTML5 `sizes` attribute (omit if passing `sizes` prop to component) |
-| `base64` | string | No | Base64-encoded thumbnail for blur-up placeholder |
-| `bgColor` | string | No | Background color placeholder (omit if requesting `base64`) |
-| `srcSet` | string | No | HTML5 `srcSet` (can be omitted — component auto-generates from `src`) |
-| `webpSrcSet` | string | No | **Deprecated** — use `{ auto: format }` imgixParams instead |
-
-### Best Practices
-
-1. **Always use `{ auto: format }`** in `imgixParams` — serves WebP/AVIF automatically without increasing response size
-2. **Prefer omitting `srcSet`** from GraphQL — the component auto-generates it from `src` + `srcSetCandidates` prop, dramatically reducing response size when many images are returned
-3. **Never request both `bgColor` and `base64`** — `base64` takes precedence, so requesting both only increases response size
-4. **Omit `sizes` from GraphQL** if you pass `sizes` as a prop to the component
+See `image-concepts.md` for the full query, field definitions, and best practices.
 
 ---
 

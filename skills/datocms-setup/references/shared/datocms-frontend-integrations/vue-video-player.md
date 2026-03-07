@@ -1,5 +1,7 @@
 # Vue Video Player — `<VideoPlayer>`
 
+See `video-player-concepts.md` for the shared GraphQL query, video field definitions, and privacy defaults.
+
 Vue 3 component for DatoCMS/Mux video streaming, designed to work with the `video` GraphQL query. Wraps the `<mux-player>` [web component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components).
 
 
@@ -7,10 +9,8 @@ Vue 3 component for DatoCMS/Mux video streaming, designed to work with the `vide
 
 - [Installation](#installation)
 - [Setup](#setup)
-- [GraphQL Query](#graphql-query)
 - [Basic Usage](#basic-usage)
 - [Props](#props)
-- [Mux Data Analytics (Opt-in)](#mux-data-analytics-opt-in)
 
 ---
 
@@ -41,41 +41,6 @@ Or use locally:
 import { VideoPlayer } from 'vue-datocms';
 </script>
 ```
-
----
-
-## GraphQL Query
-
-```graphql
-query {
-  blogPost {
-    cover {
-      video {
-        # Required — identifies the video to stream
-        muxPlaybackId
-
-        # Optional but recommended:
-        title       # displayed in upper left corner of player
-        width       # used with height for aspect ratio (prevents layout jumps)
-        height
-        blurUpThumb # blurred placeholder while video loads
-        alt         # enables Content Link for click-to-edit overlays
-      }
-    }
-  }
-}
-```
-
-### Video Object Fields
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `muxPlaybackId` | string | Yes | Identifies the video to stream from Mux CDN |
-| `title` | string | No | Displayed in the player overlay |
-| `width` | integer | No | Video width (used with `height` for `aspectRatio` style) |
-| `height` | integer | No | Video height (used with `width` for `aspectRatio` style) |
-| `blurUpThumb` | string | No | Base64-encoded blurred placeholder |
-| `alt` | string | No | Alt text (also enables Content Link overlays) |
 
 ---
 
@@ -116,13 +81,3 @@ const props = defineProps<{ data: any }>();
 
 All other props are forwarded directly to `<mux-player>`.
 
----
-
-## Mux Data Analytics (Opt-in)
-
-Video playback analytics are **disabled by default**. To enable them:
-
-1. Create a [Mux Data](https://www.mux.com/data) account (free)
-2. Pass the `env-key` prop to `<VideoPlayer>`
-
-See [Streaming Video Analytics with Mux Data](https://www.datocms.com/docs/streaming-videos/streaming-video-analytics-with-mux-data) for setup details.

@@ -1,5 +1,7 @@
 # React SEO & Meta Tags
 
+See `seo-concepts.md` for the shared GraphQL query shape and tag concatenation pattern.
+
 Utilities for rendering SEO meta tags, social share tags, and favicons from DatoCMS's `_seoMetaTags` and `faviconMetaTags` GraphQL queries.
 
 
@@ -16,32 +18,7 @@ Utilities for rendering SEO meta tags, social share tags, and favicons from Dato
 
 ## GraphQL Queries
 
-```graphql
-query {
-  page: homepage {
-    title
-    seo: _seoMetaTags {
-      attributes
-      content
-      tag
-    }
-  }
-
-  site: _site {
-    favicon: faviconMetaTags {
-      attributes
-      content
-      tag
-    }
-  }
-}
-```
-
-**Pattern:** Always concat page SEO tags with site favicon tags:
-
-```js
-const allMetaTags = [...data.page.seo, ...data.site.favicon];
-```
+See `seo-concepts.md` for the query shape and tag concatenation pattern. Examples below assume tags are fetched as `data.page.seo` and `data.site.favicon`.
 
 ---
 

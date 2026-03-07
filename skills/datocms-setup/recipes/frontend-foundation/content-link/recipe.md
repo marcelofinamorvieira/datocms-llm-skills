@@ -156,7 +156,7 @@ Install missing packages:
 
 The framework-specific component library (`react-datocms`, `vue-datocms`, `@datocms/svelte`, `@datocms/astro`) should already be installed or will be installed here if missing.
 
-Use the project's package manager (check for `pnpm-lock.yaml`, `yarn.lock`, `bun.lockb`, or default to `npm`).
+Use the project's package manager (see `../../../patterns/MANDATORY_RULES.md`).
 
 ---
 
@@ -194,16 +194,10 @@ After generating all files, tell the user:
 ## Mandatory Rules for All Generated Code
 
 ### TypeScript
-- No `as unknown as` — this is a forbidden anti-pattern
-- No unnecessary `as SomeType` casts
-- Let TypeScript infer types wherever possible
-- Use `import type { ... }` for type-only imports
+Follow the TypeScript rules in `../../../patterns/MANDATORY_RULES.md`.
 
 ### File conflicts
-- Read existing files before modifying them
-- Make targeted additions, not full rewrites
-- Skip if already configured
-- Preserve working existing behavior and patch toward the recommended pattern instead of replacing entire files by default
+Follow the file conflict rules in `../../../patterns/MANDATORY_RULES.md`.
 
 ---
 

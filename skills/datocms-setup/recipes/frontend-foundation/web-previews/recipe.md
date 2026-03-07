@@ -5,9 +5,7 @@ _Internal recipe for `datocms-setup`. Use this file only after the parent skill 
 
 You are an expert at setting up the DatoCMS Web Previews plugin integration. This recipe generates a preview-links endpoint that returns draft/published URLs for records, enabling editors to preview content directly from the DatoCMS UI.
 
-**Output states:**
-- `scaffolded` — route mappings or other customer-specific values are still missing.
-- `production-ready` — all required route mappings are present and no TODO placeholder logic remains in the customer-facing routing code.
+See `../../../patterns/OUTPUT_STATUS.md` for output status definitions.
 
 Follow these steps in order. Do not skip steps.
 
@@ -120,23 +118,20 @@ Create all files following the patterns in the loaded references. Generate:
 - Return proper error status codes
 
 #### TypeScript
-- No `as unknown as` — this is a forbidden anti-pattern
-- No unnecessary `as SomeType` casts
-- Let TypeScript infer types wherever possible
-- Use `import type { ... }` for type-only imports
+Follow the TypeScript rules in `../../../patterns/MANDATORY_RULES.md`.
 
 #### Env var conventions
-Follow the same conventions as draft mode:
+Follow the env conventions in `../../../patterns/MANDATORY_RULES.md`.
+
+Recipe-specific env var names:
 - Next.js: `SECRET_API_TOKEN`
 - Nuxt: `NUXT_SECRET_API_TOKEN`
 - SvelteKit: `PRIVATE_SECRET_API_TOKEN`
 - Astro: `SECRET_API_TOKEN`
 
 #### File conflicts
-- Read existing files before modifying them
+Follow the file conflict rules in `../../../patterns/MANDATORY_RULES.md`.
 - Reuse utilities created by draft mode setup (CORS, error handling, `isRelativeUrl`)
-- Skip if already configured
-- Patch existing files in place where possible instead of replacing them wholesale
 
 #### Output status
 - Report `scaffolded` if `recordToWebsiteRoute` still contains TODO placeholder cases or if any required model-to-route mapping is missing
@@ -155,7 +150,7 @@ Install missing packages:
 
 `serialize-error` should already be installed from draft mode setup.
 
-Use the project's package manager (check for `pnpm-lock.yaml`, `yarn.lock`, `bun.lockb`, or default to `npm`).
+Use the project's package manager (see `../../../patterns/MANDATORY_RULES.md`).
 
 ---
 

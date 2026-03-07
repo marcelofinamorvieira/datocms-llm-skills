@@ -2,6 +2,8 @@
 
 React hook for live content updates via DatoCMS's [Real-time Updates API](https://www.datocms.com/docs/real-time-updates-api/api-reference). Receives updated query results in real-time over Server-Sent Events (SSE) and reconnects automatically on network failures.
 
+See `realtime-concepts.md` for shared initialization options, connection status values, error object shape, and the `fetcher` gotcha.
+
 
 ## Contents
 
@@ -79,43 +81,19 @@ const {
 
 ## Initialization Options
 
-| Option | Type | Required | Default | Description |
-|---|---|---|---|---|
-| `enabled` | boolean | No | `true` | Whether the subscription is active |
-| `query` | string \| `TypedDocumentNode` | Yes | — | The GraphQL query to subscribe to |
-| `token` | string | Yes | — | DatoCMS API token |
-| `variables` | Object | No | — | GraphQL variables for the query |
-| `includeDrafts` | boolean | No | — | If true, returns draft records |
-| `excludeInvalid` | boolean | No | — | If true, filters out invalid records |
-| `environment` | string | No | primary | DatoCMS environment name |
-| `contentLink` | `'v1'` \| undefined | No | — | Enables Content Link metadata embedding |
-| `baseEditingUrl` | string | No | — | Base URL of the DatoCMS project (for Content Link) |
-| `cacheTags` | boolean | No | — | If true, receives Cache Tags with the query |
-| `initialData` | Object | No | — | Initial data for first render (e.g., server-fetched data) |
-| `reconnectionPeriod` | number | No | `1000` | Milliseconds to wait before reconnecting on network error |
-| `fetcher` | fetch-like function | No | `window.fetch` | Custom fetch function for the registration query |
-| `eventSourceClass` | EventSource-like class | No | `window.EventSource` | Custom EventSource class for SSE connection |
-| `baseUrl` | string | No | `https://graphql-listen.datocms.com` | Base URL for the subscription endpoint |
+See `realtime-concepts.md` for the full options table shared across all frameworks.
 
 ---
 
 ## Connection Status
 
-| Status | Description |
-|---|---|
-| `connecting` | Subscription channel is trying to connect |
-| `connected` | Channel is open, receiving live updates |
-| `closed` | Channel permanently closed due to fatal error (e.g., invalid query) |
+See `realtime-concepts.md` for connection status values.
 
 ---
 
 ## Error Object
 
-| Property | Type | Description |
-|---|---|---|
-| `code` | string | Error code (e.g., `INVALID_QUERY`) |
-| `message` | string | Human-friendly error description |
-| `response` | Object | Raw response from endpoint (if available) |
+See `realtime-concepts.md` for the error object shape.
 
 ---
 
@@ -141,46 +119,4 @@ const { data } = useQuerySubscription({
 
 ## Critical: The `fetcher` Gotcha
 
-**Always define `fetcher` as a `const` outside the component scope.** If defined inline, it creates a new function reference on every render, causing an infinite render loop.
-
-### Correct
-
-```jsx
-const fetcher = (baseUrl, { headers, method, body }) => {
-  return fetch(baseUrl, {
-    headers: {
-      ...headers,
-      'X-Custom-Header': 'value',
-    },
-    method,
-    body,
-  });
-};
-
-function Home() {
-  const { data } = useQuerySubscription({
-    fetcher,
-    query: QUERY,
-    token: 'YOUR_TOKEN',
-  });
-
-  return /* ... */;
-}
-```
-
-### Incorrect (causes infinite render loop)
-
-```jsx
-function Home() {
-  const { data } = useQuerySubscription({
-    // This creates a new function every render!
-    fetcher: (baseUrl, { headers, method, body }) => {
-      return fetch(baseUrl, { headers, method, body });
-    },
-    query: QUERY,
-    token: 'YOUR_TOKEN',
-  });
-
-  return /* ... */;
-}
-```
+See `realtime-concepts.md` for the general rule. In React, define `fetcher` as a `const` outside the component function to avoid infinite render loops.

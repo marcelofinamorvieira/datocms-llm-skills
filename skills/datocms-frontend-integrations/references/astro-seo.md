@@ -1,5 +1,7 @@
 # Astro SEO & Meta Tags — `<Seo />`
 
+See `seo-concepts.md` for the shared GraphQL query shape and tag concatenation pattern.
+
 Astro component for rendering SEO meta tags, social share tags, and favicons from DatoCMS's `_seoMetaTags` and `faviconMetaTags` GraphQL queries. Unlike React's `renderMetaTags()` / `toNextMetadata()`, Vue's `toHead()`, or Svelte's `<Head />`, Astro uses a `<Seo />` component that injects `<title>`, `<meta>`, and `<link>` tags into the document's `<head>`.
 
 
@@ -25,32 +27,7 @@ import { Seo } from '@datocms/astro/Seo';
 
 ## GraphQL Queries
 
-```graphql
-query {
-  page: homepage {
-    title
-    seo: _seoMetaTags {
-      attributes
-      content
-      tag
-    }
-  }
-
-  site: _site {
-    favicon: faviconMetaTags {
-      attributes
-      content
-      tag
-    }
-  }
-}
-```
-
-**Pattern:** Always concat page SEO tags with site favicon tags:
-
-```js
-const allMetaTags = [...result.page.seo, ...result.site.favicon];
-```
+See `seo-concepts.md` for the query shape and tag concatenation pattern. Examples below assume tags are fetched as `result.page.seo` and `result.site.favicon`.
 
 ---
 

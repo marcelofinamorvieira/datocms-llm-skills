@@ -4,6 +4,8 @@ Astro component for live content reloads via DatoCMS's [Real-time Updates API](h
 
 `<QueryListener />` is based on the `subscribeToQuery` helper from the [datocms-listen](https://www.npmjs.com/package/datocms-listen) package and automatically reconnects on network failures.
 
+See `realtime-concepts.md` for shared initialization options and the `fetcher` gotcha.
+
 
 ## Contents
 
@@ -129,21 +131,7 @@ const isDraftMode = /* your draft mode check */;
 
 ## Initialization Options
 
-| Prop | Type | Required | Default | Description |
-|---|---|---|---|---|
-| `enabled` | boolean | No | `true` | Whether the subscription is active |
-| `query` | string \| `TypedDocumentNode` | Yes | — | The GraphQL query to subscribe to |
-| `token` | string | Yes | — | DatoCMS API token |
-| `variables` | Object | No | — | GraphQL variables for the query |
-| `includeDrafts` | boolean | No | — | If true, returns draft records |
-| `excludeInvalid` | boolean | No | — | If true, filters out invalid records |
-| `environment` | string | No | primary | DatoCMS environment name |
-| `contentLink` | `'v1'` \| undefined | No | — | Enables Content Link metadata embedding |
-| `baseEditingUrl` | string | No | — | Base URL of the DatoCMS project (for Content Link) |
-| `cacheTags` | boolean | No | — | If true, receives Cache Tags with the query |
-| `initialData` | Object | No | — | Initial data for the subscription |
-| `reconnectionPeriod` | number | No | `1000` | Milliseconds to wait before reconnecting on network error |
-| `baseUrl` | string | No | `https://graphql-listen.datocms.com` | Base URL for the subscription endpoint |
+See `realtime-concepts.md` for the full options table. `<QueryListener />` accepts the same core options as props, except it does not expose `fetcher` or `eventSourceClass`.
 
 ---
 

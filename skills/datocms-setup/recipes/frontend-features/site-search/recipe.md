@@ -8,12 +8,7 @@ project provisioning with local frontend wiring so the project ends up with a
 working search route, explicit search-index wiring, and a least-privilege token
 story.
 
-**Output states:**
-
-- `scaffolded` — local search UI exists, but one or more required values are
-  still placeholders or the Dato-side automation could not complete
-- `production-ready` — a real search index is wired, the search route is
-  mounted, and no search token / index id placeholders remain
+See `../../../patterns/OUTPUT_STATUS.md` for output status definitions.
 
 Follow these steps in order. Do not skip steps.
 

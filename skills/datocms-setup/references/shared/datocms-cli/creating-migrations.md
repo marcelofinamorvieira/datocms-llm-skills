@@ -12,104 +12,7 @@ npx datocms migrations:new <NAME> [flags]
 
 Creates a new migration script in the migrations directory.
 
-### Arguments
-
-| Argument | Required | Description |
-|---|---|---|
-| `NAME` | Yes | The name to give to the script |
-
-### Flags
-
-| Flag | Type | Description |
-|---|---|---|
-| `--ts` | boolean | Force creation of a TypeScript migration file (exclusive with `--js`) |
-| `--js` | boolean | Force creation of a JavaScript migration file (exclusive with `--ts`) |
-| `--template=<path>` | string | Start from a custom template file (exclusive with `--autogenerate`) |
-| `--autogenerate=<envs>` | string | Auto-generate by diffing two environments (exclusive with `--template`) |
-| `--schema=<filter>` | string | Include schema type definitions for models/blocks (TypeScript only). Use `"all"` or comma-separated API keys |
-
----
-
-## File Naming Convention
-
-Generated files follow the pattern:
-
-```
-{unix_timestamp}_{camelCaseName}.ts|js
-```
-
-Examples:
-- `npx datocms migrations:new "add blog model"` → `1709312400_addBlogModel.ts`
-- `npx datocms migrations:new "seed content" --js` → `1709312400_seedContent.js`
-
----
-
-## Default Templates
-
-### TypeScript (default for TS projects)
-
-```ts
-import { Client } from '@datocms/cli/lib/cma-client-node';
-
-export default async function(client: Client): Promise<void> {
-  // DatoCMS migration script
-
-  // For more examples, head to our Content Management API docs:
-  // https://www.datocms.com/docs/content-management-api
-
-  const articleModel = await client.itemTypes.create({
-    name: 'Article',
-    api_key: 'article',
-  });
-
-  const titleField = await client.fields.create(articleModel, {
-    label: 'Title',
-    api_key: 'title',
-    field_type: 'string',
-    validators: {
-      required: {},
-    },
-  });
-
-  const article = await client.items.create({
-    item_type: articleModel,
-    title: 'My first article!',
-  });
-}
-```
-
-### JavaScript
-
-```js
-'use strict';
-
-/** @param client { import("@datocms/cli/lib/cma-client-node").Client } */
-module.exports = async (client) => {
-  // DatoCMS migration script
-
-  // For more examples, head to our Content Management API docs:
-  // https://www.datocms.com/docs/content-management-api
-
-  const articleModel = await client.itemTypes.create({
-    name: 'Article',
-    api_key: 'article',
-  });
-
-  const titleField = await client.fields.create(articleModel, {
-    label: 'Title',
-    api_key: 'title',
-    field_type: 'string',
-    validators: {
-      required: {},
-    },
-  });
-
-  const article = await client.items.create({
-    item_type: articleModel,
-    title: 'My first article!',
-  });
-}
-```
+Run `npx datocms migrations:new --help` for all available flags.
 
 ---
 
@@ -117,10 +20,10 @@ module.exports = async (client) => {
 
 The CLI determines the file format in this order:
 
-1. If `--template` is provided → use the template file's extension
-2. If `--js` flag is set → JavaScript
-3. If `--ts` flag is set or a `tsconfig.json` is found → TypeScript
-4. Otherwise → JavaScript
+1. If `--template` is provided -> use the template file's extension
+2. If `--js` flag is set -> JavaScript
+3. If `--ts` flag is set or a `tsconfig.json` is found -> TypeScript
+4. Otherwise -> JavaScript
 
 ---
 

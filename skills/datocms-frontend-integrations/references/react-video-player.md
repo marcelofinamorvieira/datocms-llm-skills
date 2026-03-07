@@ -1,16 +1,16 @@
 # React Video Player — `<VideoPlayer />`
 
+See `video-player-concepts.md` for the shared GraphQL query, video field definitions, and privacy defaults.
+
 React component for DatoCMS/Mux video streaming, designed to work with the `video` GraphQL query.
 
 
 ## Contents
 
 - [Installation](#installation)
-- [GraphQL Query](#graphql-query)
 - [Basic Usage](#basic-usage)
 - [Props](#props)
 - [`useVideoPlayer` Hook](#usevideoplayer-hook)
-- [Mux Data Analytics (Opt-in)](#mux-data-analytics-opt-in)
 
 ---
 
@@ -21,41 +21,6 @@ Requires `@mux/mux-player-react` as a peer dependency:
 ```bash
 npm install react-datocms @mux/mux-player-react
 ```
-
----
-
-## GraphQL Query
-
-```graphql
-query {
-  blogPost {
-    cover {
-      video {
-        # Required — identifies the video to stream
-        muxPlaybackId
-
-        # Optional but recommended:
-        title       # displayed in upper left corner of player
-        width       # used with height for aspect ratio (prevents layout jumps)
-        height
-        blurUpThumb # blurred placeholder while video loads
-        alt         # enables Content Link for click-to-edit overlays
-      }
-    }
-  }
-}
-```
-
-### Video Object Fields
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `muxPlaybackId` | string | Yes | Identifies the video to stream from Mux CDN |
-| `title` | string | No | Displayed in the player overlay |
-| `width` | integer | No | Video width (used with `height` for `aspectRatio` style) |
-| `height` | integer | No | Video height (used with `width` for `aspectRatio` style) |
-| `blurUpThumb` | string | No | Base64-encoded blurred placeholder |
-| `alt` | string | No | Alt text (also enables Content Link overlays) |
 
 ---
 
@@ -119,13 +84,3 @@ function CustomPlayer({ videoData }) {
 }
 ```
 
----
-
-## Mux Data Analytics (Opt-in)
-
-Video playback analytics are **disabled by default**. To enable them:
-
-1. Create a [Mux Data](https://www.mux.com/data) account (free)
-2. Pass the `envKey` prop to `<VideoPlayer />`
-
-See [Streaming Video Analytics with Mux Data](https://www.datocms.com/docs/streaming-videos/streaming-video-analytics-with-mux-data) for setup details.
