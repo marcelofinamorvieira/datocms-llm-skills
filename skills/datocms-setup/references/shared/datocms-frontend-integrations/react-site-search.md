@@ -2,6 +2,8 @@
 
 React hook for building a [DatoCMS Site Search](https://www.datocms.com/docs/site-search) widget. Handles all form logic (query, pagination, locale) — you control the rendering.
 
+See `site-search-concepts.md` for shared initialization options, state behavior, and loading patterns.
+
 
 ## Contents
 
@@ -67,16 +69,14 @@ function SearchWidget() {
 
 ## Initialization Options
 
-| Option | Type | Required | Default | Description |
-|---|---|---|---|---|
-| `client` | CMA Client instance | Yes | — | Instance from `buildClient()` of `@datocms/cma-client-browser` |
-| `searchIndexId` | string | Yes | — | [Search index ID](https://www.datocms.com/docs/site-search/base-integration#performing-searches) |
-| `fuzzySearch` | boolean | No | `false` | Enable approximate matching |
-| `resultsPerPage` | number | No | `8` | Results per page |
-| `highlightMatch` | `(match, key, context: 'title' \| 'bodyExcerpt') => ReactNode` | No | `(text, key) => <mark key={key}>{text}</mark>` | Custom match highlighting |
-| `initialState.query` | string | No | `''` | Initial search query |
-| `initialState.locale` | string | No | `null` | Initial locale filter |
-| `initialState.page` | number | No | `0` | Initial page number |
+See `site-search-concepts.md` for shared options. React additionally supports:
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `highlightMatch` | `(match, key, context: 'title' \| 'bodyExcerpt') => ReactNode` | `(text, key) => <mark key={key}>{text}</mark>` | Custom match highlighting |
+| `initialState.query` | string | `''` | Initial search query |
+| `initialState.locale` | string | `null` | Initial locale filter |
+| `initialState.page` | number | `0` | Initial page number |
 
 ---
 

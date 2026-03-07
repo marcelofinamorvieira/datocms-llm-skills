@@ -18,6 +18,7 @@
         "references/shared/datocms-cda/images-and-videos.md",
         "references/shared/datocms-frontend-integrations/astro-image.md",
         "references/shared/datocms-frontend-integrations/astro.md",
+        "references/shared/datocms-frontend-integrations/image-concepts.md",
         "references/shared/datocms-frontend-integrations/nextjs.md",
         "references/shared/datocms-frontend-integrations/nuxt.md",
         "references/shared/datocms-frontend-integrations/react-image.md",
@@ -61,6 +62,7 @@
         "references/shared/datocms-frontend-integrations/astro-seo.md",
         "references/shared/datocms-frontend-integrations/content-link-concepts.md",
         "references/shared/datocms-frontend-integrations/react-seo.md",
+        "references/shared/datocms-frontend-integrations/seo-concepts.md",
         "references/shared/datocms-frontend-integrations/svelte-seo.md",
         "references/shared/datocms-frontend-integrations/vue-seo.md"
       ],
@@ -83,6 +85,7 @@
         "references/shared/datocms-cma/client-types-and-behaviors.md",
         "references/shared/datocms-frontend-integrations/react-site-search.md",
         "references/shared/datocms-frontend-integrations/site-search-api.md",
+        "references/shared/datocms-frontend-integrations/site-search-concepts.md",
         "references/shared/datocms-frontend-integrations/vue-site-search.md"
       ],
       "assets": [],
@@ -138,6 +141,7 @@
         "references/shared/datocms-frontend-integrations/svelte-content-link.md",
         "references/shared/datocms-frontend-integrations/svelte-video-player.md",
         "references/shared/datocms-frontend-integrations/sveltekit.md",
+        "references/shared/datocms-frontend-integrations/video-player-concepts.md",
         "references/shared/datocms-frontend-integrations/vue-content-link.md",
         "references/shared/datocms-frontend-integrations/vue-video-player.md"
       ],

@@ -102,22 +102,19 @@ Create all files following the patterns in the loaded references. Generate:
 - Non-Next.js frameworks: use `jose` for JWT signing/verification of the draft mode cookie
 
 #### TypeScript
-- No `as unknown as` — this is a forbidden anti-pattern
-- No unnecessary `as SomeType` casts
-- Let TypeScript infer types wherever possible
-- Use `import type { ... }` for type-only imports
+Follow the TypeScript rules in `../../../patterns/MANDATORY_RULES.md`.
 
 #### Env var naming conventions
-- Next.js: plain `DATOCMS_*` (e.g., `DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN`, `DATOCMS_DRAFT_CONTENT_CDA_TOKEN`, `SECRET_API_TOKEN`, `DRAFT_MODE_SECRET`)
-- Nuxt: `NUXT_DATOCMS_*` / `NUXT_PUBLIC_DATOCMS_*` (e.g., `NUXT_DATOCMS_DRAFT_CONTENT_CDA_TOKEN`, `NUXT_SECRET_API_TOKEN`)
-- SvelteKit: `PRIVATE_DATOCMS_*` (e.g., `PRIVATE_DATOCMS_DRAFT_CONTENT_CDA_TOKEN`, `PRIVATE_SECRET_API_TOKEN`)
-- Astro: plain `DATOCMS_*` with `astro:env/server` schema validation
+Follow the env conventions in `../../../patterns/MANDATORY_RULES.md`.
+
+Recipe-specific env var names:
+- Next.js: `DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN`, `DATOCMS_DRAFT_CONTENT_CDA_TOKEN`, `SECRET_API_TOKEN`, `DRAFT_MODE_SECRET`
+- Nuxt: `NUXT_DATOCMS_DRAFT_CONTENT_CDA_TOKEN`, `NUXT_SECRET_API_TOKEN`
+- SvelteKit: `PRIVATE_DATOCMS_DRAFT_CONTENT_CDA_TOKEN`, `PRIVATE_SECRET_API_TOKEN`
+- Astro: `DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN`, `DATOCMS_DRAFT_CONTENT_CDA_TOKEN`, `SECRET_API_TOKEN`, `DRAFT_MODE_SECRET`
 
 #### File conflicts
-- Read existing files before modifying them
-- Make targeted additions, not full rewrites
-- Skip if a piece is already configured
-- Preserve working existing behavior where possible and patch toward the recommended pattern instead of replacing entire files by default
+Follow the file conflict rules in `../../../patterns/MANDATORY_RULES.md`.
 
 ---
 
@@ -131,7 +128,7 @@ Install missing packages:
 | `serialize-error` | Always (if not already installed) |
 | `jose` | Non-Next.js frameworks only (for JWT signing) |
 
-Use the project's package manager (check for `pnpm-lock.yaml`, `yarn.lock`, `bun.lockb`, or default to `npm`).
+Use the project's package manager (see `../../../patterns/MANDATORY_RULES.md`).
 
 ---
 

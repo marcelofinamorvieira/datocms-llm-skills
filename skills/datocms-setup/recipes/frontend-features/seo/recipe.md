@@ -7,12 +7,7 @@ You are an expert at wiring DatoCMS SEO metadata into existing frontend
 projects. This recipe focuses on data-layer and head-rendering integration. It
 does not create or edit Dato schema in v1.
 
-**Output states:**
-
-- `scaffolded` — metadata wiring exists, but the public site URL or query
-  integration still contains placeholders
-- `production-ready` — page metadata is wired, canonical URLs come from a real
-  site URL, and no SEO placeholders remain
+See `../../../patterns/OUTPUT_STATUS.md` for output status definitions.
 
 Follow these steps in order. Do not skip steps.
 

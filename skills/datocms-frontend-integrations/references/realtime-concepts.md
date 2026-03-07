@@ -65,6 +65,61 @@ Render: display data (auto-updates on changes)
 
 ---
 
+## Initialization Options
+
+All framework implementations accept the same core options:
+
+| Option | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `enabled` | boolean | No | `true` | Whether the subscription is active |
+| `query` | string \| `TypedDocumentNode` | Yes | — | The GraphQL query to subscribe to |
+| `token` | string | Yes | — | DatoCMS API token |
+| `variables` | Object | No | — | GraphQL variables for the query |
+| `includeDrafts` | boolean | No | — | If true, returns draft records |
+| `excludeInvalid` | boolean | No | — | If true, filters out invalid records |
+| `environment` | string | No | primary | DatoCMS environment name |
+| `contentLink` | `'v1'` \| undefined | No | — | Enables Content Link metadata embedding |
+| `baseEditingUrl` | string | No | — | Base URL of the DatoCMS project (for Content Link) |
+| `cacheTags` | boolean | No | — | If true, receives Cache Tags with the query |
+| `initialData` | Object | No | — | Initial data for first render (e.g., server-fetched data) |
+| `reconnectionPeriod` | number | No | `1000` | Milliseconds to wait before reconnecting on network error |
+| `fetcher` | fetch-like function | No | `window.fetch` | Custom fetch function for the registration query |
+| `eventSourceClass` | EventSource-like class | No | `window.EventSource` | Custom EventSource class for SSE connection |
+| `baseUrl` | string | No | `https://graphql-listen.datocms.com` | Base URL for the subscription endpoint |
+
+---
+
+## Connection Status
+
+| Status | Description |
+|---|---|
+| `connecting` | Subscription channel is trying to connect |
+| `connected` | Channel is open, receiving live updates |
+| `closed` | Channel permanently closed due to fatal error (e.g., invalid query) |
+
+---
+
+## Error Object
+
+| Property | Type | Description |
+|---|---|---|
+| `code` | string | Error code (e.g., `INVALID_QUERY`) |
+| `message` | string | Human-friendly error description |
+| `response` | Object | Raw response from endpoint (if available) |
+
+---
+
+## Critical: The `fetcher` Gotcha
+
+**Always define `fetcher` as a stable reference outside the component render cycle.** If defined inline, it creates a new function reference on every render/re-evaluation, causing an infinite reconnection loop.
+
+- **React:** Define `fetcher` as a `const` outside the component function
+- **Vue:** Define `fetcher` as a `const` before calling `useQuerySubscription`
+- **Svelte:** Define `fetcher` at the top of the `<script>` block
+- **Astro:** Define `fetcher` before passing it to `<QueryListener>`
+
+---
+
 ## Rate Limiting
 
 - **Max 500 concurrent SSE connections** per DatoCMS project
@@ -75,16 +130,9 @@ Render: display data (auto-updates on changes)
 
 ## Error Handling
 
-The subscription libraries emit error events with a `fatal` flag:
+The subscription libraries surface errors with a `fatal` flag:
 
 - **`fatal: true`** — The connection cannot be recovered. Reconnection won't help. Display an error to the user.
 - **`fatal: false`** — A transient error. The library will automatically attempt to reconnect.
 
-```ts
-const { data, error } = useQuerySubscription(options);
-
-if (error) {
-  // error.code and error.message are available
-  // Check if it's fatal to decide whether to show a permanent error
-}
-```
+See the [Error Object](#error-object) table above for the full error shape.

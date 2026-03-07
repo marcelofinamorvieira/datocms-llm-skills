@@ -19,8 +19,7 @@ Silently examine the project:
 1. **Node project** — Check for `package.json`. If missing, stop and tell the
    user this skill expects a JavaScript or TypeScript project with a package
    manifest.
-2. **Package manager** — Detect `pnpm-lock.yaml`, `yarn.lock`, `bun.lockb`, or
-   default to `npm`.
+2. **Package manager** — See `../../../patterns/MANDATORY_RULES.md`.
 3. **CLI installation** — Check `package.json` for `@datocms/cli`.
 4. **CLI config** — Check for `datocms.config.json`.
 5. **Migrations directory** — Check for `migrations/`.
@@ -97,7 +96,7 @@ Make the minimum project changes needed for a working single-project CLI setup.
 
 ## Step 5: Install Dependencies
 
-Install missing packages with the detected package manager:
+Use the project's package manager (see `../../../patterns/MANDATORY_RULES.md`).
 
 - `@datocms/cli`
 

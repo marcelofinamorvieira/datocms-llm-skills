@@ -4,27 +4,14 @@ Managing DatoCMS environments (sandboxes) and making raw API calls from the CLI.
 
 ---
 
-## environments:list
+## Simple Environment Commands
 
-List all primary and sandbox environments:
+- **`environments:list`** — List all primary and sandbox environments: `npx datocms environments:list`
+- **`environments:primary`** — Get the ID of the primary environment: `npx datocms environments:primary`
+- **`environments:rename`** — Rename an environment: `npx datocms environments:rename <ENVIRONMENT_ID> <NEW_ENVIRONMENT_ID>`
+- **`environments:destroy`** — Destroy a sandbox environment: `npx datocms environments:destroy <ENVIRONMENT_ID>`
 
-```bash
-npx datocms environments:list
-```
-
-Displays a table with environment IDs and whether each is the primary environment.
-
----
-
-## environments:primary
-
-Get the ID of the primary environment:
-
-```bash
-npx datocms environments:primary
-```
-
-Returns only the primary environment ID — useful in scripts.
+**Warning:** `environments:destroy` permanently deletes the environment and all its data.
 
 ---
 
@@ -36,12 +23,7 @@ Create a new sandbox environment by forking an existing one:
 npx datocms environments:fork <SOURCE_ENVIRONMENT_ID> <NEW_ENVIRONMENT_ID>
 ```
 
-### Flags
-
-| Flag | Type | Description |
-|---|---|---|
-| `--fast` | boolean | Fast fork (prevents writes to source environment during fork) |
-| `--force` | boolean | Force fast fork even with active editing sessions (requires `--fast`) |
+Run `npx datocms environments:fork --help` for all flags (includes `--fast` and `--force` options).
 
 ### Examples
 
@@ -76,40 +58,6 @@ npx datocms environments:promote staging
 
 ---
 
-## environments:rename
-
-Rename an environment:
-
-```bash
-npx datocms environments:rename <ENVIRONMENT_ID> <NEW_ENVIRONMENT_ID>
-```
-
-### Example
-
-```bash
-npx datocms environments:rename staging production-v2
-```
-
----
-
-## environments:destroy
-
-Destroy a sandbox environment:
-
-```bash
-npx datocms environments:destroy <ENVIRONMENT_ID>
-```
-
-### Example
-
-```bash
-npx datocms environments:destroy staging
-```
-
-**Warning:** This permanently deletes the environment and all its data.
-
----
-
 ## cma:call
 
 Make raw Content Management API calls from the command line:
@@ -118,20 +66,7 @@ Make raw Content Management API calls from the command line:
 npx datocms cma:call <RESOURCE> <METHOD> [flags]
 ```
 
-### Arguments
-
-| Argument | Description |
-|---|---|
-| `RESOURCE` | The CMA resource (e.g., `items`, `item_types`, `fields`, `uploads`) |
-| `METHOD` | The method to call (e.g., `list`, `find`, `create`, `update`, `destroy`) |
-
-### Flags
-
-| Flag | Type | Description |
-|---|---|---|
-| `--environment=<env>` | string | Target a specific environment |
-| `--data=<json>` | string | JSON data for the request body |
-| `--params=<json>` | string | JSON query parameters |
+Run `npx datocms cma:call --help` for all arguments and flags.
 
 ### Examples
 

@@ -8,13 +8,7 @@ projects. This recipe creates one shared `DatoStructuredText` renderer, patches
 query shapes toward the full DAST payload when needed, and integrates Content
 Link boundaries when visual editing is already configured.
 
-**Output states:**
-
-- `scaffolded` — the shared renderer exists, but no real Structured Text field
-  was safely patched yet or record-type mappings still contain placeholders
-- `production-ready` — a real Structured Text field is wired through the shared
-  renderer and every discovered record type in the patched query has concrete
-  handling
+See `../../../patterns/OUTPUT_STATUS.md` for output status definitions.
 
 Follow these steps in order. Do not skip steps.
 

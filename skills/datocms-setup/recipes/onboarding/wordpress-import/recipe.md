@@ -16,8 +16,7 @@ Follow these steps in order. Do not skip steps.
 Silently examine the project:
 
 1. **Node project** — Check for `package.json`
-2. **Package manager** — Detect `pnpm-lock.yaml`, `yarn.lock`, `bun.lockb`, or
-   default to `npm`
+2. **Package manager** — See `../../../patterns/MANDATORY_RULES.md`.
 3. **CLI installation** — Check `package.json` for `@datocms/cli`
 4. **WordPress plugin** — Check `package.json` for
    `@datocms/cli-plugin-wordpress`

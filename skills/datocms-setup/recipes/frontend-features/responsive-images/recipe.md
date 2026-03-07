@@ -8,12 +8,7 @@ projects. This recipe creates or patches one shared Dato image wrapper,
 normalizes `responsiveImage(...)` query shapes, and patches a real usage site
 when the repo already exposes an image field.
 
-**Output states:**
-
-- `scaffolded` — the shared wrapper exists, but no concrete image field was
-  safely patched yet or the query shape still contains placeholders
-- `production-ready` — at least one real Dato image field is wired through the
-  shared wrapper and no responsive-image TODOs remain
+See `../../../patterns/OUTPUT_STATUS.md` for output status definitions.
 
 Follow these steps in order. Do not skip steps.
 

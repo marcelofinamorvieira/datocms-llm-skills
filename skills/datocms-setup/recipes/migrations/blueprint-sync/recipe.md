@@ -16,8 +16,7 @@ Follow these steps in order. Do not skip steps.
 Silently examine the project:
 
 1. **Node project** — Check for `package.json`
-2. **Package manager** — Detect `pnpm-lock.yaml`, `yarn.lock`, `bun.lockb`, or
-   default to `npm`
+2. **Package manager** — See `../../../patterns/MANDATORY_RULES.md`.
 3. **CLI setup** — Check for `@datocms/cli`, `datocms.config.json`, and a
    `migrations/` directory or existing migration scripts
 4. **Existing profiles** — Inspect `datocms.config.json` for named profiles and

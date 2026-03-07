@@ -7,14 +7,7 @@ You are an expert at setting up lean, repeatable DatoCMS webhook management.
 This recipe adds a declarative webhook config, a sync helper, and, when the repo
 supports it, one minimal authenticated receiver endpoint.
 
-**Output states:**
-
-- `scaffolded` — webhook definitions and receiver scaffolding exist, but one or
-  more secrets, site URLs, or local receiver stub behaviors still use
-  placeholders.
-- `production-ready` — webhook definitions use real values, and any generated
-  local receiver has been intentionally wired for the project instead of left as
-  a generic stub.
+See `../../../patterns/OUTPUT_STATUS.md` for output status definitions.
 
 Follow these steps in order. Do not skip steps.
 
@@ -25,8 +18,7 @@ Follow these steps in order. Do not skip steps.
 Silently examine the project:
 
 1. **Node project** — Confirm `package.json` exists
-2. **Package manager** — Detect `pnpm-lock.yaml`, `yarn.lock`, `bun.lockb`, or
-   default to `npm`
+2. **Package manager** — See `../../../patterns/MANDATORY_RULES.md`.
 3. **CMA client package** — Check for `@datocms/cma-client`,
    `@datocms/cma-client-node`, or `@datocms/cma-client-browser`
 4. **Framework** — Read `package.json` and check for:

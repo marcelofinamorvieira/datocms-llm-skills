@@ -118,7 +118,7 @@ of keeping all work in this bundle:
 | Robots & Sitemaps | `datocms-setup` for `robots-sitemaps` |
 | Cache Tags | `datocms-setup` for `cache-tags` |
 
-Stay in this skill when the request spans multiple categories, asks for comparisons, needs partial patching in a custom setup, or another skill explicitly depends on these references.
+Route to `datocms-setup` when the task is "set up X end-to-end from scratch" for a single feature. Stay here for multi-feature tasks, partial patching, framework comparisons, or when another skill explicitly depends on these references.
 
 ### Questions
 
@@ -138,6 +138,18 @@ Otherwise proceed directly and call out unresolved values instead of stalling.
 
 Read only what is needed from the `references/` directory next to this skill.
 Long files include a contents section at the top; preview that first, then load the relevant section.
+
+### Component concept references
+
+Load the relevant concept file first — it contains shared GraphQL queries, field definitions, and patterns. Then load the framework-specific file for component APIs and props.
+
+| Category | Concept file |
+|---|---|
+| Responsive Images | `references/image-concepts.md` |
+| Video Player | `references/video-player-concepts.md` |
+| SEO & Meta Tags | `references/seo-concepts.md` |
+| Real-Time Updates | `references/realtime-concepts.md` |
+| Site Search | `references/site-search-concepts.md` |
 
 ### Setup foundations
 

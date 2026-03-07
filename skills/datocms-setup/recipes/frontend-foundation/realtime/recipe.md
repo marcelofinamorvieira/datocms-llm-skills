@@ -127,23 +127,19 @@ Generate a usage pattern/example showing how to use `<QueryListener />` from `@d
 - If Content Link is configured, include `contentLink: 'v1'` and `baseEditingUrl`
 
 #### TypeScript
-- No `as unknown as` — this is a forbidden anti-pattern
-- No unnecessary `as SomeType` casts
-- Let TypeScript infer types wherever possible
-- Use `import type { ... }` for type-only imports
+Follow the TypeScript rules in `../../../patterns/MANDATORY_RULES.md`.
 
 #### Env var conventions
-Follow the same conventions as draft mode for accessing the draft CDA token:
-- Next.js: `process.env.DATOCMS_DRAFT_CONTENT_CDA_TOKEN`
+Follow the env conventions in `../../../patterns/MANDATORY_RULES.md`.
+
+Recipe-specific env var names:
+- Next.js: `DATOCMS_DRAFT_CONTENT_CDA_TOKEN`
 - Nuxt: `useRuntimeConfig().datocms.draftContentCdaToken`
-- SvelteKit: `PRIVATE_DATOCMS_DRAFT_CONTENT_CDA_TOKEN` from `$env/dynamic/private`
-- Astro: from `astro:env/server`
+- SvelteKit: `PRIVATE_DATOCMS_DRAFT_CONTENT_CDA_TOKEN`
+- Astro: draft CDA token from `astro:env/server`
 
 #### File conflicts
-- Read existing files before modifying them
-- Make targeted additions, not full rewrites
-- Skip if already configured
-- Preserve working existing behavior and patch toward the recommended pattern instead of replacing entire files by default
+Follow the file conflict rules in `../../../patterns/MANDATORY_RULES.md`.
 
 ---
 
@@ -158,7 +154,7 @@ Install missing packages:
 | `@datocms/svelte` | SvelteKit (if not already installed) |
 | `@datocms/astro` | Astro (if not already installed) |
 
-Use the project's package manager (check for `pnpm-lock.yaml`, `yarn.lock`, `bun.lockb`, or default to `npm`).
+Use the project's package manager (see `../../../patterns/MANDATORY_RULES.md`).
 
 ---
 

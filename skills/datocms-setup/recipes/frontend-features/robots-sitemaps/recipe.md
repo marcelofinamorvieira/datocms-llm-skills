@@ -7,12 +7,7 @@ You are an expert at generating `robots.txt` and sitemap outputs for DatoCMS
 frontends. This recipe focuses on crawler-safe route generation, same-domain URL
 output, and deterministic public-route mapping.
 
-**Output states:**
-
-- `scaffolded` — route files exist, but the public site URL or model-to-route
-  mappings still contain placeholders or unresolved sections
-- `production-ready` — robots and sitemap outputs are wired to real URLs, use
-  explicit public-route mappings, and have no unresolved TODOs
+See `../../../patterns/OUTPUT_STATUS.md` for output status definitions.
 
 Follow these steps in order. Do not skip steps.
 

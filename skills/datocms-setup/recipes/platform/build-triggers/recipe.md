@@ -7,13 +7,7 @@ You are an expert at setting up lean, repeatable DatoCMS build-trigger
 management. This recipe replaces older one-off build-trigger helpers with a
 single declarative config plus sync and smoke-check scripts.
 
-**Output states:**
-
-- `scaffolded` — helper scripts exist, but one or more adapter settings, site
-  URLs, or tokens still use placeholders.
-- `production-ready` — every configured trigger can be synced from real values
-  already present in repo config or env files, and the smoke-check path can
-  inspect or trigger them.
+See `../../../patterns/OUTPUT_STATUS.md` for output status definitions.
 
 Follow these steps in order. Do not skip steps.
 
@@ -24,8 +18,7 @@ Follow these steps in order. Do not skip steps.
 Silently examine the project:
 
 1. **Node project** — Confirm `package.json` exists
-2. **Package manager** — Detect `pnpm-lock.yaml`, `yarn.lock`, `bun.lockb`, or
-   default to `npm`
+2. **Package manager** — See `../../../patterns/MANDATORY_RULES.md`.
 3. **CMA client package** — Check for `@datocms/cma-client`,
    `@datocms/cma-client-node`, or `@datocms/cma-client-browser`
 4. **Existing trigger setup**

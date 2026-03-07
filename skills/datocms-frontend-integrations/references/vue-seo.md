@@ -1,5 +1,7 @@
 # Vue SEO & Meta Tags — `toHead()`
 
+See `seo-concepts.md` for the shared GraphQL query shape and tag concatenation pattern.
+
 Utility for rendering SEO meta tags, social share tags, and favicons from DatoCMS's `_seoMetaTags` and `faviconMetaTags` GraphQL queries. Returns data in the format expected by `vue-meta` (Options API) or `@unhead/vue` (Composition API / Nuxt 3).
 
 
@@ -13,28 +15,7 @@ Utility for rendering SEO meta tags, social share tags, and favicons from DatoCM
 
 ## GraphQL Queries
 
-```graphql
-query {
-  page: homepage {
-    title
-    seo: _seoMetaTags {
-      attributes
-      content
-      tag
-    }
-  }
-
-  site: _site {
-    favicon: faviconMetaTags {
-      attributes
-      content
-      tag
-    }
-  }
-}
-```
-
-**Pattern:** Always concat page SEO tags with site favicon tags when calling `toHead()`.
+See `seo-concepts.md` for the query shape and tag concatenation pattern. Examples below assume tags are fetched as `data.page.seo` and `data.site.favicon`.
 
 ---
 

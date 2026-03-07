@@ -8,13 +8,7 @@ projects. This recipe creates one shared `DatoVideoPlayer` wrapper, normalizes
 the Dato video query shape, and patches a real usage site when the repo already
 exposes a video field.
 
-**Output states:**
-
-- `scaffolded` — the shared wrapper exists, but no concrete video field was
-  safely patched yet or required peer dependencies / provider integration are
-  still unresolved
-- `production-ready` — a supported stack has at least one real Dato video field
-  wired through the shared wrapper and no video-player TODOs remain
+See `../../../patterns/OUTPUT_STATUS.md` for output status definitions.
 
 Follow these steps in order. Do not skip steps.
 

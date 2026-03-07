@@ -18,19 +18,7 @@ npm install --save-dev @datocms/cli-plugin-wordpress
 npx datocms wordpress:import [flags]
 ```
 
-### Flags
-
-| Flag | Type | Required | Description |
-|---|---|---|---|
-| `--wp-url=<url>` | string | No* | A URL within a WordPress REST API-enabled site (e.g., `https://www.example.com`) |
-| `--wp-json-api-url=<url>` | string | No* | The WordPress JSON API endpoint (e.g., `https://www.example.com/wp-json`). Exclusive with `--wp-url` |
-| `--wp-username=<user>` | string | Yes | WordPress username |
-| `--wp-password=<pass>` | string | Yes | WordPress password |
-| `--autoconfirm` | boolean | No | Skip confirmation prompts (forces destroy of existing `wp_*` models) |
-| `--ignore-errors` | boolean | No | Try to continue despite errors during import |
-| `--concurrency=<n>` | integer | No | Maximum concurrent operations (default: 15) |
-
-*One of `--wp-url` or `--wp-json-api-url` is needed to specify the WordPress site.
+Run `npx datocms wordpress:import --help` for all flags. Key flags include `--autoconfirm` (skip prompts), `--concurrency` (default: 15), and `--ignore-errors`.
 
 ### Import Steps
 
@@ -72,19 +60,7 @@ npm install --save-dev @datocms/cli-plugin-contentful
 npx datocms contentful:import [flags]
 ```
 
-### Flags
-
-| Flag | Type | Required | Description |
-|---|---|---|---|
-| `--contentful-token=<token>` | string | No | Contentful read-only API token |
-| `--contentful-space-id=<id>` | string | No | Contentful space ID |
-| `--contentful-environment=<env>` | string | No | Contentful environment to import from |
-| `--autoconfirm` | boolean | No | Skip confirmation prompts (forces destroy of existing Contentful schema) |
-| `--ignore-errors` | boolean | No | Try to continue despite errors during import |
-| `--skip-content` | boolean | No | Import only the schema (models), skip records and assets |
-| `--only-content-type=<types>` | string | No | Import only specific content types (comma-separated Contentful IDs, e.g., `blogPost,author`) |
-| `--concurrency=<n>` | integer | No | Maximum concurrent operations (default: 15) |
-| `--log-level=<level>` | enum | No | Logging level (`NONE`, `BASIC`, `BODY`, `BODY_AND_HEADERS`) |
+Run `npx datocms contentful:import --help` for all flags. Key flags include `--autoconfirm` (skip prompts), `--concurrency` (default: 15), and `--ignore-errors`.
 
 ### Import Steps
 

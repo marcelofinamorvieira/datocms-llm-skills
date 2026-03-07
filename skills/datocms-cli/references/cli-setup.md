@@ -1,16 +1,10 @@
 # CLI Setup
 
-Installation, configuration, profiles, and global flags for `@datocms/cli`.
+Configuration, profiles, and global flags for `@datocms/cli`.
 
 ---
 
-## Installation
-
-```bash
-npm install --save-dev @datocms/cli
-```
-
-After installation, commands are available via `npx datocms <command>`.
+Install with `npm install --save-dev @datocms/cli`, then use `npx datocms <command>`.
 
 ---
 
@@ -66,13 +60,7 @@ npx datocms profile:set
 npx datocms profile:set staging --log-level=BASIC --migrations-dir=migrations
 ```
 
-Flags for `profile:set`:
-- `--log-level` — Logging level (`NONE`, `BASIC`, `BODY`, `BODY_AND_HEADERS`)
-- `--migrations-dir` — Migrations directory path
-- `--migrations-model` — API key of migration tracking model
-- `--migrations-template` — Path to custom migration template
-- `--migrations-tsconfig` — Path to tsconfig for TS migrations
-- `--base-url` — Custom API base URL
+Run `npx datocms profile:set --help` for all available flags.
 
 ### Remove a profile
 
@@ -107,15 +95,7 @@ DATOCMS_STAGING_PROFILE_API_TOKEN=your_staging_token
 
 ## Global Flags
 
-These flags are available on all CMA-based commands:
-
-| Flag | Description |
-|---|---|
-| `--api-token=<token>` | Override the API token for this command |
-| `--profile=<name>` | Use a specific profile from `datocms.config.json` |
-| `--log-level=<level>` | Set logging level (`NONE`, `BASIC`, `BODY`, `BODY_AND_HEADERS`) |
-| `--log-mode=<mode>` | Set log output destination (`stdout`, `file`, `directory`) |
-| `--json` | Output results as JSON |
+Run `npx datocms <command> --help` to see available flags. All CMA-based commands accept `--api-token`, `--profile`, `--log-level`, `--log-mode`, and `--json`.
 
 ### Log Mode Details
 
