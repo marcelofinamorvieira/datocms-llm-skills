@@ -88,4 +88,5 @@ Keep these starter guardrails:
 ## Cross-skill routing
 
 - Existing plugin maintenance -> `datocms-plugin-builder`
+- Native DatoCMS plugin UI design, layout restyling, or design-system alignment -> `datocms-plugin-design-system`
 - Standalone CMA scripts or schema work outside the plugin iframe -> `datocms-cma`

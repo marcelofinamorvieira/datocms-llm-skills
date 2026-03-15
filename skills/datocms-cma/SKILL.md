@@ -20,6 +20,10 @@ You are an expert at writing code that interacts with the DatoCMS Content Manage
 
 ## Step 1: Detect Context
 
+If the project context is already established in this conversation (client
+package, token variable, environment targeting), skip broad detection below.
+Re-inspect only when a question cannot be answered from prior context.
+
 Silently examine the project to determine the runtime and which CMA client package is available.
 
 1. Read `package.json` and check for these packages (in priority order):

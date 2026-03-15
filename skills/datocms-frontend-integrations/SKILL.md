@@ -43,6 +43,10 @@ implementation no longer depends on unresolved project-specific values.
 
 ## Step 1: Detect Context (silent)
 
+If the project context is already established in this conversation (framework,
+UI stack, existing integrations, file structure), skip broad detection below.
+Re-inspect only when a question cannot be answered from prior context.
+
 Silently examine the project to determine setup and configuration.
 
 1. **Framework** — Read `package.json` and check for:

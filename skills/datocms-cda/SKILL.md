@@ -21,6 +21,11 @@ You are an expert at querying the DatoCMS Content Delivery API (CDA) using `@dat
 
 ## Step 1: Detect Context
 
+If the project context is already established in this conversation (client
+package, token variable, framework, type generation setup), skip broad
+detection below. Re-inspect only when a question cannot be answered from
+prior context.
+
 Silently examine the project to determine setup and configuration.
 
 1. Read `package.json` and check for `@datocms/cda-client`.

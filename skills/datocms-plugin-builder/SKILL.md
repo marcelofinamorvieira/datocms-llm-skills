@@ -172,6 +172,7 @@ resizing behavior after async content loads.
 ## Cross-skill routing
 
 - New plugin from scratch -> `datocms-plugin-scaffold`
+- Native DatoCMS plugin UI design, layout restyling, or design-system alignment -> `datocms-plugin-design-system`
 - Plugin-embedded browser CMA usage inside the iframe -> stay in this skill
 - Standalone CMA scripts or schema work outside the plugin iframe -> `datocms-cma`
 - Front-end preview, Content Link, or cache-tag work outside the plugin -> `datocms-frontend-integrations`
