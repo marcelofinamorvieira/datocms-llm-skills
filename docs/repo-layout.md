@@ -12,6 +12,7 @@ skills/
   datocms-cma/
   datocms-frontend-integrations/
   datocms-plugin-builder/
+  datocms-plugin-design-system/
   datocms-plugin-scaffold/
   datocms-setup/
     agents/
@@ -27,6 +28,7 @@ evals/
 ## Why It Is Split This Way
 
 - `skills/` contains the shipped skill folders. Their names match each skill's canonical `name:` value.
+- `skills/datocms-plugin-design-system/` is the public design companion for native-feeling DatoCMS plugin UI work. It stays reference-heavy and pairs with plugin builder/scaffold work instead of replacing them.
 - `skills/datocms-setup/` is the only shipped setup entrypoint. Its `SKILL.md` stays small and routes into local recipes through references and a manifest.
 - `skills/datocms-setup/recipes/frontend-foundation/` contains project primitives such as data access, draft mode, previews, cache tags, and type generation.
 - `skills/datocms-setup/recipes/frontend-features/` contains rendering and discovery add-ons layered on top of that foundation.

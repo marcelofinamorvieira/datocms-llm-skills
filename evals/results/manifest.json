@@ -6,6 +6,7 @@
     "datocms-cma",
     "datocms-frontend-integrations",
     "datocms-plugin-builder",
+    "datocms-plugin-design-system",
     "datocms-plugin-scaffold",
     "datocms-setup"
   ],

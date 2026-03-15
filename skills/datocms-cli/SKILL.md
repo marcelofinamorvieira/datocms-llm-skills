@@ -19,6 +19,11 @@ You are an expert at using the DatoCMS CLI (`@datocms/cli`). Follow these steps 
 
 ## Step 1: Detect Context
 
+If the project context is already established in this conversation (CLI
+package, config file, token, migrations directory, TypeScript setup), skip
+broad detection below. Re-inspect only when a question cannot be answered
+from prior context.
+
 Silently examine the project to determine CLI readiness.
 
 1. Read `package.json` and check for `@datocms/cli` in `devDependencies` (or `dependencies`).

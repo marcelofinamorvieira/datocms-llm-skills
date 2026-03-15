@@ -1,8 +1,8 @@
 # DatoCMS Skills
 
 Focused DatoCMS skills for content delivery, content management, CLI workflows,
-frontend integrations, plugin work, and project setup. This README is the main
-guide for the repo.
+frontend integrations, plugin implementation, plugin UI design, and project
+setup. This README is the main guide for the repo.
 
 ## Public Skills
 
@@ -11,6 +11,7 @@ guide for the repo.
 - `datocms-cli`: handle CLI workflows such as migrations, environments, and imports.
 - `datocms-frontend-integrations`: patch or extend existing frontend integrations.
 - `datocms-plugin-builder`: patch and maintain existing DatoCMS plugins.
+- `datocms-plugin-design-system`: design or restyle DatoCMS plugins so they feel native to the DatoCMS UI.
 - `datocms-plugin-scaffold`: scaffold new DatoCMS plugin projects.
 - `datocms-setup`: one-time setup orchestrator for frontend, migrations, onboarding imports, and platform automation.
 
@@ -76,7 +77,7 @@ skills_dir="${CODEX_HOME:-$HOME/.codex}/skills"
 
 mkdir -p "$skills_dir"
 
-for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-plugin-scaffold datocms-setup; do
+for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-plugin-design-system datocms-plugin-scaffold datocms-setup; do
   ln -sfn "$repo_root/skills/$skill" "$skills_dir/$skill"
 done
 ```
@@ -92,7 +93,7 @@ skills_dir="$HOME/.claude/skills"
 
 mkdir -p "$skills_dir"
 
-for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-plugin-scaffold datocms-setup; do
+for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-plugin-design-system datocms-plugin-scaffold datocms-setup; do
   ln -sfn "$repo_root/skills/$skill" "$skills_dir/$skill"
 done
 ```
@@ -115,6 +116,7 @@ skills/
   datocms-cma/
   datocms-frontend-integrations/
   datocms-plugin-builder/
+  datocms-plugin-design-system/
   datocms-plugin-scaffold/
   datocms-setup/
     agents/
