@@ -18,7 +18,11 @@ Flags:
 |---|---|---|
 | `--force` | boolean | Activate even if users are currently editing records |
 
-When maintenance mode is active, the DatoCMS editing interface is locked — editors cannot make content changes.
+When maintenance mode is active, the DatoCMS editing interface is locked and
+editors cannot make content changes.
+
+Use `--force` only as an explicit override when you understand that active
+editing sessions may be interrupted.
 
 ### Turn off maintenance mode
 
@@ -34,9 +38,9 @@ The recommended deployment workflow for production schema changes:
 
 ```bash
 # 1. Enable maintenance mode to prevent editor conflicts
-npx datocms maintenance:on --force
+npx datocms maintenance:on
 
-# 2. Run migrations (fork primary → new sandbox, apply changes)
+# 2. Run migrations (fork primary -> new sandbox, apply changes)
 npx datocms migrations:run --destination=release-v2
 
 # 3. Verify the migration succeeded (check the new environment)
@@ -49,13 +53,16 @@ npx datocms environments:promote release-v2
 npx datocms maintenance:off
 ```
 
+If editors are active and the team intentionally accepts the risk, you can add
+`--force` to the maintenance step.
+
 ### Why This Order Matters
 
-1. **Maintenance on** — Prevents editors from creating content that conflicts with schema changes
-2. **Migrate to fork** — Keeps the current primary safe if migrations fail
-3. **Verify** — Check the fork has the expected schema before promoting
-4. **Promote** — Atomically swap the migrated environment to primary
-5. **Maintenance off** — Re-enable editing with the new schema in place
+1. **Maintenance on** — prevents editors from creating conflicting schema/content changes
+2. **Migrate to fork** — keeps the current primary safe if migrations fail
+3. **Verify** — check the fork has the expected schema before promoting
+4. **Promote** — atomically swap the migrated environment to primary
+5. **Maintenance off** — re-enable editing with the new schema in place
 
 ---
 
@@ -115,7 +122,7 @@ jobs:
       - run: npm ci
 
       - name: Enable maintenance mode
-        run: npx datocms maintenance:on --force
+        run: npx datocms maintenance:on
         env:
           DATOCMS_API_TOKEN: ${{ secrets.DATOCMS_API_TOKEN }}
 
@@ -135,6 +142,9 @@ jobs:
           DATOCMS_API_TOKEN: ${{ secrets.DATOCMS_API_TOKEN }}
         if: always()
 ```
+
+Add `--force` to the maintenance step only when the release process explicitly
+accepts the active-editor risk.
 
 ### Key CI/CD Considerations
 

@@ -1,5 +1,5 @@
 # synced_from_name: datocms-setup
-# synced_from_description_sha256: bea48f49d5af286d2039cc34b893d38cc6ca3b713c2959dc7c5dd0fcceaa5c6b
+# synced_from_description_sha256: 880b4e7f29626bf9c81bd957fb3ec308e2ad79c56d845cc8881c21febc2a6bf0
 interface:
   display_name: "DatoCMS Setup"
   short_description: "One-time DatoCMS setup wizard"

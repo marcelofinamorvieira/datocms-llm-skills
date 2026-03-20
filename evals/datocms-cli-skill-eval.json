@@ -70,5 +70,21 @@
   {
     "query": "I need to set up TypeScript type generation for my DatoCMS GraphQL queries using gql.tada. How do I configure it?",
     "should_trigger": false
+  },
+  {
+    "query": "I need to set up DatoCMS migrations for a repo that already has staging and production CLI profiles plus a shared migrations directory. What should I check first?",
+    "should_trigger": true
+  },
+  {
+    "query": "Can you scaffold a DatoCMS release helper that lets me choose the default profile and avoid forcing maintenance unless I ask for it?",
+    "should_trigger": true
+  },
+  {
+    "query": "I want a sandbox reset helper that preserves my current profile conventions and reruns migrations only when I explicitly request it.",
+    "should_trigger": true
+  },
+  {
+    "query": "How should I use datocms profile:set for named environments when the repo already has a migrations convention?",
+    "should_trigger": true
   }
 ]

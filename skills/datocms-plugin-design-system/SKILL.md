@@ -98,7 +98,11 @@ Recreate the structure with plugin-local CSS using Canvas variables.
 
 Always start with:
 - `references/foundations.md`
-- `references/source-map.md`
+- `references/datocms-react-ui-bridge.md`
+
+Load `references/source-map.md` only when the public docs plus the current
+plugin code are not enough and you need local visual calibration from a CMS
+checkout.
 
 Then load only the touched reference:
 - layout or page structure -> `references/layouts.md`
@@ -106,7 +110,6 @@ Then load only the touched reference:
 - tabs, dropdowns, tables, notices, blank slates ->
   `references/navigation-feedback-and-data-display.md`
 - hook-specific screen shape and sizing -> `references/plugin-surfaces.md`
-- public component choice -> `references/datocms-react-ui-bridge.md`
 - raw CSS implementation -> `references/raw-css-fallbacks.md`
 
 Do not load the whole bundle for a small restyle.
@@ -142,7 +145,7 @@ When a user asks for a plugin UI that “looks native”, optimize in this order
 
 Run the smallest useful verification in the target plugin repo:
 
-- `npm run build` by default
+- the repo's existing build script (`npm run build`, `pnpm build`, etc.) by default
 - or the nearest existing typecheck or build command
 
 Then name the one manual UI check that matters most for the surface:

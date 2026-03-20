@@ -15,6 +15,8 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
 1. **Node project** — Check for `package.json`
 2. **Package manager** — See `../../../patterns/MANDATORY_RULES.md`.
 3. **CLI migrations baseline** — Check for `@datocms/cli`,
@@ -35,7 +37,11 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Ask zero questions by default.
+Infer first from the repo.
+
+Follow the zero-question default and question-format rules in `../../../patterns/MANDATORY_RULES.md`.
+
+If you do ask, make it one concise question, put the recommended/default path first, and explain whether skipping it will leave placeholders, ownership, or project-specific values unresolved.
 
 Only ask if an existing sandbox-reset helper materially conflicts with the lean
 reset-and-rerun flow.
@@ -46,10 +52,10 @@ reset-and-rerun flow.
 
 Read only these references:
 
-- `../../../references/shared/datocms-cli/cli-setup.md`
-- `../../../references/shared/datocms-cli/running-migrations.md`
-- `../../../references/shared/datocms-cli/environment-commands.md`
-- `../../../references/shared/datocms-cli/deployment-workflow.md`
+- `../../../../datocms-cli/references/cli-setup.md`
+- `../../../../datocms-cli/references/running-migrations.md`
+- `../../../../datocms-cli/references/environment-commands.md`
+- `../../../../datocms-cli/references/deployment-workflow.md`
 
 Also inspect this bundled asset only when generating files:
 

@@ -15,6 +15,8 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
 1. **Node project** — Check for `package.json`
 2. **Package manager** — See `../../../patterns/MANDATORY_RULES.md`.
 3. **CLI installation** — Check `package.json` for `@datocms/cli`
@@ -36,10 +38,20 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Ask zero questions by default.
+Infer first from the repo.
+
+Follow the zero-question default and question-format rules in `../../../patterns/MANDATORY_RULES.md`.
+
+If you do ask, make it one concise question, put the recommended/default path first, and explain whether skipping it will leave placeholders, ownership, or project-specific values unresolved.
 
 Only ask if an existing WordPress import helper materially conflicts with the
 lean onboarding flow.
+
+If the repo or request implies an existing target project rather than a fresh
+disposable import target, ask whether the destructive importer behavior is
+acceptable for that target and whether they want the safest available staged
+path (for example: an interactive run without `--autoconfirm`, limited flags,
+or a disposable rehearsal project first).
 
 ---
 
@@ -47,8 +59,8 @@ lean onboarding flow.
 
 Read only these references:
 
-- `../../../references/shared/datocms-cli/cli-setup.md`
-- `../../../references/shared/datocms-cli/importing-content.md`
+- `../../../../datocms-cli/references/cli-setup.md`
+- `../../../../datocms-cli/references/importing-content.md`
 
 Also inspect this bundled asset only when generating files:
 

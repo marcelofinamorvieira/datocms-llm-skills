@@ -17,6 +17,8 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
 1. **Framework** — detect Next.js, Nuxt, SvelteKit, or Astro
 2. **Public site URL config** — inspect env files for a framework-appropriate
    site URL
@@ -40,7 +42,11 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Ask zero questions by default.
+Infer first from the repo.
+
+Follow the zero-question default and question-format rules in `../../../patterns/MANDATORY_RULES.md`.
+
+If you do ask, make it one concise question, put the recommended/default path first, and explain whether skipping it will leave placeholders, ownership, or project-specific values unresolved.
 
 Only ask if the repo exposes multiple public sections but their sitemap or
 crawler boundaries cannot be inferred safely from the existing route structure.
@@ -51,7 +57,7 @@ crawler boundaries cannot be inferred safely from the existing route structure.
 
 Read only these references:
 
-- `../../../references/shared/datocms-frontend-integrations/robots-and-sitemaps.md`
+- `../../../../datocms-frontend-integrations/references/robots-and-sitemaps.md`
 
 If the repo already has SEO or preview-route helpers, inspect those files
 directly and reuse them instead of loading more references than necessary.

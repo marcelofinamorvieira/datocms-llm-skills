@@ -107,7 +107,8 @@ Based on the task classification, read the appropriate reference files from the 
 Write the code following these mandatory rules:
 
 ### Client Usage
-- **Always use `executeQuery`** from `@datocms/cda-client` (not raw `fetch`)
+- **Default to `executeQuery`** from `@datocms/cda-client`, or the repo's existing wrapper around it (not raw `fetch`)
+- Use `buildRequestHeaders()` / `buildRequestInit()` when the framework needs integrated `fetch` handling, request tagging, or custom request plumbing
 - Use **`executeQueryWithAutoPagination`** when fetching more than 500 records
 - Use **`rawExecuteQuery`** only when you need response headers (e.g., cache tags)
 - Store the API token in an environment variable — never hardcode it
@@ -142,10 +143,11 @@ Before presenting the final code:
 4. **Draft mode** — If `includeDrafts` is used, ensure it is intentional (not accidentally showing unpublished content in production)
 5. **`excludeInvalid`** — Recommend for stable schemas. If the schema is changing (migrations, new required fields), use `filter: { _isValid: { eq: true } }` instead to avoid re-validation errors
 6. **Type safety** — No type assertions (`as`) used to silence errors
-7. **Imports** — All imports come from `@datocms/cda-client`
+7. **Imports** — CDA client imports come from `@datocms/cda-client`; keep project-generated GraphQL helper imports when type generation is already wired
 8. **Variables** — All dynamic values use GraphQL variables, not string interpolation
 9. **Structured text completeness** — If querying structured text, all relevant sub-fields (`value`, `blocks`, `links`, `inlineBlocks`) are included
-10. **Type generation** — If the project uses gql.tada or graphql-codegen, ensure queries use the project's `graphql()` function (not plain template literal strings) and that scalar mappings are configured
+10. **Fetch integration** — If the solution uses framework-native `fetch`, ensure CDA headers/init come from `buildRequestHeaders()` / `buildRequestInit()` instead of hand-rolled request wiring
+11. **Type generation** — If the project uses gql.tada or graphql-codegen, ensure queries use the project's `graphql()` function (not plain template literal strings) and that scalar mappings are configured
 
 ---
 

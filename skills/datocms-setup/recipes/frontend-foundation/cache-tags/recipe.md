@@ -27,17 +27,13 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
-1. **Framework** — Read `package.json` and check for:
-   - `next` → Next.js (App Router)
-   - `nuxt` → Nuxt
-   - `@sveltejs/kit` → SvelteKit
-   - `astro` → Astro
-   - If none match, stop and ask the user which framework they are using.
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
+1. **Framework and file layout** — use `../../../references/repo-conventions.md` for supported framework detection, `src/` usage, and the standard helper or route locations used by this setup.
 
 2. **Prerequisite: executeQuery wrapper** — Search for an existing `executeQuery` function that wraps `@datocms/cda-client`. This wrapper is the foundation for cache tags.
 
-   **If executeQuery does not exist, STOP immediately and tell the user:**
-   > "The `executeQuery` wrapper must exist before setting up cache tags. Queue the `draft-mode` recipe first so this recipe can build on the shared wrapper."
+   If `executeQuery` does not exist, record `cda-client` as a prerequisite and continue after that shared wrapper foundation is applied.
 
 3. **Existing cache tag setup** — Check for signs that cache tags are already configured:
    - Next.js: Check if `executeQuery` already uses `rawExecuteQuery` with `queryId`, or if a `cache-tags-db` module exists
@@ -52,37 +48,30 @@ Silently examine the project:
 
 5. **Installed deps** — Check `package.json` for: `@datocms/cda-client`
 
-6. **File structure** — Determine whether the project uses a `src/` directory
-
 ### Stop conditions
 
-- If the `executeQuery` wrapper does not exist, stop and record `draft-mode` as a prerequisite and continue after it is applied.
+- If the `executeQuery` wrapper does not exist, stop and record `cda-client` as a prerequisite and continue after it is applied.
 - If cache tags are already configured, inspect the current implementation first and update it in place by default. Only ask about full replacement if the current implementation is materially incompatible or the user explicitly wants a rewrite.
 
 ---
 
 ## Step 2: Ask Questions
 
+Infer first from the repo and follow the question-format rules in `../../../patterns/MANDATORY_RULES.md`. Ask zero questions only when the hosting choice is already obvious.
+
 ### Next.js
 
-Ask which database the user wants for storing cache tag mappings:
+If the repo does not clearly indicate the cache-tag database, ask one question:
 
-- **Turso** (SQLite edge database) — installs `@libsql/client`
-- **Vercel Postgres** — installs `@vercel/postgres`
-- **Other / I'll figure it out later** — generates `scaffolded` code with a placeholder database interface that the user can implement later
+> "Which cache-tag storage should I scaffold for this Next.js app: Turso, Vercel Postgres, or a placeholder adapter? Recommended default: preserve the strongest existing repo signal; otherwise use a placeholder adapter and mark the result `scaffolded`. If you skip, I'll follow that default."
 
 ### Nuxt / SvelteKit / Astro
 
-Ask which CDN the user is deploying to:
+If the repo does not clearly indicate the CDN target, ask one question:
 
-- **Netlify / Cloudflare** — uses `Cache-Tag` header
-- **Fastly** — uses `Surrogate-Key` header
-- **Bunny** — uses `CDN-Tag` header
-- **Other / I'll figure it out later** — generates `scaffolded` code with a generic `Cache-Tag` header and a placeholder purge function
+> "Which CDN should I target for cache-tag purging: Netlify or Cloudflare, Fastly, Bunny, or a placeholder adapter? Recommended default: preserve the strongest existing hosting signal; otherwise scaffold the generic `Cache-Tag` path and mark the result `scaffolded`. If you skip, I'll follow that default."
 
-This determines:
-- The cache tag response header name (`Cache-Tag`, `Surrogate-Key`, or `CDN-Tag`)
-- The webhook handler's purge API call pattern
+This determines both the response-header name and the webhook handler's purge pattern.
 
 ---
 
@@ -91,16 +80,16 @@ This determines:
 Read the relevant reference files. Load only what is needed.
 
 **Always load:**
-- `../../../references/shared/datocms-cda/draft-caching-environments.md` — for cache tags concepts, webhook payload format, and CDN header table
+- `../../../../datocms-cda/references/draft-caching-environments.md` — for cache tags concepts, webhook payload format, and CDN header table
 
 **Load per framework — focus on the `## Cache Tags (Optional)` section:**
 
 | Framework | Reference file |
 |---|---|
-| Next.js | `../../../references/shared/datocms-frontend-integrations/nextjs.md` |
-| Nuxt | `../../../references/shared/datocms-frontend-integrations/nuxt.md` |
-| SvelteKit | `../../../references/shared/datocms-frontend-integrations/sveltekit.md` |
-| Astro | `../../../references/shared/datocms-frontend-integrations/astro.md` |
+| Next.js | `../../../../datocms-frontend-integrations/references/nextjs.md` |
+| Nuxt | `../../../../datocms-frontend-integrations/references/nuxt.md` |
+| SvelteKit | `../../../../datocms-frontend-integrations/references/sveltekit.md` |
+| Astro | `../../../../datocms-frontend-integrations/references/astro.md` |
 
 ---
 
@@ -163,7 +152,7 @@ Generate framework-specific cache tag invalidation files following the patterns 
 
 1. **Create `performQueryWithCacheTags` function** at `src/lib/datocms/queries.ts` (or similar) — A wrapper around `rawExecuteQuery` that:
    - Accepts a `RequestEvent`, the query, and optional variables
-   - Checks draft mode to select the correct token
+   - Preserves draft-mode token switching if the existing wrapper already supports it; otherwise keeps the published-token flow
    - Calls `rawExecuteQuery` with `returnCacheTags: true`
    - Reads the `x-cache-tags` response header
    - Returns `{ data, cacheTags }`
@@ -312,6 +301,8 @@ After generating all files, tell the user:
    - Deploy the site to their hosting platform
    - Make a content change in DatoCMS
    - Verify that only affected pages are purged (check CDN logs or response headers)
+
+Follow the shared final handoff rules in `../../../patterns/OUTPUT_STATUS.md`, including an explicit `Unresolved placeholders` section.
 
 ---
 

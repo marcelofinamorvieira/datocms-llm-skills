@@ -23,6 +23,16 @@ These rules apply to every datocms-setup recipe. They are not repeated in indivi
 
 ---
 
+## Shared Repo Inspection Defaults
+
+- Start from `../references/repo-conventions.md` before following recipe-specific checks
+- Confirm the strongest framework, runtime, `src/` layout, package-manager, and env-file signals first
+- Inspect existing route helpers, query wrappers, renderer components, scripts, and endpoints before creating new ones
+- Preserve the strongest existing owner by default instead of creating a parallel implementation
+- Ask only when patching the wrong owner would materially change behavior, safety, or project conventions
+
+---
+
 ## Framework Environment Variable Conventions
 
 | Framework | Public prefix | Server-only | File |
@@ -52,9 +62,28 @@ Always install DatoCMS packages as regular dependencies (not devDependencies) un
 
 ## Zero Questions Default
 
-Ask zero questions by default. Proceed with sensible defaults and call out assumptions.
+Ask zero questions by default for straightforward frontend rendering or
+foundation setup when the repo already answers the important decisions.
+Proceed with sensible defaults and call out assumptions.
+
+For operational recipes — especially migrations, imports into existing targets,
+and platform automation that can affect production workflows — ask the minimum
+clarification set needed when the repo cannot safely answer the critical
+questions.
 
 Only ask when a safe implementation is blocked by something the repo cannot answer, such as:
 - Missing model-to-route mappings required for correctness
 - Ambiguous existing setup where patching the wrong file would break things
 - Missing external service credentials that have no reasonable default
+- Operational choices the repo cannot infer safely, such as release profiles,
+  destructive importer tolerance, or whether to preserve an existing CLI convention
+
+---
+
+## Question Format
+
+- Infer first from the repo, then ask only the smallest high-impact follow-up
+- Default to one concise question unless the recipe explicitly calls for one grouped pass
+- Put the recommended/default path first
+- Explain what happens if the user skips the question
+- If the user skips, preserve the strongest existing owner or the documented default and record unresolved assumptions under `Unresolved placeholders`

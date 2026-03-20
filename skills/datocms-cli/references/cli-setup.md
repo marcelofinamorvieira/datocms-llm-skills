@@ -1,10 +1,19 @@
 # CLI Setup
 
-Configuration, profiles, and global flags for `@datocms/cli`.
+Configuration, profiles, token selection, and global flags for `@datocms/cli`.
 
 ---
 
-Install with `npm install --save-dev @datocms/cli`, then use `npx datocms <command>`.
+Install the CLI in the project and run it locally:
+
+```bash
+npm install --save-dev @datocms/cli
+npx datocms --help
+```
+
+Use local `npx datocms` commands by default so the repo controls the CLI
+version. If the repo already has an established runner style (`pnpm exec`,
+`bunx`, package scripts), keep that convention.
 
 ---
 
@@ -48,12 +57,14 @@ The CLI uses `datocms.config.json` in the project root. Structure:
 
 ---
 
-## Profile Management
+## Preferred Profile Authoring Flow
+
+Use `profile:set` as the default way to create or update profiles.
 
 ### Set a profile
 
 ```bash
-# Interactive setup for default profile
+# Interactive setup for the default profile
 npx datocms profile:set
 
 # Set a named profile with specific options
@@ -70,24 +81,37 @@ npx datocms profile:remove staging
 
 ---
 
+## Active Profile Selection
+
+The CLI decides **which profile configuration to use** in this order:
+
+1. `--profile=<id>` on the command
+2. `DATOCMS_PROFILE=<id>` in the environment
+3. `default` profile in `datocms.config.json`
+
+Use `DATOCMS_PROFILE` when multiple commands in the same shell should share the
+same non-default profile.
+
+---
+
 ## API Token Resolution
 
-The CLI resolves the API token in this order (first match wins):
+Once the active profile is known, the CLI resolves the API token in this order:
 
-1. **`--api-token` flag** — Passed directly on the command line
-2. **Environment variable** — Based on the active profile:
-   - Default profile: `DATOCMS_API_TOKEN`
-   - Named profile (e.g., `staging`): `DATOCMS_STAGING_PROFILE_API_TOKEN`
+1. **`--api-token` flag** — passed directly on the command line
+2. **Environment variable for the active profile**
+   - default profile: `DATOCMS_API_TOKEN`
+   - named profile `staging`: `DATOCMS_STAGING_PROFILE_API_TOKEN`
 
 The token must have CMA access enabled (`can_access_cma: true`).
 
 ### Example `.env` setup
 
 ```env
-# For default profile
+# For the default profile
 DATOCMS_API_TOKEN=your_full_access_token
 
-# For a "staging" profile
+# For a named profile
 DATOCMS_STAGING_PROFILE_API_TOKEN=your_staging_token
 ```
 
@@ -95,10 +119,12 @@ DATOCMS_STAGING_PROFILE_API_TOKEN=your_staging_token
 
 ## Global Flags
 
-Run `npx datocms <command> --help` to see available flags. All CMA-based commands accept `--api-token`, `--profile`, `--log-level`, `--log-mode`, and `--json`.
+Run `npx datocms <command> --help` to see available flags. CMA-based commands
+support flags such as `--api-token`, `--profile`, `--log-level`, `--log-mode`,
+and `--json`.
 
 ### Log Mode Details
 
-- `stdout` — Prints API call logs to the console (colored output)
-- `file` — Appends all logs to `./api-calls.log`
-- `directory` — Writes each API call to a separate file in `./api-calls/`
+- `stdout` — prints API call logs to the console
+- `file` — appends logs to `./api-calls.log`
+- `directory` — writes each API call to a separate file in `./api-calls/`

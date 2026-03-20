@@ -120,6 +120,56 @@
     "query_mode": "explicit"
   },
   {
+    "query": "Use datocms-setup to set up full visual editing for this Next.js site with DatoCMS draft mode, Web Previews, and click-to-edit overlays.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to add side-by-side editing in DatoCMS for this Nuxt project.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to add website click-to-edit only for this SvelteKit draft site.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to set up DatoCMS preview and editor workflows for this Astro project.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to configure Site Search for a site with /blog and /docs sections.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to wire DatoCMS visual mode into a Vercel project that already has Edit Mode enabled.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to set up DatoCMS migrations in a repo with custom staging and production profiles plus an existing migrations directory.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to add a release workflow but preserve the current default release profile if one already exists.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to install WordPress import support for an existing DatoCMS project and keep destructive options explicit.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to add blueprint sync for duplicated projects that need to keep entity IDs aligned.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
     "query": "I need to pull all blog posts from my DatoCMS project and display them on my Next.js site. They have a title, slug, cover image, and a rich text body. Can you write the GraphQL query and the page component?",
     "should_trigger": false
   },
@@ -157,6 +207,69 @@
   },
   {
     "query": "Can you help me set up a Strapi headless CMS with Next.js? I need to fetch content from Strapi's REST API and display it in my pages.",
+    "should_trigger": false
+  },
+  {
+    "query": "Can you wire a ContentLink component into my existing Next.js page and patch the current renderer only?",
+    "should_trigger": false
+  },
+  {
+    "query": "Use datocms-setup to add visual mode for this Next.js repo, but keep realtime off unless it is truly needed.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to preserve the existing Vercel website edit overlays unless full DatoCMS side-by-side editing is required.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to configure typed GraphQL queries in a repo that already uses GraphQL Code Generator and .graphql documents.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to add Site Search for a site that already exposes /blog, /docs, and /help.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Can you patch my existing preview-links route handler only and keep the rest of the setup untouched?",
+    "should_trigger": false
+  },
+  {
+    "query": "Can you wire @vercel/toolbar into this Next.js repo for Edit Mode overlays?",
+    "should_trigger": false
+  },
+  {
+    "query": "Use datocms-setup to add a live preview workflow for this Next.js site with draft mode, click-to-edit, side-by-side editing, and instant updates.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to replace existing Vercel Content Link with DatoCMS visual editing for this Next.js site.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-setup to configure DatoCMS Site Search with separate indexes and search routes for /blog and /docs.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "We already have DatoCMS visual editing set up; patch one missing ContentLink boundary in the existing Structured Text renderer.",
+    "should_trigger": false
+  },
+  {
+    "query": "Our Vercel project already has working Edit Mode overlays. Explain whether DatoCMS visual editing should replace that or live alongside it.",
+    "should_trigger": false
+  },
+  {
+    "query": "We already provisioned the DatoCMS Site Search indexes and tokens. Build the React search UI against the existing public search endpoint.",
+    "should_trigger": false
+  },
+  {
+    "query": "Patch the existing preview-links endpoint so the author model resolves to /authors/[slug]; do not scaffold new preview setup.",
     "should_trigger": false
   }
 ]

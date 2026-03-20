@@ -8,8 +8,8 @@ description: >-
   record sets, upload assets from URL/local files and set metadata, update
   structured text or block payloads, create/modify schema (models/fields/blocks),
   fork/promote environments, configure webhooks and build triggers, manage roles
-  and API tokens, schedule publish/unpublish workflows, and generate CMA schema
-  types for type-safe record operations.
+  and API tokens, schedule publish/unpublish workflows, and consume generated CMA
+  schema types for type-safe record operations.
 ---
 
 # DatoCMS Content Management API Skill
@@ -62,7 +62,7 @@ Classify the user's task into one or more categories. Ask follow-up questions on
 - **Access control** — Create roles, manage API tokens, invite users
 - **Scheduling** — Schedule publish/unpublish, manage workflows
 - **Migration & scripting** — Bulk data operations, content seeding, field migrations
-- **Type generation** — Generate CMA schema types or wire typed record operations
+- **Type generation** — Consume generated CMA schema types or wire typed record operations
 
 If the user's request is clear and falls into an obvious category, skip the clarifying questions and proceed directly.
 
@@ -145,7 +145,7 @@ Before presenting the final code:
 4. **Pagination** — If the solution iterates a collection that could exceed a single page, prefer `listPagedIterator()`
 5. **Type safety** — Ensure no type assertions (`as`) are used to silence errors
 6. **Imports** — Ensure all imports come from the correct package (the one detected in Step 1)
-7. **Generated types** — If the solution intentionally uses generated CMA types (`cma-types.ts`), ensure `raw*()` method generics and `RawApiTypes.Item<>` usage are deliberate and typed end to end
+7. **Generated types** — If the solution intentionally uses generated CMA types (`cma-types.ts`), ensure the chosen path is typed end to end: simplified API generics by default, or `raw*()` / `RawApiTypes.Item<>` only when raw payload access is intentional
 
 If the generated code is a script (migration, seeding, etc.), wrap it in an async function with proper error handling and progress reporting.
 

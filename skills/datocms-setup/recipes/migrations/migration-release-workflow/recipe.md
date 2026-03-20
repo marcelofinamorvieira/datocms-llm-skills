@@ -15,6 +15,8 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
 1. **Node project** — Check for `package.json`
 2. **Package manager** — See `../../../patterns/MANDATORY_RULES.md`.
 3. **CLI setup** — Check for `@datocms/cli`, `datocms.config.json`, and a
@@ -34,11 +36,9 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Ask one question:
+Ask one grouped question:
 
-> "Do you also want a GitHub Actions template for this release workflow?"
-
-If the user says no, generate only the local helper script and package wrapper.
+> "Do you want only the local release helper, or the local helper plus the optional GitHub Actions workflow? Recommended default: local helper only unless you explicitly want CI. If this repo has multiple CLI profiles and no clear release default, which profile should the helper target by default? Recommended default: preserve the strongest existing release or migration profile convention. If you skip the profile choice, I'll infer the strongest current default and mark any ambiguity under unresolved placeholders."
 
 ---
 
@@ -46,10 +46,10 @@ If the user says no, generate only the local helper script and package wrapper.
 
 Read only these references:
 
-- `../../../references/shared/datocms-cli/cli-setup.md`
-- `../../../references/shared/datocms-cli/running-migrations.md`
-- `../../../references/shared/datocms-cli/environment-commands.md`
-- `../../../references/shared/datocms-cli/deployment-workflow.md`
+- `../../../../datocms-cli/references/cli-setup.md`
+- `../../../../datocms-cli/references/running-migrations.md`
+- `../../../../datocms-cli/references/environment-commands.md`
+- `../../../../datocms-cli/references/deployment-workflow.md`
 
 Also inspect these bundled assets only when generating files:
 
@@ -73,10 +73,13 @@ Generate only these project files:
 
 The local helper script must:
 
-1. Run `maintenance:on`
-2. Run `migrations:run --destination=<env>`
-3. Run `environments:promote <env>`
-4. Always run `maintenance:off`, even after failures
+1. Require `--destination=<env>`
+2. Accept optional `--profile=<id>`, `--dry-run`, `--skip-promote`, `--fast-fork`, `--force`, and passthrough `migrations:run` args after `--`
+3. Run `maintenance:on` by default, and add `--force` only when explicitly requested
+4. Run `migrations:run --destination=<env>` and forward `--profile`, `--fast-fork`, and passthrough args when present
+5. Run `environments:promote <env>` unless `--skip-promote` is set
+6. In `--dry-run` mode, run only `migrations:run --dry-run` and skip maintenance mode plus promotion
+7. Always run `maintenance:off`, even after failures in the non-dry-run path
 
 ### Mandatory rules
 
@@ -86,6 +89,7 @@ The local helper script must:
 - Keep the workflow GitHub-only in v1
 - Do not add provider-specific CI beyond GitHub Actions
 - Do not create additional helper scripts
+- Do not default to `maintenance:on --force`; force is an explicit operator override
 - Do not replace a working existing release workflow unless the user explicitly
   asked for a rewrite
 
@@ -105,9 +109,13 @@ After generating the files, tell the user:
 
 1. Verify the destination environment naming convention used by the helper
 2. Run a dry-run or sandbox rehearsal before using the production release flow
-3. Set the required DatoCMS token in their env file
-4. Review the generated GitHub workflow secrets mapping if CI scaffolding was
+3. Use `--skip-promote` when they want to create a release environment without promoting it yet
+4. Set the required DatoCMS token in their env file
+5. Review the generated GitHub workflow secrets mapping if CI scaffolding was
    enabled
+6. Whether the result is `scaffolded` or `production-ready`
+
+Follow the shared final handoff rules in `../../../patterns/OUTPUT_STATUS.md`, including an explicit `Unresolved placeholders` section.
 
 ---
 
@@ -116,8 +124,9 @@ After generating the files, tell the user:
 Before presenting the result, verify:
 
 1. `scripts/datocms-release.mjs` exists and keeps `maintenance:off` in the
-   failure path
+   failure path for non-dry-run runs
 2. `package.json` contains `datocms:release`
-3. The helper uses `npx datocms`
-4. The workflow file is created only when the user opted in
-5. No non-GitHub CI files were added
+3. The helper requires `--destination` and documents the optional flags clearly
+4. The helper uses `npx datocms`
+5. The workflow file is created only when the user opted in
+6. No non-GitHub CI files were added

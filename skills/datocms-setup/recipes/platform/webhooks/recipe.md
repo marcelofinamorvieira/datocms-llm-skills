@@ -17,29 +17,25 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
 1. **Node project** — Confirm `package.json` exists
-2. **Package manager** — See `../../../patterns/MANDATORY_RULES.md`.
+2. **Framework and file layout** — use `../../../references/repo-conventions.md` for supported framework detection and `src/` usage when a local receiver is in scope.
 3. **CMA client package** — Check for `@datocms/cma-client`,
    `@datocms/cma-client-node`, or `@datocms/cma-client-browser`
-4. **Framework** — Read `package.json` and check for:
-   - `next` -> Next.js App Router
-   - `nuxt` -> Nuxt
-   - `@sveltejs/kit` -> SvelteKit
-   - `astro` -> Astro
-5. **File structure** — Determine whether the project uses `src/`
-6. **Existing webhook setup**
+4. **Existing webhook setup**
    - `scripts/datocms-webhooks.config.mjs`
    - `scripts/datocms-sync-webhooks.mjs`
    - `package.json` script `datocms:webhooks:sync`
-7. **Existing receiver endpoint**
+5. **Existing receiver endpoint**
    - Next.js: `src/app/api/datocms/webhook/route.ts` or
      `app/api/datocms/webhook/route.ts`
    - Nuxt: `server/api/datocms/webhook.post.ts`
    - SvelteKit: `src/routes/api/datocms/webhook/+server.ts`
    - Astro: `src/pages/api/datocms/webhook.ts`
-8. **Public frontend URL** — Inspect env files or existing project config for a
+6. **Public frontend URL** — Inspect env files or existing project config for a
    usable site URL
-9. **Existing Dato config** — Inspect env files for a CMA-capable
+7. **Existing Dato config** — Inspect env files for a CMA-capable
    `DATOCMS_API_TOKEN`
 
 ### Stop conditions
@@ -56,14 +52,15 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Ask zero questions by default.
+Infer first from the repo.
 
-Only ask one explicit question if no `scripts/datocms-webhooks.config.mjs`
-exists yet. In that case, ask which starter webhook template to scaffold:
+Follow the zero-question default and question-format rules in `../../../patterns/MANDATORY_RULES.md`.
 
-- `content events` (recommended)
-- `schema/admin events`
-- `build/deploy events`
+Only ask one explicit question if no `scripts/datocms-webhooks.config.mjs` exists yet.
+
+In that case, ask:
+
+> "Which starter webhook template should I scaffold: content events, schema or admin events, or build or deploy events? Recommended default: content events for a new baseline setup. If you skip, I'll scaffold content events and mark any receiver-specific behavior as `scaffolded` until real values or handlers are filled in."
 
 ---
 
@@ -71,19 +68,19 @@ exists yet. In that case, ask which starter webhook template to scaffold:
 
 Read only these references:
 
-- `../../../references/shared/datocms-cma/client-types-and-behaviors.md`
-- `../../../references/shared/datocms-cma/webhooks-and-triggers.md`
-- `../../../references/shared/datocms-cma/access-control.md`
+- `../../../../datocms-cma/references/client-types-and-behaviors.md`
+- `../../../../datocms-cma/references/webhooks-and-triggers.md`
+- `../../../../datocms-cma/references/access-control.md`
 
 If a supported framework is present and a local receiver should be scaffolded,
 also load the matching framework reference:
 
 | Framework | Reference file |
 |---|---|
-| Next.js | `../../../references/shared/datocms-frontend-integrations/nextjs.md` |
-| Nuxt | `../../../references/shared/datocms-frontend-integrations/nuxt.md` |
-| SvelteKit | `../../../references/shared/datocms-frontend-integrations/sveltekit.md` |
-| Astro | `../../../references/shared/datocms-frontend-integrations/astro.md` |
+| Next.js | `../../../../datocms-frontend-integrations/references/nextjs.md` |
+| Nuxt | `../../../../datocms-frontend-integrations/references/nuxt.md` |
+| SvelteKit | `../../../../datocms-frontend-integrations/references/sveltekit.md` |
+| Astro | `../../../../datocms-frontend-integrations/references/astro.md` |
 
 Also inspect this bundled asset only when generating files:
 
@@ -208,6 +205,8 @@ After generating the files, tell the user:
 3. How to run `datocms:webhooks:sync`
 4. Whether any generated local receiver is still a generic stub
 5. Whether the result is still `scaffolded`
+
+Follow the shared final handoff rules in `../../../patterns/OUTPUT_STATUS.md`, including an explicit `Unresolved placeholders` section.
 
 ---
 

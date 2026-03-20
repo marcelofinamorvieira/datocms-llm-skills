@@ -16,24 +16,21 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
-1. **Framework** — Read `package.json` and check for:
-   - `next` -> Next.js (App Router)
-   - `nuxt` -> Nuxt
-   - `@sveltejs/kit` -> SvelteKit
-   - `astro` -> Astro
-2. **File structure** — Determine whether the project uses `src/`
-3. **Existing query utility** — Check for a shared DatoCMS query wrapper:
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
+1. **Framework and file layout** — use `../../../references/repo-conventions.md` for supported framework detection and `src/` usage.
+2. **Existing query utility** — Check for a shared DatoCMS query wrapper:
    - Next.js / Astro: `src/lib/datocms/executeQuery.ts`,
      `lib/datocms/executeQuery.ts`
    - SvelteKit: `src/lib/datocms/queries.ts`
    - Nuxt: `composables/useQuery.ts`
-4. **Existing draft mode** — Check whether draft mode is already set up so the
+3. **Existing draft mode** — Check whether draft mode is already set up so the
    shared query utility can be patched toward the published-only baseline
    without fighting later preview upgrades
-5. **Installed deps** — Check `package.json` for `@datocms/cda-client`
-6. **Env files** — Check `.env`, `.env.local`, and `.env.example` for the
+4. **Installed deps** — Check `package.json` for `@datocms/cda-client`
+5. **Env files** — Check `.env`, `.env.local`, and `.env.example` for the
    published CDA token
-7. **Typed-query context** — Check for existing gql.tada or GraphQL Code
+6. **Typed-query context** — Check for existing gql.tada or GraphQL Code
    Generator usage so the query utility can preserve the repo's current typed
    document style without configuring it here
 
@@ -48,7 +45,11 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Ask zero questions by default.
+Infer first from the repo.
+
+Follow the zero-question default and question-format rules in `../../../patterns/MANDATORY_RULES.md`.
+
+If you do ask, make it one concise question, put the recommended/default path first, and explain whether skipping it will leave placeholders, ownership, or project-specific values unresolved.
 
 Only ask if framework detection fails or the existing shared query utility is
 materially different enough that patching it safely is unclear.
@@ -59,17 +60,17 @@ materially different enough that patching it safely is unclear.
 
 Read only these references:
 
-- `../../../references/shared/datocms-cda/client-and-config.md`
+- `../../../../datocms-cda/references/client-and-config.md`
 
 Load the matching framework reference and focus on the core query-utility
 shape:
 
 | Framework | Reference file |
 |---|---|
-| Next.js | `../../../references/shared/datocms-frontend-integrations/nextjs.md` |
-| Nuxt | `../../../references/shared/datocms-frontend-integrations/nuxt.md` |
-| SvelteKit | `../../../references/shared/datocms-frontend-integrations/sveltekit.md` |
-| Astro | `../../../references/shared/datocms-frontend-integrations/astro.md` |
+| Next.js | `../../../../datocms-frontend-integrations/references/nextjs.md` |
+| Nuxt | `../../../../datocms-frontend-integrations/references/nuxt.md` |
+| SvelteKit | `../../../../datocms-frontend-integrations/references/sveltekit.md` |
+| Astro | `../../../../datocms-frontend-integrations/references/astro.md` |
 
 ---
 
@@ -163,10 +164,8 @@ Only add variables that do not already exist. Preserve any existing values.
 After generating the files, tell the user:
 
 1. Fill in the published CDA token locally
-2. Use `datocms-setup` for `draft-mode` separately if they later want preview reads
-3. Use `datocms-setup` for `graphql-types` separately if they want typed query
-   generation
-4. Keep cache tags, Content Link, and realtime as separate follow-up setups
+2. Optional follow-up recipe ids: `draft-mode` for preview reads and `graphql-types` for typed CDA queries
+3. Keep `cache-tags`, `content-link`, and `realtime` as separate follow-up recipe ids when they are actually needed
 
 ---
 

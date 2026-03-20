@@ -9,20 +9,21 @@
 - plugin-facing screens used as visual references
 - official public plugin UI docs
 
-Use this file when you want to trace a design recommendation back to the
-actual DatoCMS CMS source tree or to the public plugin UI docs.
+Use the public plugin docs first. Reach for this file only when you need to
+trace a design recommendation back to local CMS implementation details for
+visual calibration.
 
-## CMS source of truth
+## Local CMS calibration (optional)
 
-Root used for visual reference only:
+These roots are local visual references only:
 
 - `/Users/marcelofinamorvieira/datoCMS/dev/cms/src/components/ui`
 - `/Users/marcelofinamorvieira/datoCMS/dev/cms/styles`
 - `/Users/marcelofinamorvieira/datoCMS/dev/cms/src/stories`
 
 Do not import private classes or copy CMS bundles into plugins. Read these
-files to understand structure, spacing, and visual rhythm, then rebuild the
-same feel with plugin-local code.
+files only to understand structure, spacing, and visual rhythm, then rebuild
+the same feel with plugin-local code.
 
 ## Foundations
 
@@ -98,7 +99,7 @@ same feel with plugin-local code.
 | Full example | `/Users/marcelofinamorvieira/datoCMS/dev/cms/src/stories/Page/CompleteExample.story.tsx` | page rhythm for real settings screens |
 | Full-height layout | `/Users/marcelofinamorvieira/datoCMS/dev/cms/src/stories/FullHeightScrollingLayout/FullHeightScrollingLayout.story.tsx` | split layouts and bordered headers or footers |
 
-## Official public docs
+## Official public docs (default source of truth)
 
 Use the public docs for component API shape and plugin-surface behavior:
 
@@ -116,8 +117,8 @@ Use the public docs for component API shape and plugin-surface behavior:
 
 ## How to use this map
 
-1. Start from the touched plugin surface.
-2. Find the matching CMS shell or block style.
+1. Start from the touched plugin surface and the public docs listed above.
+2. Use the local CMS files only if you need finer visual calibration.
 3. Copy spacing, alignment, density, and hierarchy — not the private class names.
 4. Prefer a public `datocms-react-ui` primitive if it covers the same shape.
 5. If not, build a local wrapper with Canvas variables and plugin-local CSS.
