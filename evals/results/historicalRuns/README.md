@@ -42,6 +42,23 @@ Comparison:
 - `evals/results/historicalRuns/codex-2026-03-05/comparison/comparison.json`
 - Delta: `+1.1%` overall pass (`90/91` -> `91/91`)
 
+## 3) Archived Published Root Snapshot
+
+Date archived: **March 20, 2026**  
+Historical snapshot folder: `evals/results/historicalRuns/published-root-2026-03-20-pre-claude-code-refresh/`
+
+Analysis outputs:
+- `evals/results/historicalRuns/published-root-2026-03-20-pre-claude-code-refresh/analysis.md`
+- `evals/results/historicalRuns/published-root-2026-03-20-pre-claude-code-refresh/analysis.json`
+
+Aggregate:
+- Total: `125`
+- Passed: `122` (`97.6%`)
+- Precision: `100.0%`
+- Recall: `95.7%`
+- F1: `97.8%`
+- Coverage manifest at the time: `evals/results/historicalRuns/published-root-2026-03-20-pre-claude-code-refresh/manifest.json`
+
 ## Notes on comparability
 
 These historical snapshots were produced by different harnesses. Treat cross-snapshot comparisons as directional, not strictly apples-to-apples.

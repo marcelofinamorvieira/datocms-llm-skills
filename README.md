@@ -6,14 +6,14 @@ setup. This README is the main guide for the repo.
 
 ## Public Skills
 
-- `datocms-cda`: read content with the DatoCMS CDA and GraphQL.
-- `datocms-cma`: write records, manage schema, environments, and automation.
-- `datocms-cli`: handle CLI workflows such as migrations, environments, and imports.
-- `datocms-frontend-integrations`: patch or extend existing frontend integrations.
+- `datocms-cda`: read content with the DatoCMS CDA and GraphQL, including media, SEO, and typed query workflows.
+- `datocms-cma`: write records, manage schema, environments, uploads, webhooks, and automation.
+- `datocms-cli`: handle CLI workflows such as setup/config, migrations, schema generation, direct CMA calls, environments, deployment, multi-project sync, and imports.
+- `datocms-frontend-integrations`: patch or extend existing frontend integrations for draft mode, previews, visual editing, rendering, and search.
 - `datocms-plugin-builder`: patch and maintain existing DatoCMS plugins.
 - `datocms-plugin-design-system`: design or restyle DatoCMS plugins so they feel native to the DatoCMS UI.
 - `datocms-plugin-scaffold`: scaffold new DatoCMS plugin projects.
-- `datocms-setup`: one-time setup orchestrator for frontend, migrations, onboarding imports, and platform automation.
+- `datocms-setup`: one-time setup orchestrator for frontend foundation/features, migrations, onboarding imports, and platform automation.
 
 ## Setup Skill Behavior
 
@@ -51,7 +51,7 @@ same run instead of requiring a second explicit setup call.
 
 Inside `datocms-setup`, setup work is organized into five internal lanes:
 
-- `frontend-foundation`: `cda-client`, `draft-mode`, `web-previews`, `content-link`, `realtime`, `cache-tags`, `graphql-types`
+- `frontend-foundation`: `cda-client`, `draft-mode`, `web-previews`, `content-link`, `realtime`, `visual-editing`, `cache-tags`, `graphql-types`
 - `frontend-features`: `responsive-images`, `structured-text`, `video-player`, `site-search`, `seo`, `robots-sitemaps`
 - `migrations`: `migrations`, `migration-release-workflow`, `blueprint-sync`, `sandbox-iteration`, `cli-profiles`, `migration-autogenerate`
 - `onboarding`: `contentful-import`, `wordpress-import`
@@ -104,8 +104,9 @@ These commands resolve the repo root dynamically, so they work from any
 directory inside the cloned repository.
 
 If you only need one area, symlink or copy just that skill folder.
-`datocms-setup` already contains its internal recipes, shared references, and
-recipe-local scripts/assets, so there is no second setup bundle to install.
+`datocms-setup` already contains its internal recipes, shared references,
+patterns, and setup-local helpers, so there is no second setup bundle to
+install.
 
 ## Repo Layout
 
@@ -120,13 +121,16 @@ skills/
   datocms-plugin-scaffold/
   datocms-setup/
     agents/
+    patterns/
     references/
     recipes/
 docs/   # deeper guides and longer repo notes
 evals/
-  results/  # checked-in raw eval outputs
-  reports/  # analyzed snapshots and comparisons
+  *.json    # eval fixtures and checked-in result snapshots
+  *.md      # eval guides and manual review matrices
+  results/  # analyzed outputs and historical snapshots
   scripts/  # validation and eval tooling
+local/  # local-only scratch inputs
 ```
 
 ## Validate

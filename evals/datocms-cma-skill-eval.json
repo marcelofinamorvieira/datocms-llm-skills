@@ -27,7 +27,9 @@
     "query": "How do I fork a DatoCMS environment, make some schema changes (add a new field to the blog_post model), and then promote it to primary? Using the CMA client programmatically.",
     "should_trigger": true,
     "query_mode": "overlap",
-    "boundary_with": ["datocms-cli"]
+    "boundary_with": [
+      "datocms-cli"
+    ]
   },
   {
     "query": "I want to set up a webhook in DatoCMS that triggers when any record is published. Can you show me how to create the webhook configuration using the CMA client?",
@@ -72,5 +74,20 @@
   {
     "query": "How do I configure cache tag invalidation in my SvelteKit site so that when DatoCMS content changes, only the relevant pages get purged from Cloudflare's cache?",
     "should_trigger": false
+  },
+  {
+    "query": "Use datocms-cma to create a blog post record with a structured text body and publish it in DatoCMS.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-cma to upload remote images, set alt and title metadata, and link the uploads to product records.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-cma to scaffold a datocms CLI migration and run it against my staging profile.",
+    "should_trigger": false,
+    "query_mode": "explicit"
   }
 ]

@@ -20,12 +20,15 @@ This repo now keeps all eval outputs under one root:
 - `*.json`: trigger test cases (`query`, `should_trigger`).
 - Fixtures may also declare `query_mode` (`implicit`, `explicit`, `overlap`) and `boundary_with` for overlap cases.
 - Canonical fixture naming is `evals/<skill-name>-skill-eval.json` for every shipped skill.
+- `datocms-setup-router-eval.json`: machine-readable routing cases for `datocms-setup` (`query`, `should_route`, `expected_recipes`, `expected_stage_a`, `expected_stage_b`).
 - `results/*.json`: canonical current raw run outputs (JSON or text preamble + JSON).
 - `results/manifest.json`: declares which checked-in current result files are intentionally published.
 - `scripts/analyze_trigger_results.py`: computes metrics from raw outputs.
 - `scripts/generate_refinement_briefs.py`: writes per-skill refinement briefs from misses.
 - `scripts/compare_trigger_runs.py`: compares baseline vs candidate runs.
 - `scripts/run_codex_trigger_eval.py`: runs the local trigger classifier directly from skill frontmatter descriptions.
+- `scripts/run_claude_trigger_eval.py`: runs the Claude Code CLI directly as a trigger classifier.
+- `scripts/run_setup_router_eval.py`: scores the deterministic `datocms-setup` router fixture against `router.md` plus `recipe-manifest.json`.
 - `scripts/validate_skill_repo.py`: validates repo invariants that the skill docs depend on, including metadata sync checks.
 
 ## Prerequisites
@@ -51,6 +54,15 @@ Before publishing, run the same validator with the clean-tree gate enabled:
 python3 evals/scripts/validate_skill_repo.py --repo-root . --require-clean-git
 ```
 
+When you need to confirm that checked-in root result rows still match their
+canonical fixtures exactly, enable the opt-in freshness gate:
+
+```bash
+python3 evals/scripts/validate_skill_repo.py \
+  --repo-root . \
+  --require-fresh-results-sync
+```
+
 ## Workflow
 
 ### 1) Test
@@ -70,6 +82,14 @@ Fixture metadata guidelines:
 - Use `query_mode: implicit` for natural-language routing cases.
 - Use `query_mode: explicit` when the user directly names the target skill.
 - Use `query_mode: overlap` plus `boundary_with` when a prompt intentionally sits on a skill boundary.
+
+`datocms-setup-router-eval.json` uses a separate contract:
+- `query`
+- `should_route`
+- `expected_recipes` (fully expanded prerequisite-first recipe ids; no bundle aliases)
+- `expected_stage_a`
+- `expected_stage_b`
+- optional `notes`
 
 Important output contract for each query result:
 - `query`
@@ -94,6 +114,27 @@ evals/results/adHocRuns/
 ```
 
 The local runner now performs a preflight check and fails fast with a clear error if the classifier executable is unavailable.
+
+Run the Claude Code track with the matching runner:
+
+```bash
+python3 evals/scripts/run_claude_trigger_eval.py \
+  --repo-root . \
+  --output-dir evals/results/adHocRuns/2026-03-20-claude-code-combined-refresh/raw \
+  --source combined
+```
+
+The Claude Code runner executes in a temporary neutral working directory with
+`--setting-sources user` so project-local tool settings do not leak into the
+classification prompt.
+
+To score the deterministic setup router fixture itself:
+
+```bash
+python3 evals/scripts/run_setup_router_eval.py \
+  --repo-root . \
+  --output-json evals/results/adHocRuns/2026-03-20-setup-router/router-analysis.json
+```
 
 ### 2) Measure
 
@@ -146,6 +187,16 @@ python3 evals/scripts/compare_trigger_runs.py \
 ```
 
 Keep changes only when they improve recall and keep precision within acceptable regression limits for your project.
+
+To compare two model tracks for the same source:
+
+```bash
+python3 evals/scripts/compare_trigger_runs.py \
+  --baseline evals/results/adHocRuns/2026-03-20-codex-combined-refresh/analysis.json \
+  --candidate evals/results/adHocRuns/2026-03-20-claude-code-combined-refresh/analysis.json \
+  --output-markdown evals/results/adHocRuns/2026-03-20-claude-code-vs-codex/combined-comparison.md \
+  --output-json evals/results/adHocRuns/2026-03-20-claude-code-vs-codex/combined-comparison.json
+```
 
 ## Notes
 

@@ -30,5 +30,28 @@
   {
     "query": "Show how to render DatoCMS structured text in a React front end.",
     "should_trigger": false
+  },
+  {
+    "query": "Scaffold a new DatoCMS plugin with a config screen that already feels native to the DatoCMS UI.",
+    "should_trigger": true,
+    "query_mode": "overlap",
+    "boundary_with": [
+      "datocms-plugin-design-system"
+    ]
+  },
+  {
+    "query": "Use datocms-plugin-scaffold to create a new DatoCMS plugin project with Vite, React, and a connect() entrypoint.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-plugin-scaffold to bootstrap a new marketplace-ready DatoCMS plugin with a config screen and sidebar panel.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-plugin-scaffold to patch this existing DatoCMS plugin config screen and remove one setting field.",
+    "should_trigger": false,
+    "query_mode": "explicit"
   }
 ]

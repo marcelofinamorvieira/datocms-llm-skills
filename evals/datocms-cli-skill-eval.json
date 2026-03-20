@@ -86,5 +86,36 @@
   {
     "query": "How should I use datocms profile:set for named environments when the repo already has a migrations convention?",
     "should_trigger": true
+  },
+  {
+    "query": "I need to fork a DatoCMS environment, add a field to blog_post, and promote the sandbox. I could use either the CLI or the CMA client, but show me the CLI workflow.",
+    "should_trigger": true,
+    "query_mode": "overlap",
+    "boundary_with": [
+      "datocms-cma"
+    ]
+  },
+  {
+    "query": "I need to set up DatoCMS migrations for this repo with named staging and production profiles plus a shared migrations directory. Show me the CLI pieces to wire first.",
+    "should_trigger": true,
+    "query_mode": "overlap",
+    "boundary_with": [
+      "datocms-setup"
+    ]
+  },
+  {
+    "query": "Use datocms-cli to scaffold a migration that adds an Event model and explain how to run it on my sandbox profile.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-cli to configure datocms.config.json with staging and production profiles plus CI migration commands.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-cli to write a DatoCMS CMA script that imports 300 products from CSV and uploads their images.",
+    "should_trigger": false,
+    "query_mode": "explicit"
   }
 ]
