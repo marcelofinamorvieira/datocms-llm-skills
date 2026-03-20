@@ -15,11 +15,9 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
-1. **Framework** — Read `package.json` and check for:
-   - `next` -> Next.js
-   - `nuxt` -> Nuxt
-   - `@sveltejs/kit` -> SvelteKit
-   - `astro` -> Astro
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
+1. **Framework and file layout** — use `../../../references/repo-conventions.md` for supported framework detection and `src/` usage.
 2. **Node project** — Confirm `package.json` exists
 3. **CLI installation** — Check `package.json` for `@datocms/cli`
 4. **dotenv support** — Check `package.json` for `dotenv-cli`
@@ -28,7 +26,6 @@ Silently examine the project:
    `lib/datocms/cma-types.ts`
 7. **Environment files** — Check `.env.example`, `.env`, and `.env.local` for a
    CMA-capable token
-8. **File structure** — Determine whether the project uses `src/`
 
 ### Stop conditions
 
@@ -40,7 +37,11 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Ask zero questions by default.
+Infer first from the repo.
+
+Follow the zero-question default and question-format rules in `../../../patterns/MANDATORY_RULES.md`.
+
+If you do ask, make it one concise question, put the recommended/default path first, and explain whether skipping it will leave placeholders, ownership, or project-specific values unresolved.
 
 Only ask if the project already has a conflicting CMA type-generation flow and
 patching it safely is unclear.
@@ -51,8 +52,8 @@ patching it safely is unclear.
 
 Read only these references:
 
-- `../../../references/shared/datocms-cli/cli-setup.md`
-- `../../../references/shared/datocms-cma/type-generation.md`
+- `../../../../datocms-cli/references/cli-setup.md`
+- `../../../../datocms-cma/references/type-generation.md`
 
 ---
 
@@ -91,7 +92,7 @@ After generating the files, tell the user:
 1. Re-run `generate-cma-types` after schema changes
 2. Use the generated unions such as `AnyModel` and `AnyBlock` with `raw*()`
    CMA methods
-3. Use `datocms-setup` for `graphql-types` separately if they also want typed CDA
+3. Optional follow-up recipe id: `graphql-types` if they also want typed CDA
    queries
 
 ---

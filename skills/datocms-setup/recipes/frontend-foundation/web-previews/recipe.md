@@ -15,12 +15,9 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
-1. **Framework** — Read `package.json` and check for:
-   - `next` → Next.js (App Router)
-   - `nuxt` → Nuxt
-   - `@sveltejs/kit` → SvelteKit
-   - `astro` → Astro
-   - If none match, stop and ask the user which framework they are using.
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
+1. **Framework and file layout** — use `../../../references/repo-conventions.md` for supported framework detection, `src/` usage, and the standard draft-mode or preview route locations.
 
 2. **Prerequisite: Draft mode** — Check if the draft mode enable endpoint exists:
    - Next.js: `src/app/api/draft-mode/enable/route.ts` or `app/api/draft-mode/enable/route.ts`
@@ -28,46 +25,50 @@ Silently examine the project:
    - SvelteKit: `src/routes/api/draft-mode/enable/+server.ts`
    - Astro: `src/pages/api/draft-mode/enable/index.ts` or `src/pages/api/draft-mode/enable.ts`
 
-   **If draft mode does not exist, STOP immediately and tell the user:**
-   > "Draft mode must be set up before configuring Web Previews. Use the `draft-mode` recipe first."
-
 3. **Existing preview-links endpoint** — Check if a preview-links endpoint already exists:
    - Next.js: `src/app/api/preview-links/route.ts` or `app/api/preview-links/route.ts`
    - Nuxt: `server/api/preview-links.ts`
    - SvelteKit: `src/routes/api/preview-links/+server.ts`
    - Astro: `src/pages/api/preview-links/index.ts` or `src/pages/api/preview-links.ts`
 
-4. **Existing utilities** — Check for CORS helper and error handling utilities (likely created by draft mode setup)
+4. **Existing utilities** — Check for CORS helpers, error handling utilities, and URL helpers created by draft mode or other preview features.
 
-5. **Installed deps** — Check `package.json` for: `@datocms/rest-client-utils`
+5. **Existing route helpers** — Search for helpers that already map content to public URLs, such as:
+   - sitemap / robots helpers
+   - SEO/public URL utilities
+   - `recordToWebsiteRoute`-style helpers
+   - page-level route builders based on model api keys or slugs
 
-6. **File structure** — Determine whether the project uses a `src/` directory
+6. **Frontend count** — Inspect env files, site URL helpers, and hosting config for one vs multiple clear frontend targets (for example primary + staging, or multiple site URLs).
+
+7. **Installed deps** — Check `package.json` for `@datocms/rest-client-utils` and `@datocms/cma-client`.
 
 ### Stop conditions
 
-- If draft mode does not exist, stop and record `draft-mode` as a prerequisite and continue after it is applied.
-- If a preview-links endpoint already exists, inspect it first and update it in place by default. Only ask about full replacement if the current implementation is materially incompatible or the user requested a rewrite.
+- If draft mode does not exist, record `draft-mode` as a prerequisite and continue after it is applied. Do not tell the user to run another recipe manually.
+- If a preview-links endpoint already exists, inspect it first and update it in place by default.
 
 ---
 
 ## Step 2: Ask Questions
 
-Ask one question:
+Follow the zero-question default and question-format rules in `../../../patterns/MANDATORY_RULES.md`.
 
-> "What are your content models and their frontend URL patterns? For example:
-> - `blog_post` → `/blog/[slug]`
-> - `page` → `/[slug]`
-> - `home_page` → `/`
->
-> You can skip this and I'll scaffold TODO placeholders for you to fill in later. That result is `scaffolded`, not `production-ready`."
+Only ask if one of these unresolved decisions remains after inspection:
 
-Use the user's answer to populate the `recordToWebsiteRoute` switch statement. If the user skips, use TODO placeholders like:
-```typescript
-// TODO: Add your content models and URL patterns here
-// Example: case 'blog_post': return `/blog/${record.slug}`;
-```
+1. **Model-to-route mapping** — no safe existing route helper can be reused and the record→URL mapping cannot be inferred confidently.
 
-If placeholders are used, record the exact missing model-to-route mappings and include them in the final handoff.
+   Ask one question:
+
+   > "What are your content models and their frontend URL patterns? For example: `blog_post` → `/blog/[slug]`, `page` → `/[slug]`, `home_page` → `/`. Recommended default: if you skip, I'll scaffold TODO placeholders and mark the result `scaffolded` until those mappings are filled in."
+
+2. **Multiple frontend handoff** — the repo clearly serves more than one site or environment, but the Web Previews handoff would otherwise need to guess the frontend labels or URLs.
+
+   Ask one question:
+
+   > "This repo appears to serve multiple frontends or environments. Should the Web Previews handoff describe a single primary frontend or multiple named frontends (for example Production and Staging)? Recommended default: single primary frontend. If you skip, I'll generate one primary frontend handoff and list the additional frontend assumptions under unresolved placeholders."
+
+If neither ambiguity applies, proceed directly.
 
 ---
 
@@ -76,122 +77,108 @@ If placeholders are used, record the exact missing model-to-route mappings and i
 Read the relevant reference files. Load only what is needed.
 
 **Always load:**
-- `../../../references/shared/datocms-frontend-integrations/web-previews-concepts.md`
+- `../../../../datocms-frontend-integrations/references/visual-editing-concepts.md`
+- `../../../../datocms-frontend-integrations/references/web-previews-concepts.md`
 
 **Load per framework — focus on the `## Web Previews (Optional)` section:**
 
 | Framework | Reference file |
 |---|---|
-| Next.js | `../../../references/shared/datocms-frontend-integrations/nextjs.md` |
-| Nuxt | `../../../references/shared/datocms-frontend-integrations/nuxt.md` |
-| SvelteKit | `../../../references/shared/datocms-frontend-integrations/sveltekit.md` |
-| Astro | `../../../references/shared/datocms-frontend-integrations/astro.md` |
+| Next.js | `../../../../datocms-frontend-integrations/references/nextjs.md` |
+| Nuxt | `../../../../datocms-frontend-integrations/references/nuxt.md` |
+| SvelteKit | `../../../../datocms-frontend-integrations/references/sveltekit.md` |
+| Astro | `../../../../datocms-frontend-integrations/references/astro.md` |
 
 ---
 
-## Step 4: Generate Code
+## Step 4: Generate code
 
-Create all files following the patterns in the loaded references. Generate:
+Create or patch the preview-links integration using the smallest safe changes.
 
-### Files to generate
+### Files to generate or patch
 
 1. **Preview-links endpoint** — Handles POST requests from the DatoCMS Web Previews plugin:
-   - CORS headers and OPTIONS preflight handling
+   - CORS headers and `OPTIONS` preflight handling
    - `SECRET_API_TOKEN` validation
-   - `recordToWebsiteRoute` function that maps DatoCMS records to frontend URLs
-   - Status branching: returns both draft and published links with appropriate labels
-   - Uses the draft mode enable endpoint URL for draft links
+   - status branching for draft and published links
+   - draft links that flow through the draft-mode enable route
 
-2. **recordInfo helper** (if applicable per framework reference) — Helper to fetch record details using the CMA client when needed for URL generation
+2. **Route mapping helper reuse** — If the repo already has a safe route helper, reuse or adapt it instead of inventing a parallel `recordToWebsiteRoute` implementation.
 
-3. **CSP header configuration** — Add `frame-ancestors 'self' https://plugins-cdn.datocms.com` to the framework's response headers config
+3. **recordInfo helper** — Add only if the selected framework pattern actually needs a CMA lookup for route generation.
 
-### Mandatory rules for all generated code
+4. **CSP header configuration** — Add `frame-ancestors 'self' https://plugins-cdn.datocms.com` when it is not already configured.
 
-#### Security
-- Validate `SECRET_API_TOKEN` on the preview-links endpoint
-- CORS headers must be present on all responses (including error responses)
-- Handle OPTIONS preflight requests
+### Route-mapping rules
 
-#### Error handling
-- Reuse `handleUnexpectedError` from the draft mode utilities so error responses stay consistent across endpoints
-- Return proper error status codes
+- Prefer existing route helpers first
+- If no safe helper exists, scaffold `recordToWebsiteRoute`
+- If route mappings remain unresolved, keep explicit TODO cases and mark the result `scaffolded`
+- Always record the missing model→URL mappings in the final handoff
 
-#### TypeScript
-Follow the TypeScript rules in `../../../patterns/MANDATORY_RULES.md`.
+### Security and error-handling rules
 
-#### Env var conventions
-Follow the env conventions in `../../../patterns/MANDATORY_RULES.md`.
+- Validate `SECRET_API_TOKEN`
+- Include CORS headers on all responses, including errors
+- Reuse existing draft-mode error helpers when available
+- Return a successful empty `previewLinks` payload for unmatched records instead of throwing if that matches the framework reference pattern
 
-Recipe-specific env var names:
-- Next.js: `SECRET_API_TOKEN`
-- Nuxt: `NUXT_SECRET_API_TOKEN`
-- SvelteKit: `PRIVATE_SECRET_API_TOKEN`
-- Astro: `SECRET_API_TOKEN`
+### Plugin-side handoff
 
-#### File conflicts
-Follow the file conflict rules in `../../../patterns/MANDATORY_RULES.md`.
-- Reuse utilities created by draft mode setup (CORS, error handling, `isRelativeUrl`)
+Always generate a stable plugin-configuration handoff in the final response that names:
 
-#### Output status
-- Report `scaffolded` if `recordToWebsiteRoute` still contains TODO placeholder cases or if any required model-to-route mapping is missing
-- Report `production-ready` only when every required mapping is implemented with real customer routes and no routing TODOs remain
+- frontend label (default `Primary` unless multiple frontends were chosen)
+- Preview Links API endpoint
+- Draft Mode URL
+- initial path default (`/` unless the repo clearly indicates a different entry route)
+- viewport preset recommendation (`desktop` + `mobile` unless the repo already exposes a stronger convention)
+- custom headers or query-secret expectation
+- unresolved model-to-route mappings
+
+This handoff is required even when the code is otherwise production-ready.
+
+### Output status
+
+- Report `scaffolded` if route mappings are incomplete, frontend handoff values are still placeholders, or required plugin details still depend on user input
+- Report `production-ready` only when all required mappings and handoff values are concrete and no TODO routing cases remain
 
 ---
 
-## Step 5: Install Dependencies
+## Step 5: Install dependencies
 
-Install missing packages:
+Install missing packages only when the selected framework pattern needs them:
 
 | Package | When |
 |---|---|
-| `@datocms/rest-client-utils` | Next.js only (if not already installed) |
-| `@datocms/cma-client` | Always (if not already installed) — needed for `RawApiTypes` / `ApiTypes` used by record-routing helpers |
-
-`serialize-error` should already be installed from draft mode setup.
+| `@datocms/rest-client-utils` | Next.js only |
+| `@datocms/cma-client` | Only when route generation needs CMA record info types or helper lookups |
 
 Use the project's package manager (see `../../../patterns/MANDATORY_RULES.md`).
 
 ---
 
-## Step 6: Next Steps
+## Step 6: Final handoff
 
 After generating all files, tell the user:
 
-1. **Configure the Web Previews plugin in DatoCMS:**
-   - Go to Settings → Plugins → Web Previews
-   - Set the webhook URL to your preview-links endpoint:
-     - Next.js: `https://your-site.com/api/preview-links`
-     - Nuxt: `https://your-site.com/api/preview-links`
-     - SvelteKit: `https://your-site.com/api/preview-links`
-     - Astro: `https://your-site.com/api/preview-links`
-   - Add the `SECRET_API_TOKEN` as a query parameter: `?token=YOUR_SECRET_TOKEN`
+1. which route helper was reused or whether new TODO mappings were scaffolded
+2. the exact plugin handoff values for Web Previews
+3. whether the result is `scaffolded` or `production-ready`
+4. the optional follow-up recipe ids that still make sense: `content-link`, `realtime`, or `visual-editing`
 
-2. **If the result is `scaffolded`**: list the exact missing model-to-route mappings and tell the user to replace the TODO cases in `recordToWebsiteRoute` before treating the setup as production-ready.
-
-3. **If the result is `production-ready`**: explicitly say the preview routing has all required mappings and can be treated as ready for customer use.
-
-4. **Suggested next steps:**
-   - Use `datocms-setup` for `content-link` to enable click-to-edit visual editing overlays
-   - Use `datocms-setup` for `realtime` to enable real-time content updates in draft mode
+Follow the shared final handoff rules in `../../../patterns/OUTPUT_STATUS.md`, including an explicit `Unresolved placeholders` section.
 
 ---
 
-## Verification Checklist
+## Verification checklist
 
-Before presenting the final code, verify the correct output state.
+Before presenting the final result, verify:
 
-### Base scaffold checks
-
-1. Preview-links endpoint validates `SECRET_API_TOKEN`
-2. CORS headers are included on all responses (including errors and OPTIONS)
-3. `handleUnexpectedError` from the draft mode setup is reused for consistent serialized error responses
-4. Status branching returns both draft and published links
-5. Draft links use the enable endpoint URL with correct parameters
-6. CSP header `frame-ancestors 'self' https://plugins-cdn.datocms.com` is configured
-7. All generated TypeScript follows the mandatory rules (no `as unknown as`, inferred types, `import type`)
-
-### Production-ready checks
-
-1. Report `scaffolded` and list the missing mappings if `recordToWebsiteRoute` still contains TODO placeholder cases
-2. Report `production-ready` only when `recordToWebsiteRoute` contains real customer mappings for every required model and no routing TODOs remain
+1. the preview-links endpoint validates `SECRET_API_TOKEN`
+2. CORS headers are included on all responses, including errors and `OPTIONS`
+3. status branching returns draft and published links correctly
+4. draft links flow through the draft-mode enable route
+5. existing route helpers were reused whenever safe
+6. CSP `frame-ancestors 'self' https://plugins-cdn.datocms.com` is configured when needed
+7. the final handoff includes a plugin configuration block and an explicit `Unresolved placeholders` section
+8. `production-ready` is only reported when no TODO route mappings remain

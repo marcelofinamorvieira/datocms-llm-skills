@@ -17,6 +17,8 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
 1. **Framework** — detect Next.js, Nuxt, SvelteKit, or Astro
 2. **Dato query layer** — inspect any shared `executeQuery` wrapper, GraphQL
    query files, generated GraphQL helpers, or page-level data loaders
@@ -40,7 +42,11 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Ask zero questions by default.
+Infer first from the repo.
+
+Follow the zero-question default and question-format rules in `../../../patterns/MANDATORY_RULES.md`.
+
+If you do ask, make it one concise question, put the recommended/default path first, and explain whether skipping it will leave placeholders, ownership, or project-specific values unresolved.
 
 Only ask if the project already has multiple competing metadata systems and it
 is unclear which one owns the final page head output.
@@ -51,15 +57,15 @@ is unclear which one owns the final page head output.
 
 Read only these references:
 
-- `../../../references/shared/datocms-cda/seo-and-meta.md`
-- `../../../references/shared/datocms-frontend-integrations/react-seo.md`
-- `../../../references/shared/datocms-frontend-integrations/vue-seo.md`
-- `../../../references/shared/datocms-frontend-integrations/svelte-seo.md`
-- `../../../references/shared/datocms-frontend-integrations/astro-seo.md`
+- `../../../../datocms-cda/references/seo-and-meta.md`
+- `../../../../datocms-frontend-integrations/references/react-seo.md`
+- `../../../../datocms-frontend-integrations/references/vue-seo.md`
+- `../../../../datocms-frontend-integrations/references/svelte-seo.md`
+- `../../../../datocms-frontend-integrations/references/astro-seo.md`
 
 If Content Link is already configured, also load:
 
-- `../../../references/shared/datocms-frontend-integrations/content-link-concepts.md`
+- `../../../../datocms-frontend-integrations/references/content-link-concepts.md`
 
 Use only the framework-specific SEO reference that matches the project.
 

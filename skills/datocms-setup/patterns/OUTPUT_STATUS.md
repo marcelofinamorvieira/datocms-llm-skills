@@ -25,3 +25,15 @@ This status requires that:
 - All route mappings and model API keys match the actual DatoCMS project
 - No placeholder comments remain in generated code
 - The feature works end-to-end without manual edits
+
+---
+
+## Final handoff requirements
+
+Every recipe handoff should:
+
+- report whether the result is `scaffolded` or `production-ready`
+- summarize the created, reused, or patched resources that matter for that recipe
+- keep any recipe-specific follow-up recipe ids or operator next steps that the recipe requires
+
+When unresolved values remain, always include an explicit `Unresolved placeholders` section and list every remaining placeholder or ownership ambiguity. If nothing remains, say `none`.

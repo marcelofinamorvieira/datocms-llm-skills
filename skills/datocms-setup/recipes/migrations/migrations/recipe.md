@@ -16,17 +16,18 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
 1. **Node project** — Check for `package.json`. If missing, stop and tell the
    user this skill expects a JavaScript or TypeScript project with a package
    manifest.
-2. **Package manager** — See `../../../patterns/MANDATORY_RULES.md`.
-3. **CLI installation** — Check `package.json` for `@datocms/cli`.
-4. **CLI config** — Check for `datocms.config.json`.
-5. **Migrations directory** — Check for `migrations/`.
-6. **Environment files** — Check `.env.example`, `.env`, and `.env.local` for
+2. **CLI installation** — Check `package.json` for `@datocms/cli`.
+3. **CLI config** — Check for `datocms.config.json`.
+4. **Migrations directory** — Check for `migrations/`.
+5. **Environment files** — Check `.env.example`, `.env`, and `.env.local` for
    `DATOCMS_API_TOKEN`.
-7. **TypeScript** — Check for `tsconfig.json`.
-8. **Scripts** — Check `package.json` for `datocms:migrations:run`,
+6. **TypeScript** — Check for `tsconfig.json`.
+7. **Scripts** — Check `package.json` for `datocms:migrations:run`,
    `datocms:migrations:dry-run`, and `datocms:environments:list`.
 
 ### Stop conditions
@@ -41,11 +42,20 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Ask zero questions by default.
+Infer first from the repo.
+
+Follow the zero-question default and question-format rules in `../../../patterns/MANDATORY_RULES.md`.
+
+If you do ask, make it one concise question, put the recommended/default path first, and explain whether skipping it will leave placeholders, ownership, or project-specific values unresolved.
 
 Only ask if the existing `datocms.config.json` clearly uses multiple profiles,
-custom migration directories, or other working conventions that would be
-changed by the single-project baseline.
+custom migration directories, a custom migration template, a custom migrations
+tsconfig, or other working conventions that would be changed by the
+single-project baseline.
+
+When you do ask, keep it narrow: confirm whether the current convention should
+be preserved in place or whether the repo wants to normalize to the default
+single-project baseline.
 
 ---
 
@@ -53,9 +63,9 @@ changed by the single-project baseline.
 
 Read only these references:
 
-- `../../../references/shared/datocms-cli/cli-setup.md`
-- `../../../references/shared/datocms-cli/creating-migrations.md`
-- `../../../references/shared/datocms-cli/running-migrations.md`
+- `../../../../datocms-cli/references/cli-setup.md`
+- `../../../../datocms-cli/references/creating-migrations.md`
+- `../../../../datocms-cli/references/running-migrations.md`
 
 ---
 
@@ -109,11 +119,15 @@ No other package should be added in this setup.
 After generating the files, tell the user:
 
 1. Add a CMA-capable token to their local env file
-2. Create the first migration with:
+2. Create the first migration with the format that matches the repo:
+
+   - If TypeScript is detected, use:
 
    ```bash
    npx datocms migrations:new "describe the change" --ts
    ```
+
+   - If JavaScript is the repo convention, omit `--ts`.
 
 3. Dry-run before applying:
 
@@ -121,9 +135,9 @@ After generating the files, tell the user:
    npm run datocms:migrations:dry-run
    ```
 
-4. Use `datocms-setup` for `migration-release-workflow` if they want a repeatable
+4. Optional follow-up recipe id: `migration-release-workflow` for a repeatable
    production rollout flow
-5. Use `datocms-setup` for `blueprint-sync` if they need one migration history
+5. Optional follow-up recipe id: `blueprint-sync` when they need one migration history
    shared across multiple DatoCMS projects
 
 ---

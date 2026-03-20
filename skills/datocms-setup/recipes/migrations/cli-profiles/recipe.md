@@ -15,6 +15,8 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
 1. **Node project** — Check for `package.json`
 2. **CLI installation** — Check `package.json` for `@datocms/cli`
 3. **Existing CLI config** — Check for `datocms.config.json`
@@ -38,12 +40,9 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Ask one question:
+Ask one grouped question:
 
-> "Which CLI profile ids should I create or update?"
-
-Do not ask for environment-variable names separately. Derive those from the
-requested profile ids.
+> "Which CLI profile ids should I create or update? Recommended default: preserve any existing profile ids and add only the new ids you name. If the repo does not already have a clear migrations convention, should these new profiles inherit a migrations block or stay environment-only? Recommended default: preserve the repo's strongest existing migrations convention; if none exists, stay environment-only. If you skip the second part, I'll follow that default and derive the env-var names directly from the chosen profile ids."
 
 ---
 
@@ -51,8 +50,8 @@ requested profile ids.
 
 Read only these references:
 
-- `../../../references/shared/datocms-cli/cli-setup.md`
-- `../../../references/shared/datocms-cli/environment-commands.md`
+- `../../../../datocms-cli/references/cli-setup.md`
+- `../../../../datocms-cli/references/environment-commands.md`
 
 ---
 
@@ -104,8 +103,11 @@ After generating the files, tell the user:
 
 1. Fill in the per-profile tokens locally
 2. Test each new profile with `npx datocms environments:list --profile=<id>`
-3. Use `datocms-setup` for `blueprint-sync` separately when they want shared
+3. Whether the result is `scaffolded` or `production-ready`
+4. Optional follow-up recipe id: `blueprint-sync` when they want shared
    multi-project rollout from one migration history
+
+Follow the shared final handoff rules in `../../../patterns/OUTPUT_STATUS.md`, including an explicit `Unresolved placeholders` section.
 
 ---
 

@@ -2,7 +2,12 @@
 
 This reference covers generating TypeScript types from your DatoCMS schema for type-safe CMA record operations using `@datocms/cli`.
 
-The generated types are passed as generics to the CMA client's `raw*()` methods (e.g., `rawFind`, `rawList`, `rawCreate`) and to `RawApiTypes.Item<>` for typed field access. See `client-types-and-behaviors.md` for the `RawApiTypes` overview and dual-API guidance.
+The generated types are useful for **both** CMA API styles:
+
+- the **simplified API** via `ItemTypeDefinition` generics on methods such as `client.items.create/update/upsert/...`
+- the **raw API** via `raw*()` methods and `RawApiTypes.Item<>` when you intentionally need raw JSON:API payloads or metadata
+
+Default to the simplified API. Reach for raw methods only when the task explicitly needs them. See `client-types-and-behaviors.md` for the `RawApiTypes` overview and dual-API guidance.
 
 ## Quick Navigation
 
@@ -102,6 +107,25 @@ export type AnyBlockOrModel = AnyBlock | AnyModel;
 ---
 
 ## Usage
+
+### Simplified API (default)
+
+Use the generated model/block types directly on simplified item methods:
+
+```ts
+import type { Client } from '@datocms/cma-client';
+import type { Page } from './cma-types';
+
+export async function createPage(client: Client) {
+  return client.items.create<Page>({
+    item_type: { type: 'item_type', id: 'PAGE_MODEL_ID' },
+    title: 'Hello world',
+    slug: 'hello-world',
+  });
+}
+```
+
+### Raw API (only when you need it)
 
 Pass the generated types as generics to `raw*()` methods and `RawApiTypes.Item<>`:
 

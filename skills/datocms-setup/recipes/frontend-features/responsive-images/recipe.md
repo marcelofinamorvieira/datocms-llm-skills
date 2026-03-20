@@ -18,6 +18,8 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
 1. **Framework** — detect Next.js, Nuxt, SvelteKit, or Astro
 2. **UI package** — inspect `package.json` for `react-datocms`,
    `vue-datocms`, `@datocms/svelte`, and `@datocms/astro`
@@ -41,7 +43,11 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Ask zero questions by default.
+Infer first from the repo.
+
+Follow the zero-question default and question-format rules in `../../../patterns/MANDATORY_RULES.md`.
+
+If you do ask, make it one concise question, put the recommended/default path first, and explain whether skipping it will leave placeholders, ownership, or project-specific values unresolved.
 
 Only ask if the repo exposes multiple competing image abstractions and it is
 unclear which one owns the rendered output.
@@ -52,27 +58,27 @@ unclear which one owns the rendered output.
 
 Read only these references:
 
-- `../../../references/shared/datocms-cda/client-and-config.md`
-- `../../../references/shared/datocms-cda/images-and-videos.md`
+- `../../../../datocms-cda/references/client-and-config.md`
+- `../../../../datocms-cda/references/images-and-videos.md`
 
 Then load the matching framework references:
 
 | Framework | Reference |
 |---|---|
-| Next.js / React | `../../../references/shared/datocms-frontend-integrations/react-image.md` |
-| Nuxt / Vue | `../../../references/shared/datocms-frontend-integrations/vue-image.md` |
-| SvelteKit | `../../../references/shared/datocms-frontend-integrations/svelte-image.md` |
-| Astro | `../../../references/shared/datocms-frontend-integrations/astro-image.md` |
+| Next.js / React | `../../../../datocms-frontend-integrations/references/react-image.md` |
+| Nuxt / Vue | `../../../../datocms-frontend-integrations/references/vue-image.md` |
+| SvelteKit | `../../../../datocms-frontend-integrations/references/svelte-image.md` |
+| Astro | `../../../../datocms-frontend-integrations/references/astro-image.md` |
 
 If the repo has no shared Dato query utility yet, also inspect the matching
 framework guidance used by the CDA client baseline:
 
 | Framework | Reference |
 |---|---|
-| Next.js | `../../../references/shared/datocms-frontend-integrations/nextjs.md` |
-| Nuxt | `../../../references/shared/datocms-frontend-integrations/nuxt.md` |
-| SvelteKit | `../../../references/shared/datocms-frontend-integrations/sveltekit.md` |
-| Astro | `../../../references/shared/datocms-frontend-integrations/astro.md` |
+| Next.js | `../../../../datocms-frontend-integrations/references/nextjs.md` |
+| Nuxt | `../../../../datocms-frontend-integrations/references/nuxt.md` |
+| SvelteKit | `../../../../datocms-frontend-integrations/references/sveltekit.md` |
+| Astro | `../../../../datocms-frontend-integrations/references/astro.md` |
 
 ---
 

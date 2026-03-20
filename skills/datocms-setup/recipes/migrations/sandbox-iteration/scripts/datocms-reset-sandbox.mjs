@@ -17,6 +17,7 @@ function run(args, options = {}) {
 function parseArgs(argv) {
   const parsed = {
     force: false,
+    help: false,
     migrationArgs: [],
     profile: undefined,
     sandbox: undefined,
@@ -81,6 +82,10 @@ function usage() {
       '  node scripts/datocms-reset-sandbox.mjs --sandbox=<env-id>',
       '    [--source=<env-id>] [--profile=<profile-id>]',
       '    [--skip-migrations] [--fast-fork] [--force] [-- <migration args>]',
+      '',
+      'This helper only destroys, forks, and optionally reruns migrations.',
+      'It never promotes an environment and never toggles maintenance mode.',
+      'Use --fast-fork and --force only for operator-approved large sandboxes.',
     ].join('\n'),
   );
 }

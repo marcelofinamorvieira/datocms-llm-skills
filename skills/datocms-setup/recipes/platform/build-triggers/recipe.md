@@ -17,18 +17,19 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
 1. **Node project** — Confirm `package.json` exists
-2. **Package manager** — See `../../../patterns/MANDATORY_RULES.md`.
-3. **CMA client package** — Check for `@datocms/cma-client`,
+2. **CMA client package** — Check for `@datocms/cma-client`,
    `@datocms/cma-client-node`, or `@datocms/cma-client-browser`
-4. **Existing trigger setup**
+3. **Existing trigger setup**
    - New config: `scripts/datocms-build-triggers.config.mjs`
    - New helpers: `scripts/datocms-sync-build-triggers.mjs`,
      `scripts/datocms-build-triggers-smoke.mjs`
    - Old helper names to migrate in place:
      `scripts/datocms-build-trigger-smoke.mjs`,
      `package.json` script `datocms:build-trigger:smoke`
-5. **Provider signals**
+4. **Provider signals**
    - Vercel: `.vercel/project.json`, `vercel.json`, or env vars such as
      `VERCEL_PROJECT_ID`, `VERCEL_TEAM_ID`, `VERCEL_DEPLOY_HOOK_URL`,
      `VERCEL_TOKEN`
@@ -38,9 +39,9 @@ Silently examine the project:
      `GITLAB_TRIGGER_TOKEN`, `GITLAB_TRIGGER_REF`
    - Custom: existing deploy-hook env vars such as `DEPLOY_HOOK_URL`,
      `CUSTOM_BUILD_TRIGGER_URL`, or an existing custom trigger config
-6. **Public frontend URL** — Inspect env files and hosting config for a live
+5. **Public frontend URL** — Inspect env files and hosting config for a live
    `SITE_URL` or equivalent public site URL
-7. **Existing Dato config** — Inspect env files for a CMA-capable
+6. **Existing Dato config** — Inspect env files for a CMA-capable
    `DATOCMS_API_TOKEN`
 
 ### Stop conditions
@@ -54,19 +55,15 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Ask zero questions by default.
+Infer first from the repo.
 
-Only ask one explicit question if:
+Follow the zero-question default and question-format rules in `../../../patterns/MANDATORY_RULES.md`.
 
-- no `scripts/datocms-build-triggers.config.mjs` exists, and
-- the repo does not clearly indicate one adapter choice.
+Only ask one explicit question if no `scripts/datocms-build-triggers.config.mjs` exists yet and the repo does not clearly indicate one adapter choice.
 
-In that case, ask which starter adapter to scaffold:
+In that case, ask:
 
-- `vercel`
-- `netlify`
-- `gitlab`
-- `custom`
+> "Which starter build-trigger adapter should I scaffold: Vercel, Netlify, GitLab, or Custom? Recommended default: keep the strongest detected provider signal first; if the repo stays ambiguous, fall back to Custom and mark any provider-specific values as `scaffolded`. If you skip, I'll follow that default."
 
 ---
 
@@ -74,9 +71,9 @@ In that case, ask which starter adapter to scaffold:
 
 Read only these references:
 
-- `../../../references/shared/datocms-cma/client-types-and-behaviors.md`
-- `../../../references/shared/datocms-cma/webhooks-and-triggers.md`
-- `../../../references/shared/datocms-cma/access-control.md`
+- `../../../../datocms-cma/references/client-types-and-behaviors.md`
+- `../../../../datocms-cma/references/webhooks-and-triggers.md`
+- `../../../../datocms-cma/references/access-control.md`
 
 Also inspect these bundled assets only when generating files:
 
@@ -220,6 +217,8 @@ After generating the files, tell the user:
 3. How to run `datocms:build-triggers:sync`
 4. How to run `datocms:build-triggers:smoke`
 5. Whether the result is still `scaffolded`
+
+Follow the shared final handoff rules in `../../../patterns/OUTPUT_STATUS.md`, including an explicit `Unresolved placeholders` section.
 
 ---
 

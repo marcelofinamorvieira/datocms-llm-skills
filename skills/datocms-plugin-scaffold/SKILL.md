@@ -79,9 +79,9 @@ Keep these starter guardrails:
 
 ## Step 6: Verify
 
-1. Run `npm install`.
-2. Run `npm run build`.
-3. Tell the user to run `npm run dev`.
+1. Install dependencies with the selected package manager.
+2. Run the build script with that same package manager.
+3. Tell the user which dev command to run with that package manager.
 4. Tell the user how to install the local plugin in DatoCMS and name the single
    manual surface check that matters most.
 

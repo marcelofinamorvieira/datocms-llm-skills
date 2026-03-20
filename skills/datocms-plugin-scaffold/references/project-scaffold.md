@@ -352,7 +352,7 @@ import styles from './MyComponent.module.css';
 
 1. Install dependencies: `npm install`
 2. Start dev server: `npm run dev` (starts on `http://localhost:5173/`)
-3. In DatoCMS, go to **Settings > Plugins > Add new > Create a private plugin**
+3. In DatoCMS, open the **Plugins** area and use the **private plugin** flow to add a plugin from a URL
 4. Set the entry point URL to `http://localhost:5173/`
 5. The plugin will live-reload as you make changes
 
@@ -365,6 +365,15 @@ npm run build
 ```
 
 Output goes to `dist/`. The `dist/index.html` is the entry point DatoCMS loads.
+
+## After Scaffold: first release checklist
+
+Once the first local build works, check the official plugin lifecycle docs that
+match the next step:
+
+- **Additional permissions** — if the plugin needs new capabilities such as `currentUserAccessToken`
+- **Publishing to Marketplace** — if the plugin will be public
+- **Releasing new plugin versions** — when preparing the first versioned release
 
 ## Publishing to npm
 

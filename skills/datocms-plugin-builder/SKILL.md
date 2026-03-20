@@ -93,6 +93,8 @@ Then load only the direct surface reference you need.
   modal flows, or frame sizing behavior
 - `references/form-values.md` only when reading `ctx.formValues` outside field
   extensions, or when touching Structured Text / modular content values
+- `references/permissions.md` when adding or removing plugin permissions, using
+  `ctx.currentUserAccessToken`, or shipping permission-gated UI branches
 - `references/sdk-architecture.md` only when the smaller references do not answer a
   deeper SDK or browser CMA question
 
@@ -152,9 +154,9 @@ Keep these guardrails:
 
 Run the lightest existing verification that meaningfully covers the change:
 
-- `npm run build` by default for code changes
+- the repo's existing build script (`npm run build`, `pnpm build`, etc.) by default for code changes
 - the most relevant test or typecheck command if the project already has one
-- `npm install` before verifying if dependencies changed
+- install dependencies with the repo's package manager before verifying if dependencies changed
 
 If the repo has no suitable script, run the closest existing build, typecheck, or lint
 command instead.

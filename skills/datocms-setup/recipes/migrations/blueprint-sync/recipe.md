@@ -15,6 +15,8 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
 1. **Node project** — Check for `package.json`
 2. **Package manager** — See `../../../patterns/MANDATORY_RULES.md`.
 3. **CLI setup** — Check for `@datocms/cli`, `datocms.config.json`, and a
@@ -37,14 +39,11 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Ask these questions:
+Ask one grouped follow-up:
 
-1. Which profile id should be the blueprint source, and which profile ids
-   should be the destination projects?
-2. Do they also want a GitHub Actions template for the sync helper?
+> "Which CLI profile id should be the blueprint source, and which profile ids should be the destination projects? Do you also want the optional GitHub Actions template for the sync helper? Recommended default: no unless you explicitly want CI rollout. Were the destination projects duplicated from the blueprint, or should I keep entity-id alignment as an explicit assumption to preserve? Recommended default: if the repo does not prove duplication, preserve alignment as an explicit assumption and mark the rollout `scaffolded` until you confirm it."
 
-If the user does not specify custom migration directories, keep or create one
-shared `./migrations` directory for all profiles.
+If the user does not specify custom migration directories, keep or create one shared `./migrations` directory for all profiles.
 
 ---
 
@@ -52,9 +51,9 @@ shared `./migrations` directory for all profiles.
 
 Read only these references:
 
-- `../../../references/shared/datocms-cli/cli-setup.md`
-- `../../../references/shared/datocms-cli/running-migrations.md`
-- `../../../references/shared/datocms-cli/blueprint-sync.md`
+- `../../../../datocms-cli/references/cli-setup.md`
+- `../../../../datocms-cli/references/running-migrations.md`
+- `../../../../datocms-cli/references/blueprint-sync.md`
 
 Also inspect these bundled assets only when generating files:
 
@@ -89,7 +88,7 @@ Generate only these project changes:
 - Preserve existing per-profile migrations directories if the repo already uses
   them and the user did not ask to change them
 - Use one helper script instead of adding many profile-specific package scripts
-- The helper may support `--dry-run`, but it must not auto-promote by default
+- The helper may support `--dry-run`, `--source=<env>`, `--destination-template=<template>`, `--fast-fork`, and explicit `--force`, but it must not auto-promote by default
 - Do not infer project mappings from external systems or remote APIs
 - Do not create one migrations directory per project unless the repo already
   follows that pattern
@@ -110,9 +109,13 @@ After generating the files, tell the user:
 
 1. Fill in the per-profile tokens in their local env file
 2. Test the helper with a dry-run before using it for real rollout
-3. Promote destination environments manually after review
-4. Use `datocms-setup` for `migration-release-workflow` separately if they want a
+3. Use `--destination-template` or `--source` only when the rollout needs something other than the default pattern
+4. Promote destination environments manually after review
+5. Whether the result is `scaffolded` or `production-ready`
+6. Optional follow-up recipe id: `migration-release-workflow` when they want a
    promote-included release helper for a single project
+
+Follow the shared final handoff rules in `../../../patterns/OUTPUT_STATUS.md`, including an explicit `Unresolved placeholders` section.
 
 ---
 
@@ -127,4 +130,5 @@ Before presenting the result, verify:
 4. `scripts/datocms-sync-projects.mjs` exists
 5. `package.json` contains `datocms:sync:projects`
 6. The helper does not auto-promote by default
-7. The workflow file is created only when the user opted in
+7. The helper can accept runtime source/destination options without auto-promoting
+8. The workflow file is created only when the user opted in

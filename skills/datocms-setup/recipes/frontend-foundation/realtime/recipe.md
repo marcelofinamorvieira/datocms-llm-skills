@@ -13,6 +13,8 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
 1. **Framework** — Read `package.json` and check for:
    - `next` → Next.js (App Router)
    - `nuxt` → Nuxt
@@ -26,8 +28,6 @@ Silently examine the project:
    - SvelteKit: `src/routes/api/draft-mode/enable/+server.ts`
    - Astro: `src/pages/api/draft-mode/enable/index.ts` or `src/pages/api/draft-mode/enable.ts`
 
-   **If draft mode does not exist, STOP immediately and tell the user:**
-   > "Draft mode must be set up before configuring real-time updates. Use the `draft-mode` recipe first."
 
 3. **Content Link setup** — Check if Content Link is configured (look for `contentLink: 'v1'` in the `executeQuery` wrapper). If Content Link is set up, the real-time subscription options should include `contentLink` and `baseEditingUrl` as well.
 
@@ -37,14 +37,32 @@ Silently examine the project:
 
 ### Stop conditions
 
-- If draft mode does not exist, stop and record `draft-mode` as a prerequisite and continue after it is applied.
+- If draft mode does not exist, record `draft-mode` as a prerequisite and continue after it is applied.
 - If realtime components already exist, inspect them first and update them in place by default. Only ask about full replacement if the current implementation is materially incompatible or the user explicitly wants a rewrite.
 
 ---
 
 ## Step 2: Ask Questions
 
-Zero questions. Proceed directly.
+Infer first from the repo.
+
+Follow the zero-question default and question-format rules in `../../../patterns/MANDATORY_RULES.md`.
+
+Only ask if one of these high-impact ambiguities remains after inspection:
+
+1. **Realtime bundle inclusion** — the user asked for a broad visual-editing workflow, but it is still unclear whether realtime should be part of the active bundle.
+
+   Ask one question:
+
+   > "Do you also want real-time updates while editors type? Recommended default: no unless you explicitly asked for live or instant preview. If you skip, I'll keep realtime out of the bundle and leave the rest of visual editing in place."
+
+2. **Realtime owner** — an existing realtime implementation has conflicting ownership and it is genuinely unclear which page wrapper or subscription helper should remain the source of truth.
+
+   Ask one question:
+
+   > "This repo already has more than one realtime-style wrapper. Which one should stay the source of truth? Recommended default: preserve the wrapper already paired with draft mode or the primary page shell. If you skip, I'll patch the strongest existing owner and list the alternatives under unresolved placeholders."
+
+Otherwise, proceed directly.
 
 ---
 
@@ -53,25 +71,25 @@ Zero questions. Proceed directly.
 Read the relevant reference files. Load only what is needed.
 
 **Always load:**
-- `../../../references/shared/datocms-frontend-integrations/realtime-concepts.md`
+- `../../../../datocms-frontend-integrations/references/realtime-concepts.md`
 
 **Load per framework — focus on the `## Real-Time Updates (Optional)` section:**
 
 | Framework | Reference file |
 |---|---|
-| Next.js | `../../../references/shared/datocms-frontend-integrations/nextjs.md` |
-| Nuxt | `../../../references/shared/datocms-frontend-integrations/nuxt.md` |
-| SvelteKit | `../../../references/shared/datocms-frontend-integrations/sveltekit.md` |
-| Astro | `../../../references/shared/datocms-frontend-integrations/astro.md` |
+| Next.js | `../../../../datocms-frontend-integrations/references/nextjs.md` |
+| Nuxt | `../../../../datocms-frontend-integrations/references/nuxt.md` |
+| SvelteKit | `../../../../datocms-frontend-integrations/references/sveltekit.md` |
+| Astro | `../../../../datocms-frontend-integrations/references/astro.md` |
 
 **Load the framework-appropriate component reference:**
 
 | Framework | Component reference |
 |---|---|
-| Next.js (React) | `../../../references/shared/datocms-frontend-integrations/react-realtime.md` |
-| Nuxt (Vue) | `../../../references/shared/datocms-frontend-integrations/vue-realtime.md` |
-| SvelteKit | `../../../references/shared/datocms-frontend-integrations/svelte-realtime.md` |
-| Astro | `../../../references/shared/datocms-frontend-integrations/astro-realtime.md` |
+| Next.js (React) | `../../../../datocms-frontend-integrations/references/react-realtime.md` |
+| Nuxt (Vue) | `../../../../datocms-frontend-integrations/references/vue-realtime.md` |
+| SvelteKit | `../../../../datocms-frontend-integrations/references/svelte-realtime.md` |
+| Astro | `../../../../datocms-frontend-integrations/references/astro-realtime.md` |
 
 ---
 
@@ -158,18 +176,19 @@ Use the project's package manager (see `../../../patterns/MANDATORY_RULES.md`).
 
 ---
 
-## Step 6: Next Steps
+## Step 6: Final handoff
 
 After generating all files, tell the user:
 
-1. **How to convert an existing page** — Provide a concrete, framework-specific example showing how to take an existing page that fetches data with `executeQuery` and make it real-time in draft mode. Show the before and after.
+1. how an existing page or shared page wrapper should adopt the realtime helper
+2. whether realtime was added as a standalone enhancement or as part of the broader `visual-editing` bundle
+3. the SSE connection limit reminder — DatoCMS allows up to 500 concurrent SSE connections per project, and each open browser tab in draft mode uses one connection
+4. whether the result is `scaffolded` or `production-ready`
+5. the optional follow-up recipe id `visual-editing` if the user still wants Web Previews plus click-to-edit orchestration on top of realtime
 
-2. **SSE connection limit** — Note that DatoCMS allows up to 500 concurrent SSE connections per project. Each open browser tab in draft mode uses one connection.
+Treat the result as `scaffolded` if the repo still depends on placeholder page-integration steps, missing draft-token values, or unresolved ownership of the realtime wrapper. Report `production-ready` only when at least one real page or reusable wrapper is wired end to end with intentional repo values.
 
-3. **Testing** — Suggest the user:
-   - Enter draft mode on their site
-   - Open the DatoCMS editor in another tab
-   - Edit content and verify it appears in real-time on the site
+Follow the shared final handoff rules in `../../../patterns/OUTPUT_STATUS.md`, including an explicit `Unresolved placeholders` section.
 
 ---
 

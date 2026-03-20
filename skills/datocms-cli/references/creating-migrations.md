@@ -14,6 +14,10 @@ Creates a new migration script in the migrations directory.
 
 Run `npx datocms migrations:new --help` for all available flags.
 
+> **Precondition:** any mode that inspects the live DatoCMS project
+> (especially `--autogenerate`) needs a CMA-enabled token via `--api-token`,
+> environment variable, or configured profile.
+
 ---
 
 ## Format Detection
@@ -25,11 +29,14 @@ The CLI determines the file format in this order:
 3. If `--ts` flag is set or a `tsconfig.json` is found -> TypeScript
 4. Otherwise -> JavaScript
 
+Preserve the repo's established TS/JS convention unless the user explicitly asks
+for a different output format.
+
 ---
 
 ## Autogenerate Mode
 
-Auto-generates a migration script by diffing the schemas of two environments:
+Auto-generates a migration script by diffing the **schema** of two environments:
 
 ```bash
 # Diff sandbox "staging" against primary environment
@@ -39,16 +46,30 @@ npx datocms migrations:new "sync staging changes" --autogenerate=staging
 npx datocms migrations:new "sync foo to bar" --autogenerate=foo:bar
 ```
 
-- `--autogenerate=foo` — Finds changes in sandbox `foo` compared to the primary environment
-- `--autogenerate=foo:bar` — Finds changes in environment `foo` compared to environment `bar`
+- `--autogenerate=foo` — finds changes in sandbox `foo` compared to the primary environment
+- `--autogenerate=foo:bar` — finds changes in environment `foo` compared to environment `bar`
 
-This is useful for capturing manual schema changes made in a sandbox and converting them into a reproducible migration script.
+This is useful for capturing manual schema changes made in a sandbox and
+converting them into a reproducible migration script.
+
+### Important limitation
+
+`--autogenerate` is **schema-only**.
+
+It does **not** include:
+- records
+- uploads/assets
+- other content data that must be migrated manually
+
+If the change requires records or uploads, write that part manually or extend
+the generated migration script afterward.
 
 ---
 
 ## Schema Types Flag
 
-For TypeScript migrations, include schema type definitions for autocomplete and type checking:
+For TypeScript migrations, include schema type definitions for autocomplete and
+static checking:
 
 ```bash
 # Include types for all models and blocks
@@ -59,7 +80,7 @@ npx datocms migrations:new "update blog" --ts --schema=blog_post,author
 ```
 
 When `--schema` is used, the generated migration file includes:
-- An additional `ItemTypeDefinition` import
-- Schema type definitions inserted before the migration function
+- an additional `ItemTypeDefinition` import
+- schema type definitions inserted before the migration function
 
 This flag only works with TypeScript migrations.

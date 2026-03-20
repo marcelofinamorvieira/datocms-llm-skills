@@ -1,6 +1,6 @@
 {
   "skill_name": "datocms-setup",
-  "description": "Command-style one-time DatoCMS setup wizard for frontend foundation, frontend features, migrations, onboarding imports, and platform automation. Use when users want to scaffold or configure DatoCMS project setup, route to the right setup recipe, and answer a short clarification pass when needed.",
+  "description": "Command-style one-time DatoCMS setup wizard for frontend foundation, frontend features, migrations, onboarding imports, and platform automation. Use when users want to scaffold or configure DatoCMS project setup, route to the right setup recipe, and ask targeted clarification questions when needed.",
   "evaluation_source": "combined",
   "results": [
     {
@@ -244,6 +244,46 @@
       "pass": true
     },
     {
+      "query": "Use datocms-setup to set up DatoCMS migrations in a repo with custom staging and production profiles plus an existing migrations directory.",
+      "should_trigger": true,
+      "query_mode": "explicit",
+      "boundary_with": [],
+      "trigger_rate": 1.0,
+      "triggers": 1,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "Use datocms-setup to add a release workflow but preserve the current default release profile if one already exists.",
+      "should_trigger": true,
+      "query_mode": "explicit",
+      "boundary_with": [],
+      "trigger_rate": 1.0,
+      "triggers": 1,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "Use datocms-setup to install WordPress import support for an existing DatoCMS project and keep destructive options explicit.",
+      "should_trigger": true,
+      "query_mode": "explicit",
+      "boundary_with": [],
+      "trigger_rate": 1.0,
+      "triggers": 1,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "Use datocms-setup to add blueprint sync for duplicated projects that need to keep entity IDs aligned.",
+      "should_trigger": true,
+      "query_mode": "explicit",
+      "boundary_with": [],
+      "trigger_rate": 1.0,
+      "triggers": 1,
+      "runs": 1,
+      "pass": true
+    },
+    {
       "query": "I need to pull all blog posts from my DatoCMS project and display them on my Next.js site. They have a title, slug, cover image, and a rich text body. Can you write the GraphQL query and the page component?",
       "should_trigger": false,
       "query_mode": "implicit",
@@ -345,8 +385,8 @@
     }
   ],
   "summary": {
-    "total": 34,
-    "passed": 34,
+    "total": 38,
+    "passed": 38,
     "failed": 0
   }
 }

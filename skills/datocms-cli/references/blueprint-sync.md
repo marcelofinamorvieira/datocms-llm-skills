@@ -5,6 +5,19 @@ using CLI profiles.
 
 ---
 
+## Core assumption
+
+This flow is safest when destination projects were **duplicated from the
+blueprint project** or are otherwise known to keep entity IDs aligned.
+
+DatoCMS keeps the same entity IDs when a project is duplicated from a
+blueprint. That alignment is what makes one shared migration history practical.
+If the projects were not duplicated from the same blueprint baseline, confirm
+that ID alignment assumptions still hold before normalizing onto one shared
+migration sequence.
+
+---
+
 ## Recommended Shape
 
 Use one `datocms.config.json` with one profile per project and one shared
@@ -76,7 +89,7 @@ The token must have CMA access enabled.
 Author new migrations against the blueprint workflow:
 
 ```bash
-npx datocms migrations:new "add event model" --ts
+npx datocms migrations:new "add event model" --ts --profile=blueprint
 ```
 
 ### 2. Dry-run on a destination profile
@@ -112,9 +125,10 @@ Recommended behavior for that helper:
 
 1. Accept one or more destination profile ids as arguments
 2. Compute a unique destination environment id per profile
-3. Run `migrations:run --profile=<id> --destination=<env>`
-4. Support `--dry-run`
-5. Print the created environment ids instead of auto-promoting
+3. Optionally accept `--source=<env>` and `--destination-template=<template>`
+4. Run `migrations:run --profile=<id> --destination=<env>`
+5. Support `--dry-run`, `--fast-fork`, and explicit `--force`
+6. Print the created environment ids instead of auto-promoting
 
 Do not auto-promote in the sync helper by default. Promotion is a separate
 release decision per project.

@@ -14,17 +14,17 @@
       "summary": "Add responsive image querying and framework-specific rendering helpers.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cda/client-and-config.md",
-        "references/shared/datocms-cda/images-and-videos.md",
-        "references/shared/datocms-frontend-integrations/astro-image.md",
-        "references/shared/datocms-frontend-integrations/astro.md",
-        "references/shared/datocms-frontend-integrations/image-concepts.md",
-        "references/shared/datocms-frontend-integrations/nextjs.md",
-        "references/shared/datocms-frontend-integrations/nuxt.md",
-        "references/shared/datocms-frontend-integrations/react-image.md",
-        "references/shared/datocms-frontend-integrations/svelte-image.md",
-        "references/shared/datocms-frontend-integrations/sveltekit.md",
-        "references/shared/datocms-frontend-integrations/vue-image.md"
+        "../datocms-cda/references/client-and-config.md",
+        "../datocms-cda/references/images-and-videos.md",
+        "../datocms-frontend-integrations/references/astro-image.md",
+        "../datocms-frontend-integrations/references/astro.md",
+        "../datocms-frontend-integrations/references/image-concepts.md",
+        "../datocms-frontend-integrations/references/nextjs.md",
+        "../datocms-frontend-integrations/references/nuxt.md",
+        "../datocms-frontend-integrations/references/react-image.md",
+        "../datocms-frontend-integrations/references/svelte-image.md",
+        "../datocms-frontend-integrations/references/sveltekit.md",
+        "../datocms-frontend-integrations/references/vue-image.md"
       ],
       "assets": [],
       "scripts": [],
@@ -41,7 +41,7 @@
       "summary": "Generate robots.txt and sitemap wiring for DatoCMS-backed routes.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-frontend-integrations/robots-and-sitemaps.md"
+        "../datocms-frontend-integrations/references/robots-and-sitemaps.md"
       ],
       "assets": [],
       "scripts": [],
@@ -58,13 +58,13 @@
       "summary": "Add DatoCMS SEO metadata queries and framework-specific rendering helpers.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cda/seo-and-meta.md",
-        "references/shared/datocms-frontend-integrations/astro-seo.md",
-        "references/shared/datocms-frontend-integrations/content-link-concepts.md",
-        "references/shared/datocms-frontend-integrations/react-seo.md",
-        "references/shared/datocms-frontend-integrations/seo-concepts.md",
-        "references/shared/datocms-frontend-integrations/svelte-seo.md",
-        "references/shared/datocms-frontend-integrations/vue-seo.md"
+        "../datocms-cda/references/seo-and-meta.md",
+        "../datocms-frontend-integrations/references/astro-seo.md",
+        "../datocms-frontend-integrations/references/content-link-concepts.md",
+        "../datocms-frontend-integrations/references/react-seo.md",
+        "../datocms-frontend-integrations/references/seo-concepts.md",
+        "../datocms-frontend-integrations/references/svelte-seo.md",
+        "../datocms-frontend-integrations/references/vue-seo.md"
       ],
       "assets": [],
       "scripts": [],
@@ -81,12 +81,12 @@
       "summary": "Set up DatoCMS Site Search tokens, endpoints, and UI wiring.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cma/access-control.md",
-        "references/shared/datocms-cma/client-types-and-behaviors.md",
-        "references/shared/datocms-frontend-integrations/react-site-search.md",
-        "references/shared/datocms-frontend-integrations/site-search-api.md",
-        "references/shared/datocms-frontend-integrations/site-search-concepts.md",
-        "references/shared/datocms-frontend-integrations/vue-site-search.md"
+        "../datocms-cma/references/access-control.md",
+        "../datocms-cma/references/client-types-and-behaviors.md",
+        "../datocms-frontend-integrations/references/react-site-search.md",
+        "../datocms-frontend-integrations/references/site-search-api.md",
+        "../datocms-frontend-integrations/references/site-search-concepts.md",
+        "../datocms-frontend-integrations/references/vue-site-search.md"
       ],
       "assets": [],
       "scripts": [],
@@ -102,20 +102,20 @@
       "summary": "Add Structured Text query shapes and rendering helpers.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cda/client-and-config.md",
-        "references/shared/datocms-cda/structured-text.md",
-        "references/shared/datocms-frontend-integrations/astro-content-link.md",
-        "references/shared/datocms-frontend-integrations/astro-structured-text.md",
-        "references/shared/datocms-frontend-integrations/astro.md",
-        "references/shared/datocms-frontend-integrations/nextjs.md",
-        "references/shared/datocms-frontend-integrations/nuxt.md",
-        "references/shared/datocms-frontend-integrations/react-content-link.md",
-        "references/shared/datocms-frontend-integrations/react-structured-text.md",
-        "references/shared/datocms-frontend-integrations/svelte-content-link.md",
-        "references/shared/datocms-frontend-integrations/svelte-structured-text.md",
-        "references/shared/datocms-frontend-integrations/sveltekit.md",
-        "references/shared/datocms-frontend-integrations/vue-content-link.md",
-        "references/shared/datocms-frontend-integrations/vue-structured-text.md"
+        "../datocms-cda/references/client-and-config.md",
+        "../datocms-cda/references/structured-text.md",
+        "../datocms-frontend-integrations/references/astro-content-link.md",
+        "../datocms-frontend-integrations/references/astro-structured-text.md",
+        "../datocms-frontend-integrations/references/astro.md",
+        "../datocms-frontend-integrations/references/nextjs.md",
+        "../datocms-frontend-integrations/references/nuxt.md",
+        "../datocms-frontend-integrations/references/react-content-link.md",
+        "../datocms-frontend-integrations/references/react-structured-text.md",
+        "../datocms-frontend-integrations/references/svelte-content-link.md",
+        "../datocms-frontend-integrations/references/svelte-structured-text.md",
+        "../datocms-frontend-integrations/references/sveltekit.md",
+        "../datocms-frontend-integrations/references/vue-content-link.md",
+        "../datocms-frontend-integrations/references/vue-structured-text.md"
       ],
       "assets": [],
       "scripts": [],
@@ -131,19 +131,19 @@
       "summary": "Add Dato video query shapes and framework-specific player wiring.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cda/client-and-config.md",
-        "references/shared/datocms-cda/images-and-videos.md",
-        "references/shared/datocms-frontend-integrations/astro.md",
-        "references/shared/datocms-frontend-integrations/nextjs.md",
-        "references/shared/datocms-frontend-integrations/nuxt.md",
-        "references/shared/datocms-frontend-integrations/react-content-link.md",
-        "references/shared/datocms-frontend-integrations/react-video-player.md",
-        "references/shared/datocms-frontend-integrations/svelte-content-link.md",
-        "references/shared/datocms-frontend-integrations/svelte-video-player.md",
-        "references/shared/datocms-frontend-integrations/sveltekit.md",
-        "references/shared/datocms-frontend-integrations/video-player-concepts.md",
-        "references/shared/datocms-frontend-integrations/vue-content-link.md",
-        "references/shared/datocms-frontend-integrations/vue-video-player.md"
+        "../datocms-cda/references/client-and-config.md",
+        "../datocms-cda/references/images-and-videos.md",
+        "../datocms-frontend-integrations/references/astro.md",
+        "../datocms-frontend-integrations/references/nextjs.md",
+        "../datocms-frontend-integrations/references/nuxt.md",
+        "../datocms-frontend-integrations/references/react-content-link.md",
+        "../datocms-frontend-integrations/references/react-video-player.md",
+        "../datocms-frontend-integrations/references/svelte-content-link.md",
+        "../datocms-frontend-integrations/references/svelte-video-player.md",
+        "../datocms-frontend-integrations/references/sveltekit.md",
+        "../datocms-frontend-integrations/references/video-player-concepts.md",
+        "../datocms-frontend-integrations/references/vue-content-link.md",
+        "../datocms-frontend-integrations/references/vue-video-player.md"
       ],
       "assets": [],
       "scripts": [],
@@ -159,14 +159,14 @@
       "group": "frontend-foundation",
       "summary": "Wire granular cache invalidation for DatoCMS content changes.",
       "prerequisites": [
-        "draft-mode"
+        "cda-client"
       ],
       "shared_references": [
-        "references/shared/datocms-cda/draft-caching-environments.md",
-        "references/shared/datocms-frontend-integrations/astro.md",
-        "references/shared/datocms-frontend-integrations/nextjs.md",
-        "references/shared/datocms-frontend-integrations/nuxt.md",
-        "references/shared/datocms-frontend-integrations/sveltekit.md"
+        "../datocms-cda/references/draft-caching-environments.md",
+        "../datocms-frontend-integrations/references/astro.md",
+        "../datocms-frontend-integrations/references/nextjs.md",
+        "../datocms-frontend-integrations/references/nuxt.md",
+        "../datocms-frontend-integrations/references/sveltekit.md"
       ],
       "assets": [],
       "scripts": [],
@@ -184,11 +184,11 @@
       "summary": "Scaffold a minimal published-content CDA query utility.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cda/client-and-config.md",
-        "references/shared/datocms-frontend-integrations/astro.md",
-        "references/shared/datocms-frontend-integrations/nextjs.md",
-        "references/shared/datocms-frontend-integrations/nuxt.md",
-        "references/shared/datocms-frontend-integrations/sveltekit.md"
+        "../datocms-cda/references/client-and-config.md",
+        "../datocms-frontend-integrations/references/astro.md",
+        "../datocms-frontend-integrations/references/nextjs.md",
+        "../datocms-frontend-integrations/references/nuxt.md",
+        "../datocms-frontend-integrations/references/sveltekit.md"
       ],
       "assets": [],
       "scripts": [],
@@ -202,28 +202,31 @@
     {
       "id": "content-link",
       "group": "frontend-foundation",
-      "summary": "Enable click-to-edit visual overlays on draft pages.",
+      "summary": "Enable website click-to-edit overlays on draft pages.",
       "prerequisites": [
         "draft-mode"
       ],
       "shared_references": [
-        "references/shared/datocms-frontend-integrations/astro-content-link.md",
-        "references/shared/datocms-frontend-integrations/astro.md",
-        "references/shared/datocms-frontend-integrations/content-link-concepts.md",
-        "references/shared/datocms-frontend-integrations/nextjs.md",
-        "references/shared/datocms-frontend-integrations/nuxt.md",
-        "references/shared/datocms-frontend-integrations/react-content-link.md",
-        "references/shared/datocms-frontend-integrations/svelte-content-link.md",
-        "references/shared/datocms-frontend-integrations/sveltekit.md",
-        "references/shared/datocms-frontend-integrations/vue-content-link.md"
+        "../datocms-frontend-integrations/references/astro-content-link.md",
+        "../datocms-frontend-integrations/references/astro.md",
+        "../datocms-frontend-integrations/references/content-link-concepts.md",
+        "../datocms-frontend-integrations/references/nextjs.md",
+        "../datocms-frontend-integrations/references/nuxt.md",
+        "../datocms-frontend-integrations/references/react-content-link.md",
+        "../datocms-frontend-integrations/references/svelte-content-link.md",
+        "../datocms-frontend-integrations/references/sveltekit.md",
+        "../datocms-frontend-integrations/references/vue-content-link.md"
       ],
       "assets": [],
       "scripts": [],
       "path": "recipes/frontend-foundation/content-link/recipe.md",
       "triggers": [
         "content link",
-        "visual editing",
-        "click-to-edit"
+        "click-to-edit",
+        "click to edit",
+        "website click-to-edit",
+        "website click-to-edit only",
+        "stega"
       ]
     },
     {
@@ -232,11 +235,11 @@
       "summary": "Enable preview reads and draft-mode endpoints with a shared executeQuery wrapper.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-frontend-integrations/astro.md",
-        "references/shared/datocms-frontend-integrations/draft-mode-concepts.md",
-        "references/shared/datocms-frontend-integrations/nextjs.md",
-        "references/shared/datocms-frontend-integrations/nuxt.md",
-        "references/shared/datocms-frontend-integrations/sveltekit.md"
+        "../datocms-frontend-integrations/references/astro.md",
+        "../datocms-frontend-integrations/references/draft-mode-concepts.md",
+        "../datocms-frontend-integrations/references/nextjs.md",
+        "../datocms-frontend-integrations/references/nuxt.md",
+        "../datocms-frontend-integrations/references/sveltekit.md"
       ],
       "assets": [],
       "scripts": [],
@@ -253,7 +256,7 @@
       "summary": "Configure GraphQL query type generation for DatoCMS content reads.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cda/type-generation.md"
+        "../datocms-cda/references/type-generation.md"
       ],
       "assets": [],
       "scripts": [],
@@ -268,20 +271,20 @@
     {
       "id": "realtime",
       "group": "frontend-foundation",
-      "summary": "Add live preview updates over SSE on top of draft mode.",
+      "summary": "Add optional live preview updates over SSE on top of draft mode.",
       "prerequisites": [
         "draft-mode"
       ],
       "shared_references": [
-        "references/shared/datocms-frontend-integrations/astro-realtime.md",
-        "references/shared/datocms-frontend-integrations/astro.md",
-        "references/shared/datocms-frontend-integrations/nextjs.md",
-        "references/shared/datocms-frontend-integrations/nuxt.md",
-        "references/shared/datocms-frontend-integrations/react-realtime.md",
-        "references/shared/datocms-frontend-integrations/realtime-concepts.md",
-        "references/shared/datocms-frontend-integrations/svelte-realtime.md",
-        "references/shared/datocms-frontend-integrations/sveltekit.md",
-        "references/shared/datocms-frontend-integrations/vue-realtime.md"
+        "../datocms-frontend-integrations/references/astro-realtime.md",
+        "../datocms-frontend-integrations/references/astro.md",
+        "../datocms-frontend-integrations/references/nextjs.md",
+        "../datocms-frontend-integrations/references/nuxt.md",
+        "../datocms-frontend-integrations/references/react-realtime.md",
+        "../datocms-frontend-integrations/references/realtime-concepts.md",
+        "../datocms-frontend-integrations/references/svelte-realtime.md",
+        "../datocms-frontend-integrations/references/sveltekit.md",
+        "../datocms-frontend-integrations/references/vue-realtime.md"
       ],
       "assets": [],
       "scripts": [],
@@ -294,18 +297,40 @@
       ]
     },
     {
+      "id": "visual-editing",
+      "group": "frontend-foundation",
+      "summary": "Scaffold the full visual-editing bundle: draft mode, Content Link, Web Previews, and optional real-time updates.",
+      "prerequisites": [],
+      "shared_references": [
+        "../datocms-frontend-integrations/references/visual-editing-concepts.md"
+      ],
+      "assets": [],
+      "scripts": [],
+      "path": "recipes/frontend-foundation/visual-editing/recipe.md",
+      "triggers": [
+        "visual editing",
+        "visual mode",
+        "preview workflow",
+        "preview editor workflows",
+        "live preview workflow",
+        "editor preview",
+        "side-by-side editing in datocms",
+        "edit mode"
+      ]
+    },
+    {
       "id": "web-previews",
       "group": "frontend-foundation",
-      "summary": "Add preview-links routing so editors can open draft and published pages from DatoCMS.",
+      "summary": "Add preview-links routing and Web Previews handoff for side-by-side editing in DatoCMS.",
       "prerequisites": [
         "draft-mode"
       ],
       "shared_references": [
-        "references/shared/datocms-frontend-integrations/astro.md",
-        "references/shared/datocms-frontend-integrations/nextjs.md",
-        "references/shared/datocms-frontend-integrations/nuxt.md",
-        "references/shared/datocms-frontend-integrations/sveltekit.md",
-        "references/shared/datocms-frontend-integrations/web-previews-concepts.md"
+        "../datocms-frontend-integrations/references/astro.md",
+        "../datocms-frontend-integrations/references/nextjs.md",
+        "../datocms-frontend-integrations/references/nuxt.md",
+        "../datocms-frontend-integrations/references/sveltekit.md",
+        "../datocms-frontend-integrations/references/web-previews-concepts.md"
       ],
       "assets": [],
       "scripts": [],
@@ -313,7 +338,9 @@
       "triggers": [
         "web previews",
         "preview-links",
-        "preview links"
+        "preview links",
+        "side-by-side editing",
+        "visual tab"
       ]
     },
     {
@@ -324,9 +351,9 @@
         "migrations"
       ],
       "shared_references": [
-        "references/shared/datocms-cli/blueprint-sync.md",
-        "references/shared/datocms-cli/cli-setup.md",
-        "references/shared/datocms-cli/running-migrations.md"
+        "../datocms-cli/references/blueprint-sync.md",
+        "../datocms-cli/references/cli-setup.md",
+        "../datocms-cli/references/running-migrations.md"
       ],
       "assets": [
         "recipes/migrations/blueprint-sync/assets/datocms-sync.github-actions.yml"
@@ -346,8 +373,8 @@
       "summary": "Add named CLI profiles for multiple DatoCMS environments.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cli/cli-setup.md",
-        "references/shared/datocms-cli/environment-commands.md"
+        "../datocms-cli/references/cli-setup.md",
+        "../datocms-cli/references/environment-commands.md"
       ],
       "assets": [],
       "scripts": [],
@@ -365,9 +392,9 @@
         "migrations"
       ],
       "shared_references": [
-        "references/shared/datocms-cli/cli-setup.md",
-        "references/shared/datocms-cli/creating-migrations.md",
-        "references/shared/datocms-cli/running-migrations.md"
+        "../datocms-cli/references/cli-setup.md",
+        "../datocms-cli/references/creating-migrations.md",
+        "../datocms-cli/references/running-migrations.md"
       ],
       "assets": [],
       "scripts": [
@@ -387,10 +414,10 @@
         "migrations"
       ],
       "shared_references": [
-        "references/shared/datocms-cli/cli-setup.md",
-        "references/shared/datocms-cli/deployment-workflow.md",
-        "references/shared/datocms-cli/environment-commands.md",
-        "references/shared/datocms-cli/running-migrations.md"
+        "../datocms-cli/references/cli-setup.md",
+        "../datocms-cli/references/deployment-workflow.md",
+        "../datocms-cli/references/environment-commands.md",
+        "../datocms-cli/references/running-migrations.md"
       ],
       "assets": [
         "recipes/migrations/migration-release-workflow/assets/datocms-release.github-actions.yml"
@@ -411,9 +438,9 @@
       "summary": "Scaffold the baseline DatoCMS CLI migrations workflow.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cli/cli-setup.md",
-        "references/shared/datocms-cli/creating-migrations.md",
-        "references/shared/datocms-cli/running-migrations.md"
+        "../datocms-cli/references/cli-setup.md",
+        "../datocms-cli/references/creating-migrations.md",
+        "../datocms-cli/references/running-migrations.md"
       ],
       "assets": [],
       "scripts": [],
@@ -431,10 +458,10 @@
         "migrations"
       ],
       "shared_references": [
-        "references/shared/datocms-cli/cli-setup.md",
-        "references/shared/datocms-cli/deployment-workflow.md",
-        "references/shared/datocms-cli/environment-commands.md",
-        "references/shared/datocms-cli/running-migrations.md"
+        "../datocms-cli/references/cli-setup.md",
+        "../datocms-cli/references/deployment-workflow.md",
+        "../datocms-cli/references/environment-commands.md",
+        "../datocms-cli/references/running-migrations.md"
       ],
       "assets": [],
       "scripts": [
@@ -452,8 +479,8 @@
       "summary": "Scaffold a lean one-shot Contentful import helper.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cli/cli-setup.md",
-        "references/shared/datocms-cli/importing-content.md"
+        "../datocms-cli/references/cli-setup.md",
+        "../datocms-cli/references/importing-content.md"
       ],
       "assets": [],
       "scripts": [
@@ -470,8 +497,8 @@
       "summary": "Scaffold a lean one-shot WordPress import helper.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cli/cli-setup.md",
-        "references/shared/datocms-cli/importing-content.md"
+        "../datocms-cli/references/cli-setup.md",
+        "../datocms-cli/references/importing-content.md"
       ],
       "assets": [],
       "scripts": [
@@ -488,9 +515,9 @@
       "summary": "Manage DatoCMS build triggers declaratively from project code.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cma/access-control.md",
-        "references/shared/datocms-cma/client-types-and-behaviors.md",
-        "references/shared/datocms-cma/webhooks-and-triggers.md"
+        "../datocms-cma/references/access-control.md",
+        "../datocms-cma/references/client-types-and-behaviors.md",
+        "../datocms-cma/references/webhooks-and-triggers.md"
       ],
       "assets": [],
       "scripts": [
@@ -509,8 +536,8 @@
       "summary": "Generate typed CMA schema definitions for record operations.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cli/cli-setup.md",
-        "references/shared/datocms-cma/type-generation.md"
+        "../datocms-cli/references/cli-setup.md",
+        "../datocms-cma/references/type-generation.md"
       ],
       "assets": [],
       "scripts": [],
@@ -526,13 +553,13 @@
       "summary": "Manage DatoCMS webhooks declaratively from project code.",
       "prerequisites": [],
       "shared_references": [
-        "references/shared/datocms-cma/access-control.md",
-        "references/shared/datocms-cma/client-types-and-behaviors.md",
-        "references/shared/datocms-cma/webhooks-and-triggers.md",
-        "references/shared/datocms-frontend-integrations/astro.md",
-        "references/shared/datocms-frontend-integrations/nextjs.md",
-        "references/shared/datocms-frontend-integrations/nuxt.md",
-        "references/shared/datocms-frontend-integrations/sveltekit.md"
+        "../datocms-cma/references/access-control.md",
+        "../datocms-cma/references/client-types-and-behaviors.md",
+        "../datocms-cma/references/webhooks-and-triggers.md",
+        "../datocms-frontend-integrations/references/astro.md",
+        "../datocms-frontend-integrations/references/nextjs.md",
+        "../datocms-frontend-integrations/references/nuxt.md",
+        "../datocms-frontend-integrations/references/sveltekit.md"
       ],
       "assets": [],
       "scripts": [

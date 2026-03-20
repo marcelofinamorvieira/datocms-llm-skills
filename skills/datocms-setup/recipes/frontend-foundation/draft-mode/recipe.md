@@ -13,12 +13,9 @@ Follow these steps in order. Do not skip steps.
 
 Silently examine the project:
 
-1. **Framework** — Read `package.json` and check for:
-   - `next` → Next.js (App Router)
-   - `nuxt` → Nuxt
-   - `@sveltejs/kit` → SvelteKit
-   - `astro` → Astro
-   - If none match, stop and ask the user which framework they are using.
+Follow the shared repo inspection conventions in `../../../references/repo-conventions.md`, then inspect the recipe-specific signals below.
+
+1. **Framework and file layout** — use `../../../references/repo-conventions.md` for supported framework detection, `src/` usage, and the standard draft-mode route locations.
 
 2. **Existing draft mode** — Check if draft endpoints already exist:
    - Next.js: `src/app/api/draft-mode/enable/route.ts` or `app/api/draft-mode/enable/route.ts`
@@ -32,8 +29,6 @@ Silently examine the project:
 
 5. **Env files** — Check `.env`, `.env.local`, `.env.example` for existing DatoCMS tokens
 
-6. **File structure** — Determine whether the project uses a `src/` directory
-
 ### Stop conditions
 
 - If the framework cannot be determined, ask the user.
@@ -43,7 +38,13 @@ Silently examine the project:
 
 ## Step 2: Ask Questions
 
-Only ask if inspecting an existing draft mode setup leaves a high-impact ambiguity. Otherwise, zero questions — proceed directly.
+Infer first from the repo.
+
+Follow the zero-question default and question-format rules in `../../../patterns/MANDATORY_RULES.md`.
+
+Only ask if inspecting an existing draft-mode setup leaves one high-impact ambiguity around which existing endpoint, cookie helper, or shared query wrapper should remain the source of truth.
+
+If you do ask, make it one concise question, put the recommended/default path first, and explain what happens if the user skips it. Recommended default: preserve the most central working draft-aware wrapper or endpoint already used by the live preview flow. If the user skips, patch that strongest existing owner in place and list any alternative owners under `Unresolved placeholders`.
 
 ---
 
@@ -52,16 +53,16 @@ Only ask if inspecting an existing draft mode setup leaves a high-impact ambigui
 Read the relevant reference files. Load only what is needed.
 
 **Always load:**
-- `../../../references/shared/datocms-frontend-integrations/draft-mode-concepts.md`
+- `../../../../datocms-frontend-integrations/references/draft-mode-concepts.md`
 
 **Load per framework — focus on the `## Core` section:**
 
 | Framework | Reference file |
 |---|---|
-| Next.js | `../../../references/shared/datocms-frontend-integrations/nextjs.md` |
-| Nuxt | `../../../references/shared/datocms-frontend-integrations/nuxt.md` |
-| SvelteKit | `../../../references/shared/datocms-frontend-integrations/sveltekit.md` |
-| Astro | `../../../references/shared/datocms-frontend-integrations/astro.md` |
+| Next.js | `../../../../datocms-frontend-integrations/references/nextjs.md` |
+| Nuxt | `../../../../datocms-frontend-integrations/references/nuxt.md` |
+| SvelteKit | `../../../../datocms-frontend-integrations/references/sveltekit.md` |
+| Astro | `../../../../datocms-frontend-integrations/references/astro.md` |
 
 ---
 
@@ -172,21 +173,22 @@ Only add variables that don't already exist. Preserve any existing values.
 
 ---
 
-## Step 7: Next Steps
+## Step 7: Final handoff
 
 After generating all files, tell the user:
 
-1. **Fill in tokens** — Get tokens from DatoCMS Settings → API Tokens:
-   - Published Content CDA Token (read-only, published content)
-   - Draft Content CDA Token (read-only, draft + published content)
-   - Secret API Token (shared secret for webhook validation — can be any random string)
+1. which draft-mode files were created or reused
+2. which env vars still need real values, if any
+3. whether the result is `scaffolded` or `production-ready`
+4. the optional follow-up recipe ids that still make sense:
+   - `visual-editing` when they want the full editorial preview stack
+   - `web-previews` for preview links and the Visual tab
+   - `content-link` for click-to-edit overlays
+   - `realtime` for live draft-session updates
 
-2. **Generate the draft mode secret** — Run: `openssl rand -hex 32`
+Treat the result as `scaffolded` if any token or secret still uses placeholders or if wrapper ownership stayed ambiguous. Report `production-ready` only when the generated or patched draft-mode flow uses intentional repo values and no ownership ambiguity remains.
 
-3. **Suggested next steps:**
-   - Use `datocms-setup` for `web-previews` to add preview links for editors in DatoCMS
-   - Use `datocms-setup` for `content-link` to enable click-to-edit visual editing overlays
-   - Use `datocms-setup` for `realtime` to enable real-time content updates in draft mode
+Follow the shared final handoff rules in `../../../patterns/OUTPUT_STATUS.md`, including an explicit `Unresolved placeholders` section.
 
 ---
 

@@ -2,12 +2,13 @@
 name: datocms-frontend-integrations
 description: >-
   DatoCMS front-end integrations for existing web projects (Next.js App Router,
-  Nuxt, SvelteKit, Astro, plus React/Vue/Svelte component usage). Use when
-  users ask to set up draft mode endpoints, Web Previews preview-links APIs,
-  Content Link visual editing, real-time preview updates/subscriptions, or
-  cache-tag invalidation/revalidation flows (Next.js revalidateTag or CDN purge
-  by tags). Also use for framework component/hook wiring with react-datocms,
-  vue-datocms, @datocms/svelte, and @datocms/astro: Image/SRCImage/datocms-image,
+  Nuxt, SvelteKit, Astro, Remix, plus React/Vue/Svelte component usage). Use when
+  users ask for draft mode endpoints, Preview Links / Visual Editing flows,
+  Content Link overlays, real-time preview updates/subscriptions, cache-tag
+  invalidation/revalidation flows (Next.js revalidateTag or CDN purge by tags),
+  robots/sitemap wiring, or crawler-safe search integration. Also use for
+  framework component/hook wiring with react-datocms, vue-datocms,
+  @datocms/svelte, and @datocms/astro: Image/SRCImage/datocms-image,
   StructuredText, VideoPlayer (React/Vue/Svelte), SEO/meta helpers
   (renderMetaTags/toHead/Seo), QuerySubscription/QueryListener realtime patterns,
   ContentLink components, and Site Search (React/Vue). Prefer `datocms-setup`
@@ -54,6 +55,7 @@ Silently examine the project to determine setup and configuration.
    - `nuxt` -> Nuxt
    - `@sveltejs/kit` -> SvelteKit
    - `astro` -> Astro
+   - `@remix-run/` -> Remix
    - otherwise infer whether the project is React-based, Vue-based, or another stack
 2. **UI stack** — Determine which library the project actually uses for Dato rendering:
    - React-based -> `react-datocms`
@@ -117,12 +119,14 @@ of keeping all work in this bundle:
 | Video Player | `datocms-setup` for `video-player` |
 | SEO & Meta Tags | `datocms-setup` for `seo` |
 | Real-Time Updates | `datocms-setup` for `realtime` |
-| Visual Editing / Content Link | `datocms-setup` for `content-link` |
+| Visual Editing / Content Link | `datocms-setup` for `visual-editing` when the user means the full editor flow, or `content-link` when they explicitly want only overlays/stega wiring |
 | Site Search | `datocms-setup` for `site-search` |
 | Robots & Sitemaps | `datocms-setup` for `robots-sitemaps` |
 | Cache Tags | `datocms-setup` for `cache-tags` |
 
 Route to `datocms-setup` when the task is "set up X end-to-end from scratch" for a single feature. Stay here for multi-feature tasks, partial patching, framework comparisons, or when another skill explicitly depends on these references.
+
+If the request says **visual editing** and clearly wants the full editorial flow, treat that as the bundled setup: draft mode + preview links + Content Link + real-time updates. Only route to `content-link` by itself when the user explicitly wants the overlay/stega piece in isolation.
 
 ### Questions
 
@@ -165,6 +169,7 @@ Load these for mixed-feature setup work:
   - `references/nuxt.md`
   - `references/sveltekit.md`
   - `references/astro.md`
+  - `references/remix.md`
 - optional concept references:
   - `references/web-previews-concepts.md`
   - `references/content-link-concepts.md`
@@ -248,7 +253,7 @@ Follow the loaded references and these shared rules:
 ### Security and environment rules
 
 - All secrets come from environment variables.
-- Validate `SECRET_API_TOKEN` where draft mode or preview-links flows require it.
+- Validate a dedicated preview/webhook secret environment variable where draft mode or preview-links flows require it; preserve existing repo naming when present.
 - Use `isRelativeUrl()` for redirect validation.
 - Do not require authentication on draft-mode disable endpoints.
 
@@ -256,8 +261,8 @@ Follow the loaded references and these shared rules:
 
 - Add or preserve an `includeDrafts` option for draft-aware querying.
 - Switch between published and draft CDA tokens based on that option.
-- Always set `excludeInvalid: true` for draft-aware wrapper patterns.
-- Enable `contentLink: 'v1'` and `baseEditingUrl` only in draft contexts.
+- Default to `excludeInvalid: true` for draft-aware wrapper patterns unless the task explicitly needs invalid records during schema work.
+- Enable the repo's existing `contentLink` mode (`'v1'` or `'vercel-v1'`) plus `baseEditingUrl` only in draft / visual-editing contexts.
 
 ### Framework rules
 
