@@ -38,5 +38,28 @@
   {
     "query": "Set up DatoCMS draft mode and web previews in this Next.js app.",
     "should_trigger": false
+  },
+  {
+    "query": "Patch this existing DatoCMS plugin settings page and make the updated UI feel native to DatoCMS while keeping the behavior the same.",
+    "should_trigger": true,
+    "query_mode": "overlap",
+    "boundary_with": [
+      "datocms-plugin-design-system"
+    ]
+  },
+  {
+    "query": "Use datocms-plugin-builder to add one more itemFormDropdownActions entry that clears the current slug field in this existing plugin.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-plugin-builder to patch this existing DatoCMS plugin config screen so it removes the debug toggle and renames the API key field.",
+    "should_trigger": true,
+    "query_mode": "explicit"
+  },
+  {
+    "query": "Use datocms-plugin-builder to scaffold a brand-new DatoCMS plugin project with a config screen and starter files.",
+    "should_trigger": false,
+    "query_mode": "explicit"
   }
 ]

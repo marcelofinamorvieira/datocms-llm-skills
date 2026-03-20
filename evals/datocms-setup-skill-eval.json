@@ -12,7 +12,10 @@
   {
     "query": "Use datocms-setup to wire granular DatoCMS cache invalidation for this Next.js app with revalidateTag() and persistent tag storage.",
     "should_trigger": true,
-    "query_mode": "explicit"
+    "query_mode": "overlap",
+    "boundary_with": [
+      "datocms-frontend-integrations"
+    ]
   },
   {
     "query": "Use datocms-setup to install @datocms/cda-client, add the published CDA token placeholder, and scaffold the shared query utility for this Astro project.",
@@ -62,7 +65,10 @@
   {
     "query": "Use datocms-setup to scaffold @datocms/cli in this project, create datocms.config.json, add a migrations folder, and wire the baseline scripts.",
     "should_trigger": true,
-    "query_mode": "explicit"
+    "query_mode": "overlap",
+    "boundary_with": [
+      "datocms-cli"
+    ]
   },
   {
     "query": "Use datocms-setup to add live DatoCMS preview updates over SSE to this Next.js draft site.",
@@ -107,7 +113,10 @@
   {
     "query": "Use datocms-setup to add a preview-links endpoint, CORS handling, and record-to-URL routing for this Next.js repo.",
     "should_trigger": true,
-    "query_mode": "explicit"
+    "query_mode": "overlap",
+    "boundary_with": [
+      "datocms-frontend-integrations"
+    ]
   },
   {
     "query": "Use datocms-setup to add a declarative webhook config, a sync helper, and a local authenticated DatoCMS webhook receiver.",
@@ -122,7 +131,10 @@
   {
     "query": "Use datocms-setup to set up full visual editing for this Next.js site with DatoCMS draft mode, Web Previews, and click-to-edit overlays.",
     "should_trigger": true,
-    "query_mode": "explicit"
+    "query_mode": "overlap",
+    "boundary_with": [
+      "datocms-frontend-integrations"
+    ]
   },
   {
     "query": "Use datocms-setup to add side-by-side editing in DatoCMS for this Nuxt project.",
@@ -152,7 +164,10 @@
   {
     "query": "Use datocms-setup to set up DatoCMS migrations in a repo with custom staging and production profiles plus an existing migrations directory.",
     "should_trigger": true,
-    "query_mode": "explicit"
+    "query_mode": "overlap",
+    "boundary_with": [
+      "datocms-cli"
+    ]
   },
   {
     "query": "Use datocms-setup to add a release workflow but preserve the current default release profile if one already exists.",
@@ -210,8 +225,9 @@
     "should_trigger": false
   },
   {
-    "query": "Can you wire a ContentLink component into my existing Next.js page and patch the current renderer only?",
-    "should_trigger": false
+    "query": "Use datocms-setup to wire a ContentLink component into my existing Next.js page and patch the current renderer only.",
+    "should_trigger": false,
+    "query_mode": "explicit"
   },
   {
     "query": "Use datocms-setup to add visual mode for this Next.js repo, but keep realtime off unless it is truly needed.",
@@ -234,8 +250,9 @@
     "query_mode": "explicit"
   },
   {
-    "query": "Can you patch my existing preview-links route handler only and keep the rest of the setup untouched?",
-    "should_trigger": false
+    "query": "Use datocms-setup to patch my existing preview-links route handler only and keep the rest of the setup untouched.",
+    "should_trigger": false,
+    "query_mode": "explicit"
   },
   {
     "query": "Can you wire @vercel/toolbar into this Next.js repo for Edit Mode overlays?",
@@ -257,19 +274,26 @@
     "query_mode": "explicit"
   },
   {
-    "query": "We already have DatoCMS visual editing set up; patch one missing ContentLink boundary in the existing Structured Text renderer.",
-    "should_trigger": false
+    "query": "Use datocms-setup to patch one missing ContentLink boundary in the existing Structured Text renderer and leave the rest of the visual editing setup untouched.",
+    "should_trigger": false,
+    "query_mode": "explicit"
   },
   {
     "query": "Our Vercel project already has working Edit Mode overlays. Explain whether DatoCMS visual editing should replace that or live alongside it.",
     "should_trigger": false
   },
   {
-    "query": "We already provisioned the DatoCMS Site Search indexes and tokens. Build the React search UI against the existing public search endpoint.",
-    "should_trigger": false
+    "query": "Use datocms-setup to build the React site-search UI against the existing public search endpoint and current indexes only.",
+    "should_trigger": false,
+    "query_mode": "explicit"
   },
   {
     "query": "Patch the existing preview-links endpoint so the author model resolves to /authors/[slug]; do not scaffold new preview setup.",
     "should_trigger": false
+  },
+  {
+    "query": "Use datocms-setup to add one more itemFormDropdownActions entry to our existing DatoCMS plugin and leave the current UI alone.",
+    "should_trigger": false,
+    "query_mode": "explicit"
   }
 ]
