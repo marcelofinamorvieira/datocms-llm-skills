@@ -71,8 +71,8 @@ the smoothest cross-skill routing.
 This repo ships as a Claude Code plugin. Add the marketplace and install:
 
 ```bash
-/plugin marketplace add datocms/skills
-/plugin install datocms@datocms-skills
+/plugin marketplace add marcelofinamorvieira/datocms-llm-skills
+/plugin install datocms@datocms-llm-skills
 ```
 
 Skills are namespaced under the plugin name (e.g. `/datocms:datocms-cda`).
@@ -83,10 +83,7 @@ To test locally during development:
 claude --plugin-dir /path/to/this/repo
 ```
 
-### Manual symlink install
-
-<details>
-<summary>Codex</summary>
+### Codex (symlink install)
 
 ```bash
 repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
@@ -98,27 +95,6 @@ for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations d
   ln -sfn "$repo_root/skills/$skill" "$skills_dir/$skill"
 done
 ```
-
-</details>
-
-<details>
-<summary>Claude Code (manual)</summary>
-
-```bash
-repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-skills_dir="$HOME/.claude/skills"
-
-mkdir -p "$skills_dir"
-
-for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-plugin-design-system datocms-plugin-scaffold datocms-setup; do
-  ln -sfn "$repo_root/skills/$skill" "$skills_dir/$skill"
-done
-```
-
-</details>
-
-These commands resolve the repo root dynamically, so they work from any
-directory inside the cloned repository.
 
 If you only need one area, symlink or copy just that skill folder.
 `datocms-setup` already contains its internal recipes, shared references,

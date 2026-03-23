@@ -19,10 +19,10 @@ a Claude Code plugin. This is the recommended approach for Claude Code users.
 
 ```bash
 # Add the marketplace (once)
-/plugin marketplace add datocms/skills
+/plugin marketplace add marcelofinamorvieira/datocms-llm-skills
 
 # Install the plugin
-/plugin install datocms@datocms-skills
+/plugin install datocms@datocms-llm-skills
 ```
 
 Skills are namespaced as `/datocms:<skill-name>` (e.g. `/datocms:datocms-cda`).
@@ -31,13 +31,13 @@ To install at a specific scope:
 
 ```bash
 # User scope (default) — available in all projects
-/plugin install datocms@datocms-skills --scope user
+/plugin install datocms@datocms-llm-skills --scope user
 
 # Project scope — shared with the team via version control
-/plugin install datocms@datocms-skills --scope project
+/plugin install datocms@datocms-llm-skills --scope project
 
 # Local scope — project-specific, gitignored
-/plugin install datocms@datocms-skills --scope local
+/plugin install datocms@datocms-llm-skills --scope local
 ```
 
 To test local changes during development without installing:
