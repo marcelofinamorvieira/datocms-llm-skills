@@ -66,7 +66,24 @@ gone.
 Each public skill can be installed on its own, but the full public set gives
 the smoothest cross-skill routing.
 
-Recommended local development install:
+### Claude Code Plugin (recommended)
+
+This repo ships as a Claude Code plugin. Add the marketplace and install:
+
+```bash
+/plugin marketplace add datocms/skills
+/plugin install datocms@datocms-skills
+```
+
+Skills are namespaced under the plugin name (e.g. `/datocms:datocms-cda`).
+
+To test locally during development:
+
+```bash
+claude --plugin-dir /path/to/this/repo
+```
+
+### Manual symlink install
 
 <details>
 <summary>Codex</summary>
@@ -85,7 +102,7 @@ done
 </details>
 
 <details>
-<summary>Claude Code</summary>
+<summary>Claude Code (manual)</summary>
 
 ```bash
 repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
@@ -111,6 +128,9 @@ install.
 ## Repo Layout
 
 ```text
+.claude-plugin/
+  plugin.json         # Claude Code plugin manifest
+  marketplace.json    # Claude Code marketplace registry
 skills/
   datocms-cda/
   datocms-cli/
@@ -120,7 +140,7 @@ skills/
   datocms-plugin-design-system/
   datocms-plugin-scaffold/
   datocms-setup/
-    agents/
+    agents/           # Codex agent interface config (openai.yaml)
     patterns/
     references/
     recipes/

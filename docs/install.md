@@ -9,6 +9,48 @@ other than the default "install the full set into my local skills folder".
 - You only want one skill instead of the full set.
 - You want a detached copy instead of symlinks.
 - You want the canonical path map for each shipped skill.
+- You want details on the Claude Code plugin install.
+
+## Claude Code Plugin Install
+
+This repo ships both `.claude-plugin/marketplace.json` (marketplace registry)
+and `.claude-plugin/plugin.json` (plugin manifest), so it can be installed as
+a Claude Code plugin. This is the recommended approach for Claude Code users.
+
+```bash
+# Add the marketplace (once)
+/plugin marketplace add datocms/skills
+
+# Install the plugin
+/plugin install datocms@datocms-skills
+```
+
+Skills are namespaced as `/datocms:<skill-name>` (e.g. `/datocms:datocms-cda`).
+
+To install at a specific scope:
+
+```bash
+# User scope (default) — available in all projects
+/plugin install datocms@datocms-skills --scope user
+
+# Project scope — shared with the team via version control
+/plugin install datocms@datocms-skills --scope project
+
+# Local scope — project-specific, gitignored
+/plugin install datocms@datocms-skills --scope local
+```
+
+To test local changes during development without installing:
+
+```bash
+claude --plugin-dir /path/to/this/repo
+```
+
+After making changes, reload without restarting:
+
+```bash
+/reload-plugins
+```
 
 ## Single-Skill Install
 

@@ -1,0 +1,20 @@
+{
+  "name": "datocms",
+  "version": "1.0.0",
+  "description": "DatoCMS skills for content delivery, content management, CLI workflows, frontend integrations, plugin development, plugin UI design, plugin scaffolding, and project setup",
+  "author": {
+    "name": "DatoCMS",
+    "url": "https://www.datocms.com"
+  },
+  "keywords": [
+    "datocms",
+    "cms",
+    "headless-cms",
+    "graphql",
+    "content-delivery",
+    "content-management",
+    "plugins",
+    "migrations"
+  ],
+  "skills": "./skills/"
+}
