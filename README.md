@@ -72,7 +72,7 @@ This repo ships as a Claude Code plugin. Add the marketplace and install:
 
 ```bash
 /plugin marketplace add marcelofinamorvieira/datocms-llm-skills
-/plugin install datocms@datocms-llm-skills
+/plugin install datocms@datocms-skills
 ```
 
 Skills are namespaced under the plugin name (e.g. `/datocms:datocms-cda`).
@@ -83,23 +83,26 @@ To test locally during development:
 claude --plugin-dir /path/to/this/repo
 ```
 
-### Codex (symlink install)
+### Codex
 
-```bash
-repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-skills_dir="${CODEX_HOME:-$HOME/.codex}/skills"
+Inside a Codex session, ask the skill installer to pull all skills from this repo:
 
-mkdir -p "$skills_dir"
-
-for skill in datocms-cda datocms-cli datocms-cma datocms-frontend-integrations datocms-plugin-builder datocms-plugin-design-system datocms-plugin-scaffold datocms-setup; do
-  ln -sfn "$repo_root/skills/$skill" "$skills_dir/$skill"
-done
+```
+$skill-installer install all of these skills from https://github.com/marcelofinamorvieira/datocms-llm-skills:
+- skills/datocms-cda
+- skills/datocms-cli
+- skills/datocms-cma
+- skills/datocms-frontend-integrations
+- skills/datocms-plugin-builder
+- skills/datocms-plugin-design-system
+- skills/datocms-plugin-scaffold
+- skills/datocms-setup
 ```
 
-If you only need one area, symlink or copy just that skill folder.
-`datocms-setup` already contains its internal recipes, shared references,
-patterns, and setup-local helpers, so there is no second setup bundle to
-install.
+Restart Codex after installing. Then verify all 8 skills were picked up by
+running `ls ~/.codex/skills/ | grep datocms`. You should see all 8 folders
+listed. If any are missing, re-run `$skill-installer` for the missing skill
+individually.
 
 ## Repo Layout
 
