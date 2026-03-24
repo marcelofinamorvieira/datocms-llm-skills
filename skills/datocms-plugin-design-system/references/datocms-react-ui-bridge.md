@@ -39,7 +39,28 @@ Fall back to raw code when:
 | Header/action bar | `Toolbar`, `ToolbarStack`, `ToolbarTitle`, `ToolbarButton` | flex toolbar with border and spacing |
 | Dropdown trigger/menu | `Dropdown` | local menu only if the package version lacks the needed shape |
 | Loading state | `Spinner` | local spinner only as last resort |
-| Split view | `VerticalSplit` when available in the installed version | flex/grid layout with a divider |
+| Split view | `SplitView` (with `SplitView.Pane`, `SplitView.Sash`) | flex/grid layout with a divider |
+| Tooltip | `Tooltip` (with `TooltipTrigger`, `TooltipContent`) | local tooltip only as last resort |
+| Keyboard shortcut hint | `HotKey` | local `<kbd>` element |
+| Field error message | `FieldError` | local error message |
+| Field hint text | `FieldHint` | local hint text |
+| Field wrapper (label + input + error) | `FieldWrapper` + `FormLabel` | local wrapper with label and error |
+
+**Not available in `datocms-react-ui`:**
+
+| Design need | Recommendation |
+|---|---|
+| Tabs / tabbed navigation | Use `ButtonGroup` for tab-like selection, or build a custom tab bar with Canvas CSS variables |
+| Data table | Build with raw `<table>` using Canvas spacing and border tokens |
+| Toast / notification | Build with local component using Canvas color tokens |
+
+### Hooks
+
+| Hook | Purpose |
+|---|---|
+| `useCtx()` | Access the plugin context (`ctx`) from deeply nested components inside `<Canvas>`. Avoids prop-drilling for theme data, site info, permissions, etc. |
+| `useClickOutside` | Detect clicks outside a ref element — useful for closing custom dropdowns or popovers |
+| `useMediaQuery` | React to viewport size changes for responsive plugin layouts |
 
 ## Component notes
 

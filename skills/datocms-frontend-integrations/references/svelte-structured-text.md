@@ -25,7 +25,7 @@ For simple Structured Text fields (no blocks, links, or inline records), query o
 <script>
   import { StructuredText } from '@datocms/svelte';
 
-  export let data;
+  const { data } = $props();
 </script>
 
 <div>
@@ -119,7 +119,7 @@ Unlike React (render props) and Vue (`h()` render functions), Svelte uses **sepa
   import ItemLink from './ItemLink.svelte';
   import InlineBlock from './InlineBlock.svelte';
 
-  export let data;
+  const { data } = $props();
 </script>
 
 <StructuredText
@@ -142,7 +142,7 @@ Custom block components receive `block` as a prop (the resolved record from the 
 <script>
   import { Image } from '@datocms/svelte';
 
-  export let block;
+  const { block } = $props();
 </script>
 
 {#if block.__typename === 'ImageBlockRecord'}
@@ -159,7 +159,7 @@ Inline item components receive `link` as a prop (the resolved record from the `l
 ```svelte
 <!-- InlineItem.svelte -->
 <script>
-  export let link;
+  const { link } = $props();
 </script>
 
 {#if link.__typename === 'TeamMemberRecord'}
@@ -174,7 +174,7 @@ Item link components receive `link` as a prop and render children via `<slot />`
 ```svelte
 <!-- ItemLink.svelte -->
 <script>
-  export let link;
+  const { link } = $props();
 </script>
 
 {#if link.__typename === 'TeamMemberRecord'}
@@ -191,7 +191,7 @@ Inline block components receive `block` as a prop (the resolved record from the 
 ```svelte
 <!-- InlineBlock.svelte -->
 <script>
-  export let block;
+  const { block } = $props();
 </script>
 
 {#if block.__typename === 'MentionRecord'}
@@ -213,7 +213,7 @@ Override default rendering for any node type using predicate-component tuples wi
   import Heading from './Heading.svelte';
   import Code from './Code.svelte';
 
-  export let data;
+  const { data } = $props();
 </script>
 
 <StructuredText
@@ -234,7 +234,7 @@ Custom node components receive a `node` prop with the DAST node data:
 <script>
   import { render as toPlainText } from 'datocms-structured-text-to-plain-text';
 
-  export let node;
+  const { node } = $props();
 
   $: anchor = toPlainText(node)
     ?.toLowerCase()
@@ -254,7 +254,7 @@ Custom node components receive a `node` prop with the DAST node data:
 ```svelte
 <!-- Code.svelte -->
 <script>
-  export let node;
+  const { node } = $props();
 </script>
 
 <pre class="code-block" data-language={node.language}>
@@ -300,7 +300,7 @@ Use `isEmptyDocument()` to skip rendering when a Structured Text field is empty 
   import { StructuredText } from '@datocms/svelte';
   import { isEmptyDocument } from 'datocms-structured-text-utils';
 
-  export let data;
+  const { data } = $props();
 </script>
 
 <div>
@@ -373,7 +373,7 @@ When using Visual Editing (Content Link), Structured Text fields require special
 ```svelte
 <!-- Block.svelte -->
 <script>
-  export let block;
+  const { block } = $props();
 </script>
 
 <div data-datocms-content-link-boundary>
@@ -385,7 +385,7 @@ When using Visual Editing (Content Link), Structured Text fields require special
 ```svelte
 <!-- InlineBlock.svelte -->
 <script>
-  export let block;
+  const { block } = $props();
 </script>
 
 <span data-datocms-content-link-boundary>
@@ -396,7 +396,7 @@ When using Visual Editing (Content Link), Structured Text fields require special
 ```svelte
 <!-- InlineItem.svelte -->
 <script>
-  export let link;
+  const { link } = $props();
 </script>
 
 <span data-datocms-content-link-boundary>
@@ -407,7 +407,7 @@ When using Visual Editing (Content Link), Structured Text fields require special
 ```svelte
 <!-- ItemLink.svelte (NO boundary needed) -->
 <script>
-  export let link;
+  const { link } = $props();
 </script>
 
 <a href={`/posts/${link.slug}`}>

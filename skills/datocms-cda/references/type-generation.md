@@ -37,6 +37,8 @@ Add to `package.json` scripts:
 
 Run `npm run generate-schema` to produce `schema.graphql` at the project root. Re-run after model changes.
 
+> **Token env var:** The command above uses `DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN` (the setup recipe convention). If your project uses a different name like `DATOCMS_CDA_TOKEN`, adjust the command accordingly.
+
 > **Framework env var conventions:** SvelteKit prefixes with `PRIVATE_` (e.g., `PRIVATE_DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN`). Nuxt prefixes with `NUXT_PUBLIC_` (e.g., `NUXT_PUBLIC_DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN`).
 
 ### tsconfig.json Plugin
@@ -93,6 +95,16 @@ export type { FragmentOf, ResultOf, VariablesOf } from 'gql.tada';
 
 The `scalars` object maps DatoCMS custom GraphQL scalars to TypeScript types. See `client-and-config.md` for the full scalar reference.
 
+### CI / Build Output
+
+The tsconfig plugin generates types in the IDE, but CI builds need an explicit output step. Add to `package.json` scripts:
+
+```json
+"generate-output": "gql.tada generate output"
+```
+
+Run `npm run generate-schema && npm run generate-output` in CI before `tsc` or the framework build.
+
 ### Key Exports
 
 | Export | Purpose |
@@ -110,9 +122,11 @@ The `scalars` object maps DatoCMS custom GraphQL scalars to TypeScript types. Se
 ### Install
 
 ```bash
-npm install @graphql-codegen/typed-document-node @graphql-codegen/typescript @graphql-codegen/typescript-operations @graphql-typed-document-node/core graphql
-npm install --save-dev @graphql-codegen/cli graphql-config
+npm install @graphql-typed-document-node/core graphql
+npm install --save-dev @graphql-codegen/cli @graphql-codegen/client-preset graphql-config
 ```
+
+> The `client` preset bundles `@graphql-codegen/typescript`, `@graphql-codegen/typescript-operations`, and `@graphql-codegen/typed-document-node` — no need to install them separately.
 
 ### Configuration
 
@@ -146,7 +160,7 @@ const config: IGraphQLConfig = {
             strictScalars: true,
             scalars: {
               BooleanType: 'boolean',
-              CustomData: 'Record<string, unknown>',
+              CustomData: 'Record<string, string>',
               Date: 'string',
               DateTime: 'string',
               FloatType: 'number',

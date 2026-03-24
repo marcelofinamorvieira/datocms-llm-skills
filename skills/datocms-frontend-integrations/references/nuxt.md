@@ -850,7 +850,6 @@ Switch from `executeQuery` to `rawExecuteQuery` to access the `x-cache-tags` res
 ```ts
 import { rawExecuteQuery } from '@datocms/cda-client';
 import type { TadaDocumentNode } from 'gql.tada';
-import { hash } from 'ohash';
 
 type Options<Variables> = {
   variables?: Variables;
@@ -862,43 +861,16 @@ export async function useQueryWithCacheTags<Result, Variables>(
 ) {
   const config = useRuntimeConfig();
 
-  const data = await useFetch('https://graphql.datocms.com/', {
-    ...buildRawRequestInit(query, config.public.datocmsPublishedContentCdaToken, options),
-    key: hash([query, options]),
-    transform: (response: { data: Result; errors?: any[] }) => {
-      if (response.errors)
-        throw new Error(
-          `Something went wrong while executing the query: ${JSON.stringify(response.errors)}`,
-        );
-      return response.data;
-    },
-  });
-
-  // For cache tags, make a parallel raw request to get the headers
-  const [, rawResponse] = await rawExecuteQuery(query, {
+  const [data, response] = await rawExecuteQuery(query, {
     token: config.public.datocmsPublishedContentCdaToken,
     excludeInvalid: true,
     variables: options?.variables,
     returnCacheTags: true,
   });
 
-  const cacheTags = rawResponse.headers.get('x-cache-tags') ?? '';
+  const cacheTags = response.headers.get('x-cache-tags') ?? '';
 
-  return { data: data.data, cacheTags };
-}
-
-function buildRawRequestInit<Result, Variables>(
-  query: TadaDocumentNode<Result, Variables>,
-  token: string,
-  options?: Options<Variables>,
-) {
-  const { buildRequestInit } = require('@datocms/cda-client');
-  return buildRequestInit(query, {
-    token,
-    excludeInvalid: true,
-    variables: options?.variables,
-    returnCacheTags: true,
-  });
+  return { data, cacheTags };
 }
 ```
 

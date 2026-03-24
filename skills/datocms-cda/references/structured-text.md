@@ -23,7 +23,7 @@ query {
     content {
       value
       blocks {
-        ... on RecordInterface { id }
+        ... on RecordInterface { id _modelApiKey }
         ... on ImageBlockRecord {
           image {
             responsiveImage(imgixParams: { w: 800 }) {
@@ -41,7 +41,7 @@ query {
         }
       }
       links {
-        ... on RecordInterface { id }
+        ... on RecordInterface { id _modelApiKey }
         ... on BlogPostRecord {
           slug
           title
@@ -90,8 +90,8 @@ The `value` field contains a JSON object following the DAST (DatoCMS Abstract Sy
 | `paragraph` | span, link, itemLink, inlineItem, inlineBlock | Text paragraph |
 | `span` | — (leaf) | Text content. Has `value` (string) and optional `marks` array |
 | `heading` | span, link, itemLink, inlineItem, inlineBlock | Heading with `level` attribute (1-6) |
-| `link` | span | External hyperlink with `url` attribute |
-| `itemLink` | span | Link to a DatoCMS record with `item` attribute (record ID) |
+| `link` | span | External hyperlink with `url` attribute. Optional `meta` array of `{ id, value }` pairs for extra attributes (e.g., `target: "_blank"`) |
+| `itemLink` | span | Link to a DatoCMS record with `item` attribute (record ID). Optional `meta` array of `{ id, value }` pairs |
 | `inlineItem` | — | Inline record reference with `item` attribute (record ID) |
 | `inlineBlock` | — | Inline block record with `item` attribute (block record ID) |
 | `list` | listItem | Ordered or unordered list with `style` attribute (`"bulleted"` or `"numbered"`) |
@@ -216,7 +216,7 @@ For non-framework contexts (search indexing, emails, APIs), use these utility pa
 | `datocms-structured-text-to-html-string` | HTML string |
 | `datocms-structured-text-to-dom-nodes` | DOM nodes |
 
-The framework components accept custom renderers for blocks, inline records, and record links:
+The framework components accept custom renderers for blocks, inline records, inline blocks, and record links:
 
 ```tsx
 import { StructuredText } from "react-datocms";
@@ -238,6 +238,14 @@ import { StructuredText } from "react-datocms";
   }}
   renderLinkToRecord={({ record, children }) => {
     return <a href={`/posts/${record.slug}`}>{children}</a>;
+  }}
+  renderInlineBlock={({ record }) => {
+    switch (record._modelApiKey) {
+      case "mention_block":
+        return <span className="mention">@{record.username}</span>;
+      default:
+        return null;
+    }
   }}
 />
 ```

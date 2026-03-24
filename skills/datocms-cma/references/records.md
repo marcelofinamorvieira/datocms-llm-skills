@@ -253,10 +253,12 @@ await client.items.bulkMoveToStage({
 Get all records that reference a given record:
 
 ```ts
-const referencingRecords = await client.items.references("record-id");
+const referencingRecords = await client.items.references("record-id", {
+  nested: true,
+});
 ```
 
-With optional query params (nested, version):
+With additional query params (version):
 
 ```ts
 const refs = await client.items.references("record-id", {
@@ -277,6 +279,39 @@ for await (const version of client.itemVersions.listPagedIterator(
   console.log(version.id, version.meta.created_at);
 }
 ```
+
+---
+
+## Validation
+
+Validate field values before creating or updating a record:
+
+```ts
+// Validate before creating a new record
+await client.items.validateNew({
+  item_type: { type: "item_type", id: "model-id" },
+  title: "Hello",
+});
+
+// Validate an existing record's fields before saving
+await client.items.validateExisting("record-id", {
+  title: "Updated title",
+});
+```
+
+Both methods throw an `ApiError` if validation fails, with the same error shape as a failed `create` or `update`.
+
+---
+
+## Current vs Published State
+
+Compare the current (draft) version of a record with its published version:
+
+```ts
+const diff = await client.items.currentVsPublishedState("record-id");
+```
+
+Useful for audit workflows and migration scripts that need to know what changed before publishing.
 
 ---
 

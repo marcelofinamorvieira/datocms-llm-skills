@@ -5,7 +5,7 @@ description: >-
   schema type generation, direct one-off CMA calls, environment operations,
   deployment workflows, and multi-project profile syncing. Use when users ask
   for datocms CLI commands or scripts such as migrations:new, migrations:run,
-  migrations:status, schema:generate, cma:call, migration scaffolding for
+  schema:generate, cma:call, migration scaffolding for
   models/fields/blocks, CLI setup with datocms.config.json and profiles,
   environment commands (list/fork/promote/rename/destroy), maintenance-mode
   toggling, CI/CD migration pipelines, blueprint/client project sync, and

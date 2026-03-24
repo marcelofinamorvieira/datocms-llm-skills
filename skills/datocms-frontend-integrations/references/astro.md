@@ -456,7 +456,7 @@ export const POST: APIRoute = async ({ url, request }) => {
 ```
 
 Key points:
-- **Astro uses `itemType.attributes.api_key`** (the model's API key string like `'blog_post'`), NOT the model ID
+- **Astro uses `itemType.attributes.api_key`** (the model's API key string like `'blog_post'`), NOT the model ID. This differs from Next.js/Nuxt/SvelteKit which use the numeric model ID — the `api_key` approach is preferred because it is human-readable and stable across environments
 - Uses the custom `json()` helper from utils
 
 ### `recordToWebsiteRoute`

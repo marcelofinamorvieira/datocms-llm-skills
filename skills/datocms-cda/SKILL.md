@@ -4,7 +4,7 @@ description: >-
   Query the DatoCMS Content Delivery API (CDA) — the read-only GraphQL API —
   using @datocms/cda-client. Use when users ask for GraphQL content reads:
   fetching posts/pages/projects, filtering by date/text/fields, sorting/order,
-  pagination/load-more, full-text search, localization and fallback locales,
+  pagination/load-more, text pattern matching via regex filters, localization and fallback locales,
   modular content fragments, Structured Text (DAST) with blocks/inline records,
   responsive images (srcset/blur-up/imgix), SEO metadata (_seoMetaTags, favicons,
   global SEO), video/Mux fields, draft or preview reads, environment-targeted

@@ -29,7 +29,7 @@ The `<Head />` component takes a `data` prop — an array of `Tag` objects (with
 <script>
   import { Head } from '@datocms/svelte';
 
-  export let data;
+  const { data } = $props();
 </script>
 
 <Head data={[...data.page.seo, ...data.site.favicon]} />
@@ -43,7 +43,7 @@ In a SvelteKit page, use the `<Head />` component with data from your `load` fun
 <script>
   import { Head } from '@datocms/svelte';
 
-  export let data;
+  const { data } = $props();
 </script>
 
 <Head data={[...data.page.seo, ...data.site.favicon]} />

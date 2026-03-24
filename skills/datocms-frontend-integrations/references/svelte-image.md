@@ -54,7 +54,7 @@ See `image-concepts.md` for the full query, field definitions, and best practice
 <script>
   import { Image, NakedImage } from '@datocms/svelte';
 
-  export let data;
+  const { data } = $props();
 </script>
 
 <div>

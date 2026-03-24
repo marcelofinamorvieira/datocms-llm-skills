@@ -22,7 +22,7 @@ npm install @datocms/svelte @mux/mux-player
 <script>
   import { VideoPlayer } from '@datocms/svelte';
 
-  export let data;
+  const { data } = $props();
 </script>
 
 <div>

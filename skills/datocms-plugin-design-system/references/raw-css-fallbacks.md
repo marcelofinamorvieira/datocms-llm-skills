@@ -38,6 +38,7 @@ the top of your plugin CSS to avoid silent `0` values:
 ## 2. Local section shell
 
 ```css
+/* --space-unit is NOT injected by Canvas; define :root { --space-unit: 12px; } locally */
 .section {
   margin-block: calc(4 * var(--space-unit));
 }
@@ -76,7 +77,7 @@ the top of your plugin CSS to avoid silent `0` values:
   display: flex;
   align-items: center;
   gap: var(--spacing-m);
-  margin-bottom: calc(4 * var(--space-unit));
+  margin-bottom: calc(4 * var(--space-unit)); /* requires local --space-unit: 12px */
 }
 
 .pageTitle {

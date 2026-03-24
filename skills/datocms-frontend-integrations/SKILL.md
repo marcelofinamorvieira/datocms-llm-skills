@@ -2,7 +2,7 @@
 name: datocms-frontend-integrations
 description: >-
   DatoCMS front-end integrations for existing web projects (Next.js App Router,
-  Nuxt, SvelteKit, Astro, Remix, plus React/Vue/Svelte component usage). Use when
+  Nuxt, SvelteKit, Astro, plus React/Vue/Svelte component usage). Use when
   users ask for draft mode endpoints, Preview Links / Visual Editing flows,
   Content Link overlays, real-time preview updates/subscriptions, cache-tag
   invalidation/revalidation flows (Next.js revalidateTag or CDN purge by tags),

@@ -453,7 +453,11 @@ type ExecuteQueryOptions<Variables> = {
 
 ### ContentLink Component Setup
 
-Create a client component that initializes Content Link with routing support for the Web Previews Visual tab:
+Create a client component that initializes Content Link with routing support for the Web Previews Visual tab.
+
+> **Alternative:** The `react-datocms` package also exports a declarative `<ContentLink>` component (see `react-content-link.md`). The imperative `createController` approach below gives more control over lifecycle and routing; the `<ContentLink>` component is simpler for basic setups.
+
+
 
 **File:** `src/components/ContentLink.tsx`
 
@@ -634,11 +638,11 @@ export function generatePageComponent<PageProps, Result, Variables>(
   return async function Page(unsanitizedPageProps: PageProps) {
     const { isEnabled: isDraftModeEnabled } = await draftMode();
 
-    const { searchParams, ...pagePropsWithoutSearchParams } = unsanitizedPageProps as PageProps & {
-      searchParams: unknown;
-    };
-
-    const pageProps = pagePropsWithoutSearchParams as unknown as PageProps;
+    const pageProps = Object.fromEntries(
+      Object.entries(unsanitizedPageProps as Record<string, unknown>).filter(
+        ([key]) => key !== 'searchParams',
+      ),
+    ) as PageProps;
 
     const variables = options.buildQueryVariables
       ? await options.buildQueryVariables(pageProps)

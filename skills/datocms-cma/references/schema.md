@@ -219,6 +219,7 @@ Validators enforce constraints on field values. They are specified as an object 
 | `title_length` | seo | `{ min?: number, max?: number }` | SEO title character limits |
 | `description_length` | seo | `{ min?: number, max?: number }` | SEO description character limits |
 | `slug_format` | slug | `{ custom_pattern?: string, predefined_pattern?: "webpage_slug" }` | Slug format constraints |
+| `slug_title_field` | slug | `{ title_field_id: string }` | Links a slug field to a title field for auto-generation |
 | `sanitized_html` | text | `{ sanitize_before_validation: boolean }` | HTML sanitization |
 
 ### Relational Validators
@@ -381,6 +382,22 @@ const fieldsets = await client.fieldsets.list(model.id);
 await client.fieldsets.update("fieldset-id", { title: "Updated Title" });
 await client.fieldsets.destroy("fieldset-id");
 ```
+
+### Reordering Fields and Fieldsets
+
+Control the display order of fields and fieldsets within a model:
+
+```ts
+await client.itemTypes.reorderFieldsAndFieldsets("model-id", {
+  data: [
+    { id: "field-id-1", type: "field" },
+    { id: "fieldset-id-1", type: "fieldset" },
+    { id: "field-id-2", type: "field" },
+  ],
+});
+```
+
+Useful in migration scripts that create fields and need to control their display order in the editing UI.
 
 ---
 

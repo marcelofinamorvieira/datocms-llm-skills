@@ -300,7 +300,7 @@ Available on all models:
 | `_firstPublishedAt` | `eq`, `neq`, `lt`, `lte`, `gt`, `gte`, `exists` |
 | `_publicationScheduledAt` | `eq`, `neq`, `lt`, `lte`, `gt`, `gte`, `exists` |
 | `_unpublishingScheduledAt` | `eq`, `neq`, `lt`, `lte`, `gt`, `gte`, `exists` |
-| `_status` | `eq`, `neq`, `in`, `notIn` (values: `draft`, `published`) |
+| `_status` | `eq`, `neq`, `in`, `notIn` (values: `draft`, `published`, `updated`) — `updated` means published with unpublished changes, only visible when `includeDrafts: true` |
 | `_isValid` | `eq` |
 | `parent` | `eq`, `exists` (tree models only) |
 | `position` | `eq`, `neq`, `lt`, `lte`, `gt`, `gte` (sortable/tree models only) |
@@ -421,6 +421,22 @@ filter: {
 ## Upload Queries and Filtering
 
 `allUploads` and `upload` (single upload by ID) are standalone root-level queries for browsing the media library. They support pagination (`first`/`skip`), ordering, and `_allUploadsMeta { count }` for totals.
+
+Single upload by ID:
+
+```graphql
+query {
+  upload(filter: { id: { eq: "12345" } }) {
+    url
+    filename
+    mimeType
+    alt
+    title
+    width
+    height
+  }
+}
+```
 
 The `allUploads` query supports its own set of filters:
 

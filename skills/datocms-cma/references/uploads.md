@@ -418,7 +418,9 @@ await client.items.create({
 ## Finding Records That Use an Upload
 
 ```ts
-const referencingRecords = await client.uploads.references("upload-id");
+const referencingRecords = await client.uploads.references("upload-id", {
+  nested: true,
+});
 ```
 
 ---

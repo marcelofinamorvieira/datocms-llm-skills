@@ -102,6 +102,17 @@ query {
 }
 ```
 
+The `_site` query also exposes `noIndex` (the project-level "prevent search engine indexing" toggle):
+
+```graphql
+query {
+  _site {
+    noIndex
+    globalSeo { siteName }
+  }
+}
+```
+
 For multi-language projects, `globalSeo` accepts a `locale` argument:
 
 ```graphql
@@ -174,6 +185,7 @@ const query = `
 const data = await executeQuery(query, {
   token: process.env.DATOCMS_CDA_TOKEN!,
   excludeInvalid: true,
+  variables: { slug: "my-page" },
 });
 
 // Combine page SEO tags with favicon tags for the <head>

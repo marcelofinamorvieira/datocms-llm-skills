@@ -8,7 +8,7 @@ CLI.
 ## Simple Environment Commands
 
 - **`environments:list`** — list all primary and sandbox environments: `npx datocms environments:list`
-- **`environments:primary`** — get the ID of the primary environment: `npx datocms environments:primary`
+- **`environments:primary`** — get the ID of the primary environment: `npx datocms environments:primary` (CLI convenience — no direct CMA client equivalent)
 - **`environments:rename`** — rename an environment: `npx datocms environments:rename <ENVIRONMENT_ID> <NEW_ENVIRONMENT_ID>`
 - **`environments:destroy`** — destroy a sandbox environment: `npx datocms environments:destroy <ENVIRONMENT_ID>`
 

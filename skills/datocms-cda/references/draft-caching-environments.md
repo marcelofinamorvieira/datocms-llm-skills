@@ -149,9 +149,9 @@ For the full implementation pattern (replacement `executeQuery`, DB abstraction,
 
 ---
 
-## Content Link / Visual Editing (Enterprise)
+## Content Link / Visual Editing
 
-**Note:** Content Link / Visual Editing is an **Enterprise feature**. Non-Enterprise projects will receive an `INVALID_X_VISUAL_EDITING_HEADER` error.
+**Note:** Content Link / Visual Editing requires a plan that supports it. Projects on plans without this feature will receive an `INVALID_X_VISUAL_EDITING_HEADER` error. Check your DatoCMS plan for availability.
 
 Enable Content Link to embed editing metadata in responses, allowing visual editing integrations (e.g., Vercel Visual Editing):
 
@@ -171,4 +171,15 @@ const data = await executeQuery(query, {
 
 When enabled, string fields in the response include additional metadata that Vercel's Visual Editing toolbar uses to create direct links to the DatoCMS editor.
 
-Setting `baseEditingUrl` alone (without `contentLink`) enables the `_editingUrl` field on records, which returns a direct URL to edit that record in the DatoCMS admin.
+Setting `baseEditingUrl` alone (without `contentLink`) enables the `_editingUrl` field on records, which returns a direct URL to edit that record in the DatoCMS admin:
+
+```graphql
+query {
+  blogPost(filter: { slug: { eq: "hello-world" } }) {
+    title
+    _editingUrl
+  }
+}
+```
+
+The `_editingUrl` value is a full URL like `https://your-project.admin.datocms.com/editor/item_types/123/items/456`.

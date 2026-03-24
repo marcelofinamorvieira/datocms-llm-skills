@@ -65,8 +65,8 @@ The SDK supports 40+ hooks in total. Here is every hook, grouped by category:
 
 ### Render Hooks (render UI into iframes)
 
-| Hook | Context Type | Purpose |
-|------|-------------|---------|
+| Hook | Frame Type | Purpose |
+|------|-----------|---------|
 | `renderFieldExtension` | `SelfResizingPluginFrameCtx` | Render a field extension |
 | `renderManualFieldExtensionConfigScreen` | `SelfResizingPluginFrameCtx` | Render per-field config for a configurable extension |
 | `renderItemFormSidebarPanel` | `SelfResizingPluginFrameCtx` | Render a collapsible sidebar panel |
@@ -81,6 +81,8 @@ The SDK supports 40+ hooks in total. Here is every hook, grouped by category:
 | `renderUploadSidebar` | `ImposedSizePluginFrameCtx` | Render a full-width sidebar in Media Area |
 | `renderInspector` | `ImposedSizePluginFrameCtx` | Render the left side of an inspector |
 | `renderInspectorPanel` | `ImposedSizePluginFrameCtx` | Render a custom panel in the inspector right side |
+
+Frame types determine iframe sizing behavior: `SelfResizingPluginFrameCtx` auto-resizes to content height; `ImposedSizePluginFrameCtx` fills the available space (pass `noAutoResizer` to Canvas).
 
 ### Lifecycle Hooks (no UI, run in hidden iframe)
 

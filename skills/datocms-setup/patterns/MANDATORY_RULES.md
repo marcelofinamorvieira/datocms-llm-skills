@@ -87,3 +87,48 @@ Only ask when a safe implementation is blocked by something the repo cannot answ
 - Put the recommended/default path first
 - Explain what happens if the user skips the question
 - If the user skips, preserve the strongest existing owner or the documented default and record unresolved assumptions under `Unresolved placeholders`
+
+### Structured questions (Claude Code)
+
+When the `AskUserQuestion` tool is available, use it instead of inline prose for
+every user-facing question. Map each decision point to a separate question with
+discrete options:
+
+- Use a short `header` (max 12 chars) that names the decision, e.g. `"Edit mode"`, `"Realtime"`, `"Index shape"`
+- List 2-4 concrete options with a `label` and a one-sentence `description`
+- Put the recommended option first and append `(Recommended)` to its label
+- Use `multiSelect: true` only when choices are not mutually exclusive
+- Group related decisions into a single `AskUserQuestion` call (up to 4 questions per call) rather than asking them one at a time
+- If the recipe specifies a "skip" default, include it in the description of the recommended option so the user knows what happens if they just accept the default
+
+Example — visual-editing grouped follow-up:
+
+```
+questions: [
+  {
+    question: "Which editing modes should I set up?",
+    header: "Edit mode",
+    options: [
+      { label: "Both (Recommended)", description: "Website click-to-edit overlays + side-by-side editing inside DatoCMS" },
+      { label: "Website click-to-edit only", description: "Content Link overlays on your live site, no side-by-side panel" },
+      { label: "Side-by-side only", description: "Preview panel inside DatoCMS editor, no website overlays" }
+    ],
+    multiSelect: false
+  },
+  {
+    question: "Enable real-time updates while editors type?",
+    header: "Realtime",
+    options: [
+      { label: "No (Recommended)", description: "Editors reload the preview manually. Simpler setup, fewer moving parts." },
+      { label: "Yes", description: "Preview updates live as editors type. Requires an SSE subscription per page." }
+    ],
+    multiSelect: false
+  }
+]
+```
+
+### Fallback (Codex / non-interactive)
+
+When `AskUserQuestion` is not available, present the same choices as a
+numbered list in plain text. Keep the same structure: label the recommended
+default, describe what each option does, and state what happens on skip.

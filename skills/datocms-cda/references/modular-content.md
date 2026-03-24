@@ -232,6 +232,8 @@ const data = await executeQuery(query, {
   variables: { slug: "about" },
 });
 
+if (!data.page) throw new Error("Page not found");
+
 for (const section of data.page.sections) {
   switch (section._modelApiKey) {
     case "hero_section":

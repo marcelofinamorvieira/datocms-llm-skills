@@ -15,6 +15,7 @@ This reference provides the standard project structure and configuration files f
 
 ```
 my-plugin/
+├── .gitignore
 ├── package.json
 ├── tsconfig.json
 ├── tsconfig.app.json
@@ -32,6 +33,14 @@ my-plugin/
     │   └── ...
     ├── components/           # Shared components
     └── types.ts              # Shared type definitions (if needed)
+```
+
+## `.gitignore`
+
+```
+node_modules/
+dist/
+.env
 ```
 
 ## `package.json`
@@ -65,9 +74,9 @@ my-plugin/
   "devDependencies": {
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^5",
+    "@vitejs/plugin-react": "^6",
     "typescript": "^5",
-    "vite": "^7"
+    "vite": "^8"
   },
   "overrides": {
     "datocms-react-ui": {

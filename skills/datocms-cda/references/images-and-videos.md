@@ -60,7 +60,7 @@ DatoCMS supports **all** imgix URL API parameters. Common ones:
 | `w` | `Int` | Width |
 | `h` | `Int` | Height |
 | `fit` | `ImgixParamsFit` | Resize mode: `crop`, `clip`, `fill`, `max`, `min`, `scale` |
-| `auto` | `ImgixParamsAuto` | Automatic optimizations: `format`, `compress`, or both via array `[format, compress]` |
+| `auto` | `ImgixParamsAuto` | Automatic optimizations. Pass a single value (`auto: format`) or an array (`auto: [format, compress]`) |
 | `fm` | `ImgixParamsFm` | Output format: `jpg`, `png`, `webp`, `gif`, `avif` |
 | `q` | `Int` | Quality (1-100) |
 | `crop` | `ImgixParamsCrop` | Crop mode: `focalpoint`, `faces`, `entropy`, `edges`, `top`, `bottom`, `left`, `right`, `center` |
@@ -290,7 +290,8 @@ const data = await executeQuery(query, {
   variables: { slug: "hello-world" },
 });
 
-const image = data.blogPost.coverImage.responsiveImage;
+const image = data.blogPost?.coverImage?.responsiveImage;
+if (!image) throw new Error("Blog post or cover image not found");
 
 // Use in an <img> element:
 // <img

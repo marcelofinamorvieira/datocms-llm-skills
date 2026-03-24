@@ -56,12 +56,12 @@ For full [Web Previews plugin](https://www.datocms.com/marketplace/plugins/i/dat
 <script>
   import { ContentLink } from '@datocms/svelte';
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
 </script>
 
 <ContentLink
   onNavigateTo={(path) => goto(path)}
-  currentPath={$page.url.pathname}
+  currentPath={page.url.pathname}
 />
 ```
 
@@ -72,12 +72,12 @@ Place this in your root `+layout.svelte`:
 <script>
   import { ContentLink } from '@datocms/svelte';
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
 </script>
 
 <ContentLink
   onNavigateTo={(path) => goto(path)}
-  currentPath={$page.url.pathname}
+  currentPath={page.url.pathname}
 />
 
 <slot />
@@ -256,7 +256,7 @@ Then, in your custom components, wrap the root element with `data-datocms-conten
 ```svelte
 <!-- Block.svelte -->
 <script>
-  export let block;
+  const { block } = $props();
 </script>
 
 <div data-datocms-content-link-boundary>
@@ -268,7 +268,7 @@ Then, in your custom components, wrap the root element with `data-datocms-conten
 ```svelte
 <!-- InlineBlock.svelte -->
 <script>
-  export let block;
+  const { block } = $props();
 </script>
 
 <span data-datocms-content-link-boundary>
@@ -279,7 +279,7 @@ Then, in your custom components, wrap the root element with `data-datocms-conten
 ```svelte
 <!-- InlineItem.svelte -->
 <script>
-  export let link;
+  const { link } = $props();
 </script>
 
 <span data-datocms-content-link-boundary>
@@ -292,7 +292,7 @@ Item link components don't need a boundary — their content belongs to the surr
 ```svelte
 <!-- ItemLink.svelte -->
 <script>
-  export let link;
+  const { link } = $props();
 </script>
 
 <a href={`/posts/${link.slug}`}>
@@ -344,7 +344,7 @@ if (decoded) {
 
 ### Navigation not syncing with Web Previews plugin
 1. Provide both `onNavigateTo` and `currentPath` props
-2. Verify `currentPath` updates on navigation (use `$page.url.pathname` in SvelteKit)
+2. Verify `currentPath` updates on navigation (use `page.url.pathname` in SvelteKit)
 
 ### StructuredText blocks not clickable
 1. Wrap with `data-datocms-content-link-group`
