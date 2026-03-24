@@ -100,9 +100,23 @@ gone.
 Each public skill can be installed on its own, but the full public set gives
 the smoothest cross-skill routing.
 
-### Claude Code Plugin (recommended)
+### Any agent — npx skills (recommended)
 
-This repo ships as a Claude Code plugin. Add the marketplace and install:
+Works with Claude Code, Codex, Cursor, Copilot, and 40+ other agents:
+
+```bash
+npx skills add marcelofinamorvieira/datocms-llm-skills
+```
+
+Installs all 8 skills at once. Uses symlinks by default so updates are easy:
+
+```bash
+npx skills update
+```
+
+### Claude Code Plugin
+
+This repo also ships as a Claude Code plugin. Add the marketplace and install:
 
 ```bash
 /plugin marketplace add marcelofinamorvieira/datocms-llm-skills
