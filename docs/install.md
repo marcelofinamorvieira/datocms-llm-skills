@@ -10,6 +10,7 @@ other than the default "install the full set into my local skills folder".
 - You want a detached copy instead of symlinks.
 - You want the canonical path map for each shipped skill.
 - You want details on the Claude Code plugin install.
+- You want to understand how updates work.
 
 ## Claude Code Plugin Install
 
@@ -27,18 +28,71 @@ a Claude Code plugin. This is the recommended approach for Claude Code users.
 
 Skills are namespaced as `/datocms:<skill-name>` (e.g. `/datocms:datocms-cda`).
 
-To install at a specific scope:
+### Installation Scopes
+
+Plugins can be installed at three scopes, each with different visibility and
+persistence:
+
+| Scope | Flag | Where it lives | Who sees it | Version-controlled? |
+|-------|------|---------------|-------------|---------------------|
+| **User** (default) | `--scope user` | `~/.claude/plugins/` | You, in every project | No |
+| **Project** | `--scope project` | `.claude/plugins/` in the project root | Everyone who clones the repo | Yes |
+| **Local** | `--scope local` | `.claude/plugins/` in the project root (gitignored) | Only you, only in this project | No |
 
 ```bash
-# User scope (default) — available in all projects
+# User scope (default) — available in all your projects on this machine
 /plugin install datocms@datocms-skills --scope user
 
 # Project scope — shared with the team via version control
+# Good for teams that all use DatoCMS in the same repo
 /plugin install datocms@datocms-skills --scope project
 
 # Local scope — project-specific, gitignored
+# Good for personal experimentation without affecting teammates
 /plugin install datocms@datocms-skills --scope local
 ```
+
+**Which scope should I use?**
+
+- **Individual developer**: Use `user` (default). The DatoCMS skills are
+  available in every project without any per-project setup.
+- **Team standardization**: Use `project`. Every teammate who clones the repo
+  gets the DatoCMS skills automatically.
+- **Trying it out**: Use `local`. You can experiment without committing anything.
+
+### Updates
+
+Plugins are **cached locally** after installation. When the plugin is updated
+upstream (new commit + version bump in `plugin.json`), users need to update
+their local copy.
+
+**Auto-update:** For third-party marketplaces (like this one), auto-update is
+disabled by default. To enable it:
+
+1. Run `/plugin` to open the plugin manager
+2. Go to the **Marketplaces** tab
+3. Select the `datocms-skills` marketplace
+4. Choose **Enable auto-update**
+
+Once enabled, Claude Code refreshes marketplace data at startup and prompts
+you to run `/reload-plugins` when updates are available.
+
+**Manual update:**
+
+```bash
+# Update the plugin to the latest version
+claude plugin update datocms@datocms-skills
+
+# Reload plugins in the current session
+/reload-plugins
+```
+
+**Important:** If the plugin version number in `plugin.json` has not changed,
+Claude Code considers the cached copy up to date and will not fetch changes.
+Plugin authors must bump the version in `.claude-plugin/plugin.json` for
+updates to propagate.
+
+### Local Development
 
 To test local changes during development without installing:
 

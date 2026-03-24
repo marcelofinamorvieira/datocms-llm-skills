@@ -15,21 +15,64 @@ setup. This README is the main guide for the repo.
 - `datocms-plugin-scaffold`: scaffold new DatoCMS plugin projects.
 - `datocms-setup`: one-time setup orchestrator for frontend foundation/features, migrations, onboarding imports, and platform automation.
 
-## Setup Skill Behavior
+## Usage
 
-`datocms-setup` is meant to be called explicitly.
+### Implicit skills (7 of 8)
 
-Its host metadata sets `allow_implicit_invocation: false`, so it does not
-auto-trigger from a generic request like "install visual editing in my
-project". Use `$datocms-setup` when you want the setup wizard to inspect the
-repo, choose the right internal recipe, and queue prerequisites automatically.
-
-After you call `$datocms-setup`, write the prompt as the outcome you want in
-plain language. You do not need to know the internal recipe ids, but using
-terms like `content link`, `visual editing`, `click-to-edit`, or `draft mode`
-helps the router land on the smallest matching setup bundle.
+The first 7 skills listed above trigger **automatically** — you do not need to
+invoke them. Just describe what you want in plain language and the right skill
+activates based on your request.
 
 Examples:
+
+```text
+Write a GraphQL query to fetch all blog posts with images
+                                          → triggers datocms-cda
+
+Create a migration that adds a "category" field to the blog_post model
+                                          → triggers datocms-cli
+
+Bulk-publish all draft records of type "article"
+                                          → triggers datocms-cma
+
+Add draft mode to my Next.js app
+                                          → triggers datocms-frontend-integrations
+
+Add a sidebar panel to my plugin that shows word count
+                                          → triggers datocms-plugin-builder
+
+Make my plugin config screen match the DatoCMS style
+                                          → triggers datocms-plugin-design-system
+
+Create a new DatoCMS plugin from scratch
+                                          → triggers datocms-plugin-scaffold
+```
+
+### Setup skill (explicit only)
+
+`datocms-setup` does **not** trigger automatically. You must invoke it
+explicitly:
+
+| Platform | Invocation |
+|----------|-----------|
+| **Claude Code** | `/datocms:datocms-setup <your request>` |
+| **Codex** | `$datocms-setup <your request>` |
+
+Write the prompt as the outcome you want in plain language. You do not need to
+know the internal recipe ids, but using terms like `content link`,
+`visual editing`, `click-to-edit`, or `draft mode` helps the router land on the
+smallest matching setup bundle.
+
+Examples (Claude Code):
+
+```text
+/datocms:datocms-setup install visual editing in this project
+/datocms:datocms-setup set up draft mode and web previews
+/datocms:datocms-setup add migrations and a release workflow
+/datocms:datocms-setup set up click-to-edit overlays for draft pages
+```
+
+Examples (Codex):
 
 ```text
 $datocms-setup install visual editing in this project
@@ -37,17 +80,8 @@ $datocms-setup set up draft mode and web previews
 $datocms-setup add migrations and a release workflow
 ```
 
-For Content Link specifically, prompts like these are a good fit:
-
-```text
-$datocms-setup install content link in this project
-$datocms-setup add visual editing to this app
-$datocms-setup set up click-to-edit overlays for draft pages
-$datocms-setup enable content-link for this repo and wire any missing prerequisites
-```
-
-If draft mode is missing, `datocms-setup` should queue that prerequisite in the
-same run instead of requiring a second explicit setup call.
+If a prerequisite is missing (e.g., draft mode is needed before web previews),
+the setup skill queues it in the same run instead of requiring a second call.
 
 Inside `datocms-setup`, setup work is organized into five internal lanes:
 
@@ -57,7 +91,7 @@ Inside `datocms-setup`, setup work is organized into five internal lanes:
 - `onboarding`: `contentful-import`, `wordpress-import`
 - `platform`: `cma-types`, `webhooks`, `build-triggers`
 
-Setup work should be reported as `scaffolded` when placeholders or unresolved
+Setup work is reported as `scaffolded` when placeholders or unresolved
 project-specific values remain, and `production-ready` only when those gaps are
 gone.
 
@@ -76,6 +110,12 @@ This repo ships as a Claude Code plugin. Add the marketplace and install:
 ```
 
 Skills are namespaced under the plugin name (e.g. `/datocms:datocms-cda`).
+
+**Updates:** After installation, enable auto-update so you always get the
+latest skill improvements: run `/plugin`, go to **Marketplaces**, select
+`datocms-skills`, and choose **Enable auto-update**. Or update manually with
+`claude plugin update datocms@datocms-skills`. See [docs/install.md](docs/install.md)
+for scopes, update details, and single-skill install options.
 
 To test locally during development:
 
@@ -103,6 +143,12 @@ Restart Codex after installing. Then verify all 8 skills were picked up by
 running `ls ~/.codex/skills/ | grep datocms`. You should see all 8 folders
 listed. If any are missing, re-run `$skill-installer` for the missing skill
 individually.
+
+**Updates:** The `$skill-installer` copies skill files into `~/.codex/skills/`.
+These are frozen snapshots — there is no auto-update. To get the latest
+version after the repo is updated, re-run the same `$skill-installer` command
+above. It will overwrite the existing copies with the latest files from the
+repo.
 
 ## Repo Layout
 
