@@ -172,6 +172,19 @@ for await (const call of client.webhookCalls.listPagedIterator({
 }
 ```
 
+### Find a Specific Webhook Call
+
+```ts
+const call = await client.webhookCalls.find("webhook-call-id");
+
+console.log(call.request_url);
+console.log(call.request_headers);
+console.log(call.request_payload);
+console.log(call.response_status);
+console.log(call.response_headers);
+console.log(call.response_payload);
+```
+
 ### Resend a Failed Webhook
 
 ```ts
@@ -362,6 +375,18 @@ await client.buildTriggers.trigger("trigger-id");
 
 ```ts
 await client.buildTriggers.abort("trigger-id");
+```
+
+### Trigger Site Search Re-indexing
+
+```ts
+await client.buildTriggers.reindex("trigger-id");
+```
+
+### Abort a Running Search Indexing
+
+```ts
+await client.buildTriggers.abortIndexing("trigger-id");
 ```
 
 ---

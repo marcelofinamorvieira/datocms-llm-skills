@@ -74,9 +74,21 @@ const client = buildClient({
 | Roles | `client.roles` | CRUD, duplicate |
 | API tokens | `client.accessTokens` | CRUD, regenerate |
 | Workflows | `client.workflows` | CRUD |
-| Site | `client.site` | Find site settings such as locales |
+| Site | `client.site` | Find and update site settings (locales, timezone, global SEO) |
+| Menu items | `client.menuItems` | CRUD, organize dashboard navigation |
+| Schema menu items | `client.schemaMenuItems` | CRUD, organize schema sidebar |
+| Plugins | `client.plugins` | CRUD, list fields using a plugin |
+| Maintenance mode | `client.maintenanceMode` | Find, activate, deactivate |
+| Record filters | `client.itemTypeFilters` | CRUD for saved record list filters |
+| Upload filters | `client.uploadFilters` | CRUD for saved upload filters |
+| Upload tracks | `client.uploadTracks` | Create, list, destroy video subtitle tracks |
+| Upload tags | `client.uploadTags` | List, create manual asset tags |
+| Job results | `client.jobResults` | Find async job status (usually auto-polled) |
+| Audit log | `client.auditLogEvents` | Query events with filters |
+| Subscription limits | `client.subscriptionLimits` | List plan limits and current usage |
+| Search results | `client.searchResults` | CMA-side site search |
 
-The client also exposes resources for record versions, webhook calls, audit logs, SSO, search indexes, plugins, maintenance mode, and more.
+The client also exposes resources for record versions, webhook calls, SSO, daily usage, subscription features, white-label settings, and more.
 
 ---
 

@@ -8,8 +8,11 @@ description: >-
   record sets, upload assets from URL/local files and set metadata, update
   structured text or block payloads, create/modify schema (models/fields/blocks),
   fork/promote environments, configure webhooks and build triggers, manage roles
-  and API tokens, schedule publish/unpublish workflows, and consume generated CMA
-  schema types for type-safe record operations.
+  and API tokens, schedule publish/unpublish workflows, consume generated CMA
+  schema types for type-safe record operations, manage dashboard and schema menus,
+  install and configure plugins, update project settings and maintenance mode,
+  create saved filters, query audit logs and usage analytics, manage upload
+  tracks and tags, and check subscription limits.
 ---
 
 # DatoCMS Content Management API Skill
@@ -63,6 +66,11 @@ Classify the user's task into one or more categories. Ask follow-up questions on
 - **Scheduling** — Schedule publish/unpublish, manage workflows
 - **Migration & scripting** — Bulk data operations, content seeding, field migrations
 - **Type generation** — Consume generated CMA schema types or wire typed record operations
+- **Dashboard & schema menu management** — Organize navigation sidebar items, group models in menus
+- **Plugin management** — Install, configure, or audit plugins programmatically
+- **Project settings & usage** — Site settings, maintenance mode, subscription limits, usage tracking, white-label
+- **Saved filters** — Create or manage saved record/upload filter views
+- **Audit & debugging** — Query audit logs, inspect async job results, CMA-side search
 
 If the user's request is clear and falls into an obvious category, skip the clarifying questions and proceed directly.
 
@@ -90,6 +98,11 @@ Based on the task classification, read the appropriate reference files from the 
 - `Scheduling` → `references/scheduling.md`
 - `Migration & scripting` → `references/migration-patterns.md`
 - `Type generation` → `references/type-generation.md`
+- `Dashboard & schema menu management` → `references/dashboard-and-schema-menus.md`
+- `Plugin management` → `references/plugins.md`
+- `Project settings & usage` → `references/project-settings-and-usage.md`
+- `Saved filters` → `references/saved-filters.md`
+- `Audit & debugging` → `references/async-jobs-and-search.md`
 
 **Load cross-cutting references when needed:**
 - If the task involves localized fields in any context → also load `references/localization.md`
@@ -98,6 +111,9 @@ Based on the task classification, read the appropriate reference files from the 
 - If the task involves DAST structured text, `SchemaRepository`, `inspectItem()`, or block traversal utilities → also load `references/structured-text-and-block-tools.md`
 - If the task involves listing many records → also load `references/filtering-and-pagination.md`
 - If the task is a migration script → also load `references/migration-patterns.md` plus whatever domain refs are needed
+- If the task involves video upload subtitles/tracks or upload tag management → also load `references/upload-tracks-and-tags.md`
+- If the task involves maintenance mode before a migration → also load `references/project-settings-and-usage.md`
+- If the task involves checking subscription limits before bulk operations → also load `references/project-settings-and-usage.md`
 
 ---
 

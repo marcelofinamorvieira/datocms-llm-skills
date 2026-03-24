@@ -280,6 +280,28 @@ for await (const version of client.itemVersions.listPagedIterator(
 }
 ```
 
+### Finding a Specific Version
+
+```ts
+const version = await client.itemVersions.find("version-id");
+
+console.log(version.id);
+console.log(version.meta.created_at);
+console.log(version.item); // the record snapshot at that version
+```
+
+### Restoring a Previous Version
+
+Restoring a version creates a new version whose content matches the restored one. It does not delete any existing versions.
+
+```ts
+const restored = await client.itemVersions.restore("version-id");
+
+console.log(restored.id); // the newly created version ID
+```
+
+**Important:** After restoring, the record's current content matches the restored version but the record remains in its current publication state. Publish explicitly if needed.
+
 ---
 
 ## Validation

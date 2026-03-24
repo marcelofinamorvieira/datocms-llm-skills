@@ -283,6 +283,12 @@ const invitations = await client.siteInvitations.list();
 await client.siteInvitations.destroy("invitation-id");
 ```
 
+### Resending an Invitation
+
+```ts
+await client.siteInvitations.resend("invitation-id");
+```
+
 ---
 
 ## SSO Users and Groups
