@@ -207,6 +207,87 @@ for (const event of recentEvents) {
 
 ---
 
+## Type Reference
+
+All types are imported from `@datocms/cma-client`:
+
+```ts
+import type {
+  JobResult,
+  SearchResult,
+  SearchResultInstancesHrefSchema,
+  AuditLogEvent,
+  AuditLogEventQuerySchema,
+} from "@datocms/cma-client";
+```
+
+> **Note:** These types are auto-generated from the DatoCMS API schema. Always refer to the installed package version as the source of truth, since fields may change between releases.
+
+### Response Types
+
+#### `JobResult`
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | The job ID |
+| `type` | `'job_result'` | JSON:API resource type |
+| `status` | `number` | HTTP-style status code of the delayed response (`200` for success, `422` for failure) |
+| `payload` | `null \| { [k: string]: unknown }` | JSON:API response body of the completed operation, or `null` if not yet available |
+
+#### `SearchResult`
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | The search result ID |
+| `type` | `'search_result'` | JSON:API resource type |
+| `title` | `string` | Title of the page |
+| `body_excerpt` | `string` | First 200 characters of the page body, unformatted |
+| `url` | `string` | URL of the matching page |
+| `score` | `number` | Relevance score for the match |
+| `highlight` | `{ title?: string[] \| null; body?: string[] \| null }` | Highlighted snippets from the title and body that matched the query |
+
+#### `AuditLogEvent`
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | The event ID |
+| `type` | `'audit_log_event'` | JSON:API resource type |
+| `action_name` | `string` | The actual action performed (e.g. `"create"`, `"publish"`, `"destroy"`) |
+| `actor` | `{ type: string; id: string; name: string }` | The actor who performed the action. `type` can be `"account"`, `"user"`, `"sso_user"`, or `"access_token"`. `name` is a human-readable representation (name, email, or username depending on actor type) |
+| `role` | `null \| { name: string; id: string }` | The role of the actor at the time the action was performed, or `null` if not applicable |
+| `environment` | `{ id: string; primary: boolean }` | The environment inside which the action was performed. `primary` indicates whether it was the primary environment at the time |
+| `request` | `{ path: string; method: string; id?: string; payload?: null \| { [k: string]: unknown } }` | The HTTP request that triggered the event. `path` is the full request path, `method` is the HTTP verb, `id` is the `X-Request-ID` header, and `payload` is the full request body |
+| `response` | `null \| { status: number; payload: { [k: string]: unknown } }` | The HTTP response returned by DatoCMS, or `null`. Includes the status code and the full response body |
+| `meta` | `{ occurred_at: string }` | Metadata for the event. `occurred_at` is the ISO 8601 date of when the event occurred |
+
+### Input Types
+
+#### `SearchResultInstancesHrefSchema`
+
+Used as the parameter object for `client.searchResults.list()`.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `page` | `{ offset?: number; limit?: number }` | No | Pagination parameters. `offset` is the zero-based index of the first result (defaults to `0`). `limit` is the maximum number of results to return (defaults to `20`, maximum `100`) |
+| `filter` | `object` | Yes | Filter attributes (see sub-fields below) |
+| `filter.query` | `string` | Yes | The text to search for |
+| `filter.fuzzy` | `boolean` | No | When set, enables fuzzy search using Levenshtein Edit Distance to match more results |
+| `filter.build_trigger_id` | `string` | No | The build trigger ID to search within. Required if more than one build trigger exists in the project |
+| `filter.locale` | `string` | No | Restrict the search to pages in a specific locale |
+
+#### `AuditLogEventQuerySchema`
+
+Used as the parameter object for `client.auditLogEvents.rawQuery()`.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `type` | `'audit_log_query'` | No | JSON:API resource type (automatically set by the client) |
+| `filter` | `string` | No | An SQL-like expression to filter the events |
+| `next_token` | `string` | No | Set this value to get remaining results when a `meta.next_token` was returned in the previous query response |
+| `detailed_log` | `boolean` | No | Whether to return a detailed log complete with full request and response payloads |
+
+---
+
 ## Complete Example: Query Audit Log for Recent Schema Changes
 
 ```ts

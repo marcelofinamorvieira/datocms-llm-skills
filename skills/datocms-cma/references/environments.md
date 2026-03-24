@@ -149,6 +149,56 @@ const records = await sandboxClient.items.list({
 
 ---
 
+## Type Reference
+
+```ts
+import { Environment, EnvironmentForkSchema, EnvironmentForkHrefSchema, EnvironmentRenameSchema } from "@datocms/cma-client/dist/types/generated/ApiTypes";
+```
+
+> **Note:** Types are imported from the generated API types. Always refer to the installed package for the most up-to-date definitions.
+
+### `Environment` (response type)
+
+Returned by `list()`, `find()`, `fork()`, `rename()`, `promote()`, and `destroy()`.
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | The environment ID |
+| `type` | `"environment"` | JSON API resource type |
+| `meta.status` | `"creating" \| "ready" \| "destroying"` | Current status of the environment |
+| `meta.fork_completion_percentage` | `number` (optional) | Fork progress (only present when status is `creating`) |
+| `meta.read_only_mode` | `boolean` | Whether the environment is in read-only mode (during fast fork) |
+| `meta.created_at` | `string` | ISO 8601 creation date |
+| `meta.last_data_change_at` | `string` | ISO 8601 date of last data change |
+| `meta.primary` | `boolean` | Whether this is the primary environment |
+| `meta.forked_from` | `string \| null` | ID of the source environment, or `null` |
+
+### `EnvironmentForkSchema` (input for `fork()`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` | Yes | The ID for the new forked environment |
+| `type` | `"environment"` | No | JSON API resource type |
+
+### `EnvironmentForkHrefSchema` (query params for `fork()`)
+
+Passed as the third argument to `client.environments.fork()`.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `immediate_return` | `boolean` | No | Return immediately instead of waiting for fork completion |
+| `fast` | `boolean` | No | Faster fork, but prevents writes to the source environment during the process |
+| `force` | `boolean` | No | Force fast fork even if collaborators are editing records |
+
+### `EnvironmentRenameSchema` (input for `rename()`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` | Yes | The new ID for the environment |
+| `type` | `"environment"` | No | JSON API resource type |
+
+---
+
 ## CI/CD Pattern: Fork → Migrate → Promote
 
 A common pattern for deploying schema changes through CI/CD:

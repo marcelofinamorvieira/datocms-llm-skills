@@ -348,6 +348,349 @@ await client.ssoSettings.update({
 
 ---
 
+## Type Reference
+
+**Import:** `import type { ApiTypes } from "@datocms/cma-client-node";`
+
+Type properties are based on `@datocms/cma-client@5.x`. Properties may differ on other versions.
+
+### Permission Object Shapes
+
+The four permission arrays on roles (`positive_item_type_permissions`, `negative_item_type_permissions`, `positive_upload_permissions`, `negative_upload_permissions`) share a common shape. They are documented here once to avoid repetition.
+
+#### Item Type Permission Object
+
+Used in `positive_item_type_permissions` and `negative_item_type_permissions`.
+
+| Field | Type | Description |
+|---|---|---|
+| `item_type` | `string \| null` (optional) | Model ID to scope to, or `null` for all models |
+| `workflow` | `string \| null` (optional) | Workflow ID to scope to, or `null` for any workflow |
+| `on_stage` | `string \| null` (optional) | Workflow stage the record must be on |
+| `to_stage` | `string \| null` (optional) | Target workflow stage (for `move_to_stage` action) |
+| `environment` | `string` | Environment ID this permission applies to |
+| `action` | `"all" \| "read" \| "update" \| "create" \| "duplicate" \| "delete" \| "publish" \| "edit_creator" \| "take_over" \| "move_to_stage"` | Permitted action |
+| `on_creator` | `"anyone" \| "self" \| "role" \| null` (optional) | Restrict to records by a certain creator |
+| `localization_scope` | `"all" \| "localized" \| "not_localized" \| null` (optional) | Content scope for the permission |
+| `locale` | `string \| null` (optional) | Specific locale (required when `localization_scope` is `"localized"`) |
+
+#### Upload Permission Object
+
+Used in `positive_upload_permissions` and `negative_upload_permissions`.
+
+| Field | Type | Description |
+|---|---|---|
+| `environment` | `string` | Environment ID this permission applies to |
+| `action` | `"all" \| "read" \| "update" \| "create" \| "delete" \| "edit_creator" \| "replace_asset"` | Permitted action |
+| `on_creator` | `"anyone" \| "self" \| "role" \| null` (optional) | Restrict to uploads by a certain creator |
+| `localization_scope` | `"all" \| "localized" \| "not_localized" \| null` (optional) | Content scope for the permission |
+| `locale` | `string \| null` (optional) | Specific locale (required when `localization_scope` is `"localized"`) |
+
+#### Build Trigger Permission Object
+
+Used in `positive_build_trigger_permissions` and `negative_build_trigger_permissions`.
+
+| Field | Type | Description |
+|---|---|---|
+| `build_trigger` | `string \| null` (optional) | Build trigger ID, or `null` for all triggers |
+
+---
+
+### `ApiTypes.Role`
+
+Returned by `list()`, `find()`, `create()`, `update()`, `duplicate()`, and `destroy()`.
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | Role ID |
+| `type` | `"role"` | JSON API resource type |
+| `name` | `string` | The name of the role |
+| `can_edit_favicon` | `boolean` | Can edit favicon, global SEO settings, and no-index policy |
+| `can_edit_site` | `boolean` | Can change project global properties |
+| `can_edit_schema` | `boolean` | Can create/edit models and plugins |
+| `can_manage_menu` | `boolean` | Can customize content navigation bar |
+| `can_edit_environment` | `boolean` | Can change locales, timezone, and UI theme |
+| `can_promote_environments` | `boolean` | Can promote environments to primary and manage maintenance mode |
+| `environments_access` | `"all" \| "primary_only" \| "sandbox_only" \| "none"` | Which environments the role can access |
+| `can_manage_users` | `boolean` | Can create/edit roles and invite/remove collaborators |
+| `can_manage_shared_filters` | `boolean` | Can create/edit shared filters |
+| `can_manage_upload_collections` | `boolean` | Can create/edit upload collections |
+| `can_manage_build_triggers` | `boolean` | Can create/edit build triggers |
+| `can_manage_webhooks` | `boolean` | Can create/edit webhooks |
+| `can_manage_environments` | `boolean` | Can create/delete sandbox environments and promote them |
+| `can_manage_sso` | `boolean` | Can manage Single Sign-On settings |
+| `can_access_audit_log` | `boolean` | Can access audit log |
+| `can_manage_workflows` | `boolean` | Can create/edit workflows |
+| `can_manage_access_tokens` | `boolean` | Can manage API tokens |
+| `can_perform_site_search` | `boolean` | Can perform Site Search API calls |
+| `can_access_build_events_log` | `boolean` | Can access the build events log |
+| `positive_item_type_permissions` | [Item Type Permission Object](#item-type-permission-object)`[]` | Allowed actions on models |
+| `negative_item_type_permissions` | [Item Type Permission Object](#item-type-permission-object)`[]` | Prohibited actions on models |
+| `positive_upload_permissions` | [Upload Permission Object](#upload-permission-object)`[]` | Allowed actions on uploads |
+| `negative_upload_permissions` | [Upload Permission Object](#upload-permission-object)`[]` | Prohibited actions on uploads |
+| `positive_build_trigger_permissions` | [Build Trigger Permission Object](#build-trigger-permission-object)`[]` | Allowed build triggers |
+| `negative_build_trigger_permissions` | [Build Trigger Permission Object](#build-trigger-permission-object)`[]` | Prohibited build triggers |
+| `inherits_permissions_from` | `{ id: string; type: "role" }[]` | Roles this role inherits permissions from |
+| `meta.final_permissions` | `object` | The computed final set of permissions (same shape as the role's own permission fields, including inherited ones) |
+
+### `ApiTypes.RoleCreateSchema`
+
+Input for `client.roles.create()`.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | **Yes** | The name of the role |
+| `can_edit_favicon` | `boolean` | No | Can edit favicon, global SEO settings, and no-index policy |
+| `can_edit_site` | `boolean` | No | Can change project global properties |
+| `can_edit_schema` | `boolean` | No | Can create/edit models and plugins |
+| `can_manage_menu` | `boolean` | No | Can customize content navigation bar |
+| `can_edit_environment` | `boolean` | No | Can change locales, timezone, and UI theme |
+| `can_promote_environments` | `boolean` | No | Can promote environments to primary and manage maintenance mode |
+| `environments_access` | `"all" \| "primary_only" \| "sandbox_only" \| "none"` | No | Which environments the role can access |
+| `can_manage_users` | `boolean` | No | Can create/edit roles and invite/remove collaborators |
+| `can_manage_shared_filters` | `boolean` | No | Can create/edit shared filters |
+| `can_manage_upload_collections` | `boolean` | No | Can create/edit upload collections |
+| `can_manage_build_triggers` | `boolean` | No | Can create/edit build triggers |
+| `can_manage_webhooks` | `boolean` | No | Can create/edit webhooks |
+| `can_manage_environments` | `boolean` | No | Can create/delete sandbox environments and promote them |
+| `can_manage_sso` | `boolean` | No | Can manage Single Sign-On settings |
+| `can_access_audit_log` | `boolean` | No | Can access audit log |
+| `can_manage_workflows` | `boolean` | No | Can create/edit workflows |
+| `can_manage_access_tokens` | `boolean` | No | Can manage API tokens |
+| `can_perform_site_search` | `boolean` | No | Can perform Site Search API calls |
+| `can_access_build_events_log` | `boolean` | No | Can access the build events log |
+| `positive_item_type_permissions` | [Item Type Permission Object](#item-type-permission-object)`[]` | No | Allowed actions on models |
+| `negative_item_type_permissions` | [Item Type Permission Object](#item-type-permission-object)`[]` | No | Prohibited actions on models |
+| `positive_upload_permissions` | [Upload Permission Object](#upload-permission-object)`[]` | No | Allowed actions on uploads |
+| `negative_upload_permissions` | [Upload Permission Object](#upload-permission-object)`[]` | No | Prohibited actions on uploads |
+| `positive_build_trigger_permissions` | [Build Trigger Permission Object](#build-trigger-permission-object)`[]` | No | Allowed build triggers |
+| `negative_build_trigger_permissions` | [Build Trigger Permission Object](#build-trigger-permission-object)`[]` | No | Prohibited build triggers |
+| `inherits_permissions_from` | `{ id: string; type: "role" }[]` | No | Roles this role inherits permissions from |
+
+### `ApiTypes.RoleUpdateSchema`
+
+Input for `client.roles.update()`. All fields are optional.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | No | The name of the role |
+| `can_edit_favicon` | `boolean` | No | Can edit favicon, global SEO settings, and no-index policy |
+| `can_edit_site` | `boolean` | No | Can change project global properties |
+| `can_edit_schema` | `boolean` | No | Can create/edit models and plugins |
+| `can_manage_menu` | `boolean` | No | Can customize content navigation bar |
+| `can_edit_environment` | `boolean` | No | Can change locales, timezone, and UI theme |
+| `can_promote_environments` | `boolean` | No | Can promote environments to primary and manage maintenance mode |
+| `environments_access` | `"all" \| "primary_only" \| "sandbox_only" \| "none"` | No | Which environments the role can access |
+| `can_manage_users` | `boolean` | No | Can create/edit roles and invite/remove collaborators |
+| `can_manage_shared_filters` | `boolean` | No | Can create/edit shared filters |
+| `can_manage_upload_collections` | `boolean` | No | Can create/edit upload collections |
+| `can_manage_build_triggers` | `boolean` | No | Can create/edit build triggers |
+| `can_manage_webhooks` | `boolean` | No | Can create/edit webhooks |
+| `can_manage_environments` | `boolean` | No | Can create/delete sandbox environments and promote them |
+| `can_manage_sso` | `boolean` | No | Can manage Single Sign-On settings |
+| `can_access_audit_log` | `boolean` | No | Can access audit log |
+| `can_manage_workflows` | `boolean` | No | Can create/edit workflows |
+| `can_manage_access_tokens` | `boolean` | No | Can manage API tokens |
+| `can_perform_site_search` | `boolean` | No | Can perform Site Search API calls |
+| `can_access_build_events_log` | `boolean` | No | Can access the build events log |
+| `positive_item_type_permissions` | [Item Type Permission Object](#item-type-permission-object)`[]` | No | Allowed actions on models |
+| `negative_item_type_permissions` | [Item Type Permission Object](#item-type-permission-object)`[]` | No | Prohibited actions on models |
+| `positive_upload_permissions` | [Upload Permission Object](#upload-permission-object)`[]` | No | Allowed actions on uploads |
+| `negative_upload_permissions` | [Upload Permission Object](#upload-permission-object)`[]` | No | Prohibited actions on uploads |
+| `positive_build_trigger_permissions` | [Build Trigger Permission Object](#build-trigger-permission-object)`[]` | No | Allowed build triggers |
+| `negative_build_trigger_permissions` | [Build Trigger Permission Object](#build-trigger-permission-object)`[]` | No | Prohibited build triggers |
+| `inherits_permissions_from` | `{ id: string; type: "role" }[]` | No | Roles this role inherits permissions from |
+
+---
+
+### `ApiTypes.AccessToken`
+
+Returned by `list()`, `find()`, `create()`, `update()`, `regenerateToken()`, and `destroy()`.
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | API token ID |
+| `type` | `"access_token"` | JSON API resource type |
+| `name` | `string` | Name of the API token |
+| `token` | `string \| null` (optional) | The actual API token value. Only returned on create/regenerate; `null` otherwise |
+| `can_access_cda` | `boolean` | Whether this token can access the Content Delivery API published content endpoint |
+| `can_access_cda_preview` | `boolean` | Whether this token can access the Content Delivery API draft content endpoint |
+| `can_access_cma` | `boolean` | Whether this token can access the Content Management API |
+| `hardcoded_type` | `string \| null` | Internal token type identifier |
+| `role` | `{ id: string; type: "role" } \| null` | Associated role |
+
+### `ApiTypes.AccessTokenCreateSchema`
+
+Input for `client.accessTokens.create()`.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | **Yes** | Name of the API token |
+| `can_access_cda` | `boolean` | **Yes** | Whether this token can access the Content Delivery API published content endpoint |
+| `can_access_cda_preview` | `boolean` | **Yes** | Whether this token can access the Content Delivery API draft content endpoint |
+| `can_access_cma` | `boolean` | **Yes** | Whether this token can access the Content Management API |
+| `role` | `{ id: string; type: "role" } \| null` | **Yes** | Associated role |
+
+### `ApiTypes.AccessTokenUpdateSchema`
+
+Input for `client.accessTokens.update()`.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | **Yes** | Name of the API token |
+| `can_access_cda` | `boolean` | **Yes** | Whether this token can access the Content Delivery API published content endpoint |
+| `can_access_cda_preview` | `boolean` | **Yes** | Whether this token can access the Content Delivery API draft content endpoint |
+| `can_access_cma` | `boolean` | **Yes** | Whether this token can access the Content Management API |
+| `role` | `{ id: string; type: "role" } \| null` | **Yes** | Associated role |
+
+---
+
+### `ApiTypes.User`
+
+Returned by `list()`, `find()`, `update()`, and `destroy()`.
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | User ID |
+| `type` | `"user"` | JSON API resource type |
+| `email` | `string` | User email address |
+| `is_2fa_active` | `boolean` | Whether 2-factor authentication is active |
+| `full_name` | `string` | Full name |
+| `is_active` | `boolean` | Whether the user is active |
+| `role` | `{ id: string; type: "role" }` | Associated role |
+| `meta.last_access` | `string \| null` (optional) | Date of last reading/interaction |
+
+### `ApiTypes.UserUpdateSchema`
+
+Input for `client.users.update()`.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `is_active` | `boolean` | No | Whether the user is active |
+| `role` | `{ id: string; type: "role" }` | No | Associated role |
+
+---
+
+### `ApiTypes.SiteInvitation`
+
+Returned by `list()`, `find()`, `create()`, `update()`, `destroy()`, and `resend()`.
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | Invitation ID |
+| `type` | `"site_invitation"` | JSON API resource type |
+| `email` | `string` | Invitee email address |
+| `expired` | `boolean` | Whether this invitation has expired |
+| `invitation_link` | `string \| null` (optional) | The link to join the project. Only shown on creation and reset |
+| `role` | `{ id: string; type: "role" }` | Associated role |
+
+### `ApiTypes.SiteInvitationCreateSchema`
+
+Input for `client.siteInvitations.create()`.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `email` | `string` | **Yes** | Email of the person to invite |
+| `role` | `{ id: string; type: "role" }` | **Yes** | Role to assign to the invitee |
+
+### `ApiTypes.SiteInvitationUpdateSchema`
+
+Input for `client.siteInvitations.update()`.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `role` | `{ id: string; type: "role" }` | No | Updated role assignment |
+
+---
+
+### `ApiTypes.SsoUser`
+
+Returned by `list()`, `find()`, `copyUsers()`, and `destroy()`. SSO users cannot be updated directly -- their attributes are managed by the identity provider.
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | SSO user ID |
+| `type` | `"sso_user"` | JSON API resource type |
+| `username` | `string` | Email / username |
+| `external_id` | `string \| null` | Identity provider ID |
+| `is_active` | `boolean` | Whether this user is active on the identity provider |
+| `first_name` | `string \| null` | First name |
+| `last_name` | `string \| null` | Last name |
+| `groups` | `{ id: string; type: "sso_group" }[]` | SSO groups this user belongs to |
+| `role` | `{ id: string; type: "role" } \| null` | Directly assigned role (if any) |
+| `meta.last_access` | `string \| null` | Date of last reading/interaction |
+
+---
+
+### `ApiTypes.SsoGroup`
+
+Returned by `list()`, `copyRoles()`, `update()`, and `destroy()`.
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | SSO group ID |
+| `type` | `"sso_group"` | JSON API resource type |
+| `name` | `string` | Name of the group |
+| `priority` | `number` | When a user belongs to multiple groups, the role from the highest-priority group is used |
+| `role` | `{ id: string; type: "role" }` | Role assigned to this group |
+| `users` | `{ id: string; type: "sso_user" }[]` | SSO users in this group |
+
+### `ApiTypes.SsoGroupUpdateSchema`
+
+Input for `client.ssoGroups.update()`.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `priority` | `number` | **Yes** | Priority for role resolution across groups |
+| `role` | `{ id: string; type: "role" }` | **Yes** | Role to assign to this group |
+
+---
+
+### `ApiTypes.SsoSettings`
+
+Returned by `find()` and `update()`.
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | SSO settings ID |
+| `type` | `"sso_settings"` | JSON API resource type |
+| `idp_saml_metadata_url` | `string \| null` | URL of Identity Provider SAML Metadata endpoint |
+| `idp_saml_metadata_xml` | `string \| null` (optional) | Identity Provider SAML Metadata XML |
+| `scim_base_url` | `string` | DatoCMS SCIM base URL |
+| `saml_acs_url` | `string` | DatoCMS SAML ACS URL |
+| `sp_saml_metadata_url` | `string` | DatoCMS SAML Metadata URL |
+| `sp_saml_base_url` | `string` | DatoCMS SAML Base URL |
+| `saml_token` | `string` | DatoCMS SAML Token |
+| `scim_api_token` | `string` (optional) | DatoCMS SCIM API Token |
+| `default_role` | `{ id: string; type: "role" } \| null` | Default role for new SSO users |
+
+### `ApiTypes.SsoSettingsUpdateSchema`
+
+Input for `client.ssoSettings.update()`.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `idp_saml_metadata_url` | `string \| null` | No | URL of Identity Provider SAML Metadata endpoint |
+| `idp_saml_metadata_xml` | `string \| null` | No | Identity Provider SAML Metadata XML |
+| `default_role` | `{ id: string; type: "role" }` | No | Default role for new SSO users |
+
+---
+
+### `ApiTypes.Account`
+
+Returned by `client.account.find()`. Represents the project owner.
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | Account ID |
+| `type` | `"account"` | JSON API resource type |
+| `email` | `string` | Email address |
+| `first_name` | `string \| null` | First name |
+| `last_name` | `string \| null` | Last name |
+| `company` | `string \| null` | Company name |
+
+---
+
 ## Complete Example: Set Up a Content Editor Role with Token
 
 ```ts

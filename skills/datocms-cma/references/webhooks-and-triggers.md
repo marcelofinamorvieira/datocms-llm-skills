@@ -12,6 +12,7 @@ Covers webhook configuration, build trigger management, and deploy operations.
 - [Triggering and Aborting Deploys](#triggering-and-aborting-deploys)
 - [Listing, Updating, Deleting Build Triggers](#listing-updating-deleting-build-triggers)
 - [Build Events](#build-events)
+- [Type Reference](#type-reference)
 - [Complete Example: Set Up Webhook + Build Trigger](#complete-example-set-up-webhook--build-trigger)
 
 ---
@@ -420,6 +421,212 @@ for await (const event of client.buildEvents.listPagedIterator()) {
   console.log(event.id, event.event_type, event.created_at);
 }
 ```
+
+---
+
+## Type Reference
+
+These types are auto-generated from the DatoCMS CMA API schema. Always refer to the installed package for the most up-to-date definitions:
+
+```ts
+import type {
+  Webhook,
+  WebhookCreateSchema,
+  WebhookUpdateSchema,
+  WebhookCall,
+  WebhookCallInstancesHrefSchema,
+  BuildTrigger,
+  BuildTriggerCreateSchema,
+  BuildTriggerUpdateSchema,
+  BuildEvent,
+  BuildEventInstancesHrefSchema,
+} from "@datocms/cma-client";
+```
+
+> **Versioning note:** The exact shape of these types may change between `@datocms/cma-client` versions. If a property listed below does not match your installed version, the installed `.d.ts` file is the source of truth.
+
+### Webhook (Response)
+
+Returned by `client.webhooks.create()`, `find()`, `update()`, `list()`, and `destroy()`.
+
+| Property | Type |
+|---|---|
+| `id` | `string` |
+| `type` | `'webhook'` |
+| `name` | `string` |
+| `enabled` | `boolean` |
+| `url` | `string` |
+| `custom_payload` | `string \| null` |
+| `http_basic_user` | `string \| null` |
+| `http_basic_password` | `string \| null` |
+| `headers` | `Record<string, string>` |
+| `events` | `Array<{ entity_type, event_types, filters? }>` (see Events shape below) |
+| `payload_api_version` | `string` |
+| `nested_items_in_payload` | `boolean` |
+| `auto_retry` | `boolean` |
+
+**Events array shape** (applies to `Webhook`, `WebhookCreateSchema`, and `WebhookUpdateSchema`):
+
+Each entry in the `events` array has:
+
+| Property | Type |
+|---|---|
+| `entity_type` | `'item_type' \| 'item' \| 'upload' \| 'build_trigger' \| 'environment' \| 'maintenance_mode' \| 'sso_user' \| 'cda_cache_tags'` |
+| `event_types` | `Array<'create' \| 'update' \| 'delete' \| 'publish' \| 'unpublish' \| 'promote' \| 'deploy_started' \| 'deploy_succeeded' \| 'deploy_failed' \| 'change' \| 'invalidate'>` |
+| `filters?` | `Array<{ entity_type: 'item_type' \| 'item' \| 'build_trigger' \| 'environment' \| 'environment_type', entity_ids: [string, ...string[]] }> \| null` |
+
+### WebhookCreateSchema (Input)
+
+Passed to `client.webhooks.create()`.
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | Yes | Unique name for the webhook |
+| `url` | `string` | Yes | The URL to be called |
+| `headers` | `Record<string, string>` | Yes | Additional headers (pass `{}` if none) |
+| `events` | `Array<{ entity_type, event_types, filters? }>` | Yes | Event configurations (see Events shape above) |
+| `custom_payload` | `string \| null` | Yes | Mustache template string for a custom payload body, or `null` for the default JSON:API payload. When set, the entire request body is replaced by this rendered template. |
+| `http_basic_user` | `string \| null` | Yes | HTTP Basic auth username (pass `null` if unused) |
+| `http_basic_password` | `string \| null` | Yes | HTTP Basic auth password (pass `null` if unused) |
+| `enabled` | `boolean` | No | Whether the webhook is active (defaults to enabled) |
+| `payload_api_version` | `string` | No | API version for serializing entities in the payload |
+| `nested_items_in_payload` | `boolean` | No | Whether records in the payload show blocks expanded |
+| `auto_retry` | `boolean` | No | Retry on timeout or error |
+
+### WebhookUpdateSchema (Input)
+
+Passed to `client.webhooks.update()`. All fields are optional -- only include what you want to change.
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | No | Unique name for the webhook |
+| `url` | `string` | No | The URL to be called |
+| `headers` | `Record<string, string>` | No | Additional headers |
+| `events` | `Array<{ entity_type, event_types, filters? }>` | No | Event configurations (see Events shape above) |
+| `custom_payload` | `string \| null` | No | Mustache template string, or `null` for default payload |
+| `http_basic_user` | `string \| null` | No | HTTP Basic auth username |
+| `http_basic_password` | `string \| null` | No | HTTP Basic auth password |
+| `enabled` | `boolean` | No | Whether the webhook is active |
+| `payload_api_version` | `string` | No | API version for serializing entities in the payload |
+| `nested_items_in_payload` | `boolean` | No | Whether records in the payload show blocks expanded |
+| `auto_retry` | `boolean` | No | Retry on timeout or error |
+
+### WebhookCall (Response)
+
+Returned by `client.webhookCalls.find()` and `client.webhookCalls.listPagedIterator()`.
+
+| Property | Type |
+|---|---|
+| `id` | `string` |
+| `type` | `'webhook_call'` |
+| `entity_type` | `'item_type' \| 'item' \| 'upload' \| 'build_trigger' \| 'environment' \| 'maintenance_mode' \| 'sso_user' \| 'cda_cache_tags'` |
+| `event_type` | `'create' \| 'update' \| 'delete' \| 'publish' \| 'unpublish' \| 'promote' \| 'deploy_started' \| 'deploy_succeeded' \| 'deploy_failed' \| 'change' \| 'invalidate'` |
+| `created_at` | `string` |
+| `request_url` | `string` |
+| `request_headers` | `Record<string, unknown>` |
+| `request_payload` | `string` (JSON-encoded; use `JSON.parse()` to decode) |
+| `response_status` | `number \| null` |
+| `response_headers` | `Record<string, unknown> \| null` |
+| `response_payload` | `string \| null` |
+| `attempted_auto_retries_count` | `number` |
+| `last_sent_at` | `string` |
+| `next_retry_at` | `string \| null` |
+| `status` | `'pending' \| 'success' \| 'failed' \| 'rescheduled'` |
+| `webhook` | `{ type: 'webhook', id: string }` |
+
+### WebhookCallInstancesHrefSchema (Query Parameters)
+
+Passed to `client.webhookCalls.listPagedIterator()`.
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `page.offset` | `number` | No | Zero-based offset (defaults to 0) |
+| `page.limit` | `number` | No | Max entities to return (defaults to 30, max 500) |
+| `filter.ids` | `string` | No | IDs to fetch, comma separated |
+| `filter.fields.webhook_id.eq` | `string` | No | Filter by webhook ID |
+| `filter.fields.entity_type.eq` | `'item_type' \| 'item' \| 'upload' \| 'build_trigger' \| 'environment' \| 'maintenance_mode' \| 'sso_user' \| 'cda_cache_tags'` | No | Filter by entity type |
+| `filter.fields.event_type.eq` | `'create' \| 'update' \| 'delete' \| 'publish' \| 'unpublish' \| 'promote' \| 'deploy_started' \| 'deploy_succeeded' \| 'deploy_failed' \| 'change' \| 'invalidate'` | No | Filter by event type |
+| `filter.fields.status.eq` | `'pending' \| 'success' \| 'failed' \| 'rescheduled'` | No | Filter by delivery status |
+| `filter.fields.last_sent_at.gt` / `.lt` | `string` | No | Filter by last sent timestamp |
+| `filter.fields.next_retry_at.gt` / `.lt` | `string` | No | Filter by next retry timestamp |
+| `filter.fields.created_at.gt` / `.lt` | `string` | No | Filter by creation timestamp |
+| `order_by` | `'webhook_id_asc' \| 'webhook_id_desc' \| 'created_at_asc' \| 'created_at_desc' \| 'last_sent_at_asc' \| 'last_sent_at_desc' \| 'next_retry_at_asc' \| 'next_retry_at_desc'` | No | Sort order |
+
+### BuildTrigger (Response)
+
+Returned by `client.buildTriggers.create()`, `find()`, `update()`, `list()`, and `destroy()`.
+
+| Property | Type |
+|---|---|
+| `id` | `string` |
+| `type` | `'build_trigger'` |
+| `name` | `string` |
+| `adapter` | `'custom' \| 'netlify' \| 'vercel' \| 'circle_ci' \| 'gitlab' \| 'travis'` |
+| `adapter_settings` | `Record<string, unknown>` |
+| `last_build_completed_at` | `string \| null` |
+| `build_status` | `string` |
+| `webhook_token` | `string` (optional) |
+| `webhook_url` | `string` |
+| `indexing_status` | `string` |
+| `frontend_url` | `string \| null` |
+| `autotrigger_on_scheduled_publications` | `boolean` |
+| `indexing_enabled` | `boolean` |
+
+### BuildTriggerCreateSchema (Input)
+
+Passed to `client.buildTriggers.create()`.
+
+The `adapter_settings` object varies by adapter type. See the [Creating a Build Trigger](#creating-a-build-trigger) section above for adapter-specific examples (custom, Netlify, Vercel).
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | Yes | Name of the build trigger |
+| `adapter` | `'custom' \| 'netlify' \| 'vercel' \| 'circle_ci' \| 'gitlab' \| 'travis'` | Yes | Deployment adapter type |
+| `adapter_settings` | `Record<string, unknown>` | Yes | Adapter-specific configuration. Shape depends on `adapter`: **custom** expects `{ trigger_url, headers, payload }`. **netlify** expects `{ site_id, trigger_url, access_token, branch }`. **vercel** expects `{ project_id, team_id, deploy_hook_url, token, branch }`. |
+| `frontend_url` | `string \| null` | Yes | Public URL of the frontend (also used as Site Search start URL) |
+| `autotrigger_on_scheduled_publications` | `boolean` | Yes | Auto-trigger on scheduled publish/unpublish |
+| `indexing_enabled` | `boolean` | Yes | Whether Site Search spidering is enabled |
+| `webhook_token` | `string` | No | Unique token for the webhook |
+
+### BuildTriggerUpdateSchema (Input)
+
+Passed to `client.buildTriggers.update()`. All fields are optional -- only include what you want to change.
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | No | Name of the build trigger |
+| `adapter` | `'custom' \| 'netlify' \| 'vercel' \| 'circle_ci' \| 'gitlab' \| 'travis'` | No | Deployment adapter type |
+| `adapter_settings` | `Record<string, unknown>` | No | Adapter-specific configuration (see `BuildTriggerCreateSchema` for shape details) |
+| `frontend_url` | `string \| null` | No | Public URL of the frontend |
+| `autotrigger_on_scheduled_publications` | `boolean` | No | Auto-trigger on scheduled publish/unpublish |
+| `indexing_enabled` | `boolean` | No | Whether Site Search spidering is enabled |
+
+### BuildEvent (Response)
+
+Returned by `client.buildEvents.listPagedIterator()`.
+
+| Property | Type |
+|---|---|
+| `id` | `string` |
+| `type` | `'build_event'` |
+| `event_type` | `'request_success' \| 'request_failure' \| 'response_success' \| 'response_failure' \| 'request_aborted' \| 'response_unprocessable' \| 'indexing_started' \| 'indexing_success' \| 'indexing_failure'` |
+| `created_at` | `string` |
+| `data` | `Record<string, unknown>` |
+| `build_trigger` | `{ type: 'build_trigger', id: string }` |
+
+### BuildEventInstancesHrefSchema (Query Parameters)
+
+Passed to `client.buildEvents.listPagedIterator()`.
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `page.offset` | `number` | No | Zero-based offset (defaults to 0) |
+| `page.limit` | `number` | No | Max entities to return (defaults to 30, max 500) |
+| `filter.ids` | `string` | No | IDs to fetch, comma separated |
+| `filter.fields.build_trigger_id.eq` | `string` | No | Filter by build trigger ID |
+| `filter.fields.event_type.eq` | `'request_success' \| 'request_failure' \| 'response_success' \| 'response_failure' \| 'request_aborted' \| 'response_unprocessable' \| 'indexing_started' \| 'indexing_success' \| 'indexing_failure'` | No | Filter by event type |
+| `filter.fields.created_at.gt` / `.lt` | `string` | No | Filter by creation timestamp |
+| `order_by` | `'build_trigger_id_asc' \| 'build_trigger_id_desc' \| 'created_at_asc' \| 'created_at_desc' \| 'event_type_asc' \| 'event_type_desc'` | No | Sort order |
 
 ---
 

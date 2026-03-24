@@ -246,6 +246,175 @@ Use case: real-time quota monitoring, alerting when usage approaches plan limits
 
 ---
 
+## Type Reference
+
+**Import:** `import type { ApiTypes } from "@datocms/cma-client-node";`
+
+> **Note:** These types are auto-generated from the DatoCMS CMA OpenAPI schema. Always refer to the installed package version as the source of truth, since properties may change between releases.
+
+### `ApiTypes.Site` (Response)
+
+Returned by `client.site.find()`. Key properties are listed below; additional properties exist for internal settings.
+
+| Property | Type | Description |
+|---|---|---|
+| `id` | `SiteIdentity` | Unique project identifier |
+| `name` | `string` | Project display name |
+| `locales` | `[string, ...string[]]` | Available locales (first element is the primary locale) |
+| `timezone` | `string` | IANA timezone string (e.g. `"America/New_York"`) |
+| `no_index` | `boolean` | Whether search engines should be told not to index the project |
+| `favicon` | `string \| null` | Upload ID used as the project favicon |
+| `global_seo` | `object \| null` | Global SEO defaults (site_name, fallback_seo, title_suffix, facebook_page_url, twitter_account) |
+| `theme` | `object` | Admin UI theme with `type` (`"custom"` or `"monochromatic"`), `hue`, color objects (`primary_color`, `light_color`, `accent_color`, `dark_color`), and `logo` |
+| `domain` | `string \| null` | Custom domain for the administrative area |
+| `internal_domain` | `string \| null` | DatoCMS internal domain for the administrative area |
+| `google_maps_api_token` | `string \| null` | Google API key for the LatLon widget |
+| `imgix_host` | `string \| null` | Imgix host |
+| `last_data_change_at` | `string \| null` | ISO timestamp of the last data change |
+| `require_2fa` | `boolean` | Whether all users must use two-factor authentication |
+| `ip_tracking_enabled` | `boolean` | Whether IPs are tracked in the usage section |
+| `force_use_of_sandbox_environments` | `boolean` | If enabled, blocks schema changes on the primary environment |
+| `assets_cdn_default_settings` | `object` | Default CDN parameters for images (q, auto, cs) and videos (disable_serving_raw_videos) |
+| `item_types` | `ItemTypeData[]` | Relationship data for the project's models |
+| `meta` | `SiteMeta` | Meta attributes (created_at, draft_mode_default, etc.) |
+
+### `ApiTypes.SiteUpdateSchema` (Input)
+
+Passed to `client.site.update()`. All properties are optional (partial update). Commonly used properties are listed below.
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | No | Project display name |
+| `locales` | `[string, ...string[]]` | No | Available locales; first element becomes the primary locale |
+| `timezone` | `string` | No | IANA timezone string |
+| `no_index` | `boolean` | No | Whether search engines should not index the project |
+| `favicon` | `string \| null` | No | Upload ID for the favicon |
+| `global_seo` | `object \| null` | No | Global SEO defaults (same structure as the response type) |
+| `theme` | `object` | No | Admin UI theme — either `{ type: "monochromatic", hue, logo }` or `{ type: "custom", logo, primary_color, light_color, accent_color, dark_color? }` |
+| `require_2fa` | `boolean` | No | Require two-factor authentication for all users |
+| `ip_tracking_enabled` | `boolean` | No | Track IPs in the usage section |
+| `force_use_of_sandbox_environments` | `boolean` | No | Block schema changes on the primary environment |
+| `meta` | `object` | No | Opt-in product updates (improved_timezone_management, improved_hex_management, draft_mode_default, etc.) |
+
+### `ApiTypes.SiteSelfHrefSchema` (Query Parameters)
+
+Optional parameters when calling `client.site.find()`.
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `include` | `string` | No | Comma-separated relationship paths to include (allowed: `item_types`, `item_types.fields`, `item_types.fieldsets`, `item_types.singleton_item`, `account`) |
+
+### `ApiTypes.MaintenanceMode` (Response)
+
+Returned by `client.maintenanceMode.find()`.
+
+| Property | Type | Description |
+|---|---|---|
+| `id` | `MaintenanceModeIdentity` | Resource identifier |
+| `active` | `boolean` | Whether maintenance mode is currently active |
+
+### `ApiTypes.MaintenanceModeActivateHrefSchema` (Query Parameters)
+
+Optional parameters when calling `client.maintenanceMode.activate()`.
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `force` | `boolean` | No | Force activation even if collaborators are currently editing records |
+
+### `ApiTypes.PublicInfo` (Response)
+
+Returned by `client.publicInfo.find()`.
+
+| Property | Type | Description |
+|---|---|---|
+| `id` | `PublicInfoIdentity` | Resource identifier |
+| `name` | `string` | Project name |
+| `sso_saml_init_url` | `string \| null` | Single Sign-On URL, if configured |
+| `logo_url` | `string \| null` | Logo URL, if present |
+| `white_label` | `boolean` | Whether the project is in white-label mode |
+| `custom_i18n_messages_template_url` | `string \| null` | Template URL for custom i18n messages (white-label only) |
+| `theme` | `object` | Color scheme with `primary_color`, `light_color`, `accent_color`, `dark_color` (each has `red`, `green`, `blue`, `alpha`) |
+| `extras` | `object \| null` | Additional info on authenticated requests: `blocks_depth`, `blocks_per_item`, `maximum_single_upload_bytes` |
+
+### `ApiTypes.WhiteLabelSettings` (Response)
+
+Returned by `client.whiteLabelSettings.find()`.
+
+| Property | Type | Description |
+|---|---|---|
+| `id` | `WhiteLabelSettingsIdentity` | Resource identifier |
+| `custom_i18n_messages_template_url` | `string \| null` | URL of custom i18n messages (`:locale` placeholder represents the current DatoCMS UI locale) |
+
+### `ApiTypes.WhiteLabelSettingsUpdateSchema` (Input)
+
+Passed to `client.whiteLabelSettings.update()`.
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `custom_i18n_messages_template_url` | `string \| null` | No | URL of custom i18n messages (`:locale` placeholder for locale) |
+
+### `ApiTypes.SubscriptionLimit` (Response)
+
+Returned by `client.subscriptionLimits.list()` and `client.subscriptionLimits.find()`.
+
+| Property | Type | Description |
+|---|---|---|
+| `id` | `SubscriptionLimitIdentity` | Limit identifier (e.g. `"records"`, `"uploadable_bytes"`) |
+| `code` | `string` | Codename for the limit |
+| `usage` | `number` | Current usage count |
+| `limit` | `number \| null` | Maximum allowed value, or `null` for unlimited |
+
+### `ApiTypes.SubscriptionFeature` (Response)
+
+Returned by `client.subscriptionFeatures.list()`.
+
+| Property | Type | Description |
+|---|---|---|
+| `id` | `SubscriptionFeatureIdentity` | Feature identifier (e.g. `"sso"`, `"workflows"`) |
+| `code` | `string` | Codename for the feature |
+| `enabled` | `boolean` | Whether the feature is available on the current plan |
+| `in_use` | `boolean` (optional) | Whether the project is currently using the feature |
+
+### `ApiTypes.DailyUsage` (Response)
+
+Returned by `client.dailyUsages.list()`.
+
+| Property | Type | Description |
+|---|---|---|
+| `id` | `DailyUsageIdentity` | Resource identifier |
+| `date` | `string` | The date the data refer to |
+| `cda_api_calls` | `number` | Number of Content Delivery API calls |
+| `cma_api_calls` | `number` | Number of Content Management API calls |
+| `cda_traffic_bytes` | `number` | Content Delivery API traffic in bytes |
+| `cma_traffic_bytes` | `number` | Content Management API traffic in bytes |
+| `assets_traffic_bytes` | `number` | Upload/asset request traffic in bytes |
+| `mux_delivered_seconds` | `number` | Regular video streaming (max 1080p), in seconds |
+| `mux_high_resolution_delivered_seconds` | `number` | High-res video streaming (> 1080p), in seconds |
+| `mux_encoded_seconds` | `number` | Video encoding seconds |
+
+### `ApiTypes.UsageCounter` (Response)
+
+Returned by `client.usageCounters.find()`.
+
+| Property | Type | Description |
+|---|---|---|
+| `id` | `UsageCounterIdentity` | Counter identifier (e.g. `"api-calls"`) |
+| `result` | `Array<{ value: string; counter: number }>` | Array of occurrence/counter pairs |
+
+### `ApiTypes.UsageCounterSelfHrefSchema` (Query Parameters)
+
+Optional parameters when calling `client.usageCounters.find()`.
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `period` | `"today" \| "current_month" \| "last_month"` | No | Time period for the counter data |
+
+### `ApiTypes.SitePlan`
+
+The `SitePlan` type exists but is omitted from this reference due to its size. Refer to the installed `@datocms/cma-client` package types for the full definition.
+
+---
+
 ## Complete Example: Pre-Migration Environment Check
 
 A script that reads site settings, checks subscription limits, verifies maintenance mode status, activates maintenance mode, and logs everything — a typical pre-flight check before promoting a sandbox environment.

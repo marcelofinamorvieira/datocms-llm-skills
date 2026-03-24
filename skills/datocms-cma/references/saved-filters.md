@@ -16,6 +16,7 @@ Covers saved filter presets for both the record listing view (record filters) an
 - [Finding an Upload Filter](#finding-an-upload-filter)
 - [Updating an Upload Filter](#updating-an-upload-filter)
 - [Deleting an Upload Filter](#deleting-an-upload-filter)
+- [Type Reference](#type-reference)
 - [Complete Example](#complete-example-create-shared-filters-for-content-team)
 
 ---
@@ -183,6 +184,100 @@ console.log("Updated upload filter:", updatedUploadFilter.name);
 await client.uploadFilters.destroy("filter-id");
 console.log("Upload filter deleted");
 ```
+
+---
+
+## Type Reference
+
+```ts
+import type {
+  ItemTypeFilter,
+  ItemTypeFilterCreateSchema,
+  ItemTypeFilterUpdateSchema,
+  UploadFilter,
+  UploadFilterCreateSchema,
+  UploadFilterUpdateSchema,
+} from "@datocms/cma-client";
+```
+
+> **Note:** These types are auto-generated from the DatoCMS CMA API schema. Always refer to the installed package version for the most up-to-date definitions.
+
+### Response Types
+
+These types describe what the API **returns** (e.g., from `create`, `find`, `list`, `update`, `destroy`).
+
+#### `ItemTypeFilter`
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `string` | Unique identifier for the record filter |
+| `type` | `"item_type_filter"` | JSON API resource type |
+| `name` | `string` | The name of the filter |
+| `filter` | `{ [k: string]: unknown }` | Serialized filter state (mirrors the `filter` query parameter of the List all records endpoint) |
+| `columns` | `[{ name: string; width: number }, ...{ name: string; width: number }[]] \| null` | Visible columns and their widths, or `null` for defaults. `name` can be a field API key or a meta column (`id`, `_preview`, `_updated_at`, `_created_at`, `_creator`, `_status`, `_published_at`, `_first_published_at`, `_publication_scheduled_at`, `_unpublishing_scheduled_at`, `position`, `_stage`) |
+| `order_by` | `string \| null` | Sort order, or `null` for the default model ordering |
+| `shared` | `boolean` | Whether the filter is visible to all team members |
+| `item_type` | `{ type: string; id: string }` | The model this filter applies to |
+
+#### `UploadFilter`
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `string` | Unique identifier for the upload filter |
+| `type` | `"upload_filter"` | JSON API resource type |
+| `name` | `string` | The name of the filter |
+| `filter` | `{ [k: string]: unknown }` | Serialized filter state |
+| `shared` | `boolean` | Whether the filter is visible to all team members |
+
+### Input Types
+
+These types describe what you **pass in** when creating or updating resources.
+
+#### `ItemTypeFilterCreateSchema`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | `string` | No | Optional client-side ID |
+| `type` | `"item_type_filter"` | No | JSON API resource type |
+| `name` | `string` | **Yes** | The name of the filter |
+| `filter` | `{ [k: string]: unknown }` | No | Serialized filter state |
+| `columns` | `[{ name: string; width: number }, ...{ name: string; width: number }[]] \| null` | No | Visible columns and their widths |
+| `order_by` | `string \| null` | No | Sort order |
+| `shared` | `boolean` | No | Whether the filter is shared |
+| `item_type` | `{ type: string; id: string }` | **Yes** | The model this filter applies to |
+
+#### `ItemTypeFilterUpdateSchema`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | `string` | No | Optional client-side ID |
+| `type` | `"item_type_filter"` | No | JSON API resource type |
+| `name` | `string` | No | The name of the filter |
+| `filter` | `{ [k: string]: unknown }` | No | Serialized filter state |
+| `columns` | `[{ name: string; width: number }, ...{ name: string; width: number }[]] \| null` | No | Visible columns and their widths |
+| `order_by` | `string \| null` | No | Sort order |
+| `shared` | `boolean` | No | Whether the filter is shared |
+| `item_type` | `{ type: string; id: string }` | No | The model this filter applies to |
+
+#### `UploadFilterCreateSchema`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | `string` | No | Optional client-side ID |
+| `type` | `"upload_filter"` | No | JSON API resource type |
+| `name` | `string` | **Yes** | The name of the filter |
+| `filter` | `{ [k: string]: unknown }` | **Yes** | Serialized filter state |
+| `shared` | `boolean` | **Yes** | Whether the filter is shared |
+
+#### `UploadFilterUpdateSchema`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | `string` | No | Optional client-side ID |
+| `type` | `"upload_filter"` | No | JSON API resource type |
+| `name` | `string` | **Yes** | The name of the filter |
+| `filter` | `{ [k: string]: unknown }` | **Yes** | Serialized filter state |
+| `shared` | `boolean` | No | Whether the filter is shared |
 
 ---
 

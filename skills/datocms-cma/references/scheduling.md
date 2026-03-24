@@ -176,6 +176,105 @@ await client.workflows.destroy("workflow-id");
 
 ---
 
+## Type Reference
+
+```ts
+import {
+  ScheduledPublication,
+  ScheduledPublicationCreateSchema,
+  ScheduledUnpublishing,
+  ScheduledUnpublishingCreateSchema,
+  Workflow,
+  WorkflowCreateSchema,
+  WorkflowUpdateSchema,
+} from "@datocms/cma-client/dist/types/generated/ApiTypes";
+```
+
+> **Note:** Types are imported from the generated API types. Always refer to the installed package for the most up-to-date definitions.
+
+### `ScheduledPublication` (response type)
+
+Returned by `scheduledPublication.create()`.
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | The scheduled publication ID |
+| `type` | `"scheduled_publication"` | JSON API resource type |
+| `publication_scheduled_at` | `string` | ISO 8601 datetime for the scheduled publication |
+| `selective_publication` | `null \| { content_in_locales: string[]; non_localized_content: boolean }` | Which content to publish, or `null` for the whole record |
+| `item` | `ItemData` | The related record |
+
+### `ScheduledPublicationCreateSchema` (input for `scheduledPublication.create()`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `type` | `"scheduled_publication"` | No | JSON API resource type |
+| `publication_scheduled_at` | `string` | Yes | ISO 8601 datetime in the future |
+| `selective_publication` | `null \| { content_in_locales: string[]; non_localized_content: boolean }` | No | Locales and non-localized content to publish; omit or `null` to publish the whole record |
+
+### `ScheduledUnpublishing` (response type)
+
+Returned by `scheduledUnpublishing.create()`.
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | The scheduled unpublishing ID |
+| `type` | `"scheduled_unpublishing"` | JSON API resource type |
+| `unpublishing_scheduled_at` | `string` | ISO 8601 datetime for the scheduled unpublishing |
+| `content_in_locales` | `null \| string[]` | Locales to unpublish, or `null` to unpublish the whole record |
+| `item` | `ItemData` | The related record |
+
+### `ScheduledUnpublishingCreateSchema` (input for `scheduledUnpublishing.create()`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `type` | `"scheduled_unpublishing"` | No | JSON API resource type |
+| `unpublishing_scheduled_at` | `string` | Yes | ISO 8601 datetime in the future |
+| `content_in_locales` | `null \| string[]` | No | Locales to unpublish; omit or `null` to unpublish the whole record |
+
+### `Workflow` (response type)
+
+Returned by `workflows.create()`, `workflows.update()`, `workflows.find()`, `workflows.list()`, and `workflows.destroy()`.
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | The workflow ID |
+| `type` | `"workflow"` | JSON API resource type |
+| `name` | `string` | The name of the workflow |
+| `api_key` | `string` | Workflow API key |
+| `stages` | `Stage[]` (at least one) | The stages of the workflow |
+
+Each object in the `stages` array has the following shape:
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | Unique ID of the stage |
+| `name` | `string` | Display name of the stage |
+| `description` | `string \| null` (optional) | Description of the stage |
+| `initial` | `boolean` (optional) | Whether this is the initial stage; exactly one stage should be `true` |
+
+### `WorkflowCreateSchema` (input for `workflows.create()`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` | No | Optional custom ID |
+| `type` | `"workflow"` | No | JSON API resource type |
+| `name` | `string` | Yes | The name of the workflow |
+| `api_key` | `string` | Yes | Workflow API key |
+| `stages` | `Stage[]` (at least one) | Yes | The stages of the workflow (see stage shape above) |
+
+### `WorkflowUpdateSchema` (input for `workflows.update()`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` | No | Optional custom ID |
+| `type` | `"workflow"` | No | JSON API resource type |
+| `name` | `string` | No | The name of the workflow |
+| `api_key` | `string` | No | Workflow API key |
+| `stages` | `Stage[]` (at least one) | No | The stages of the workflow (see stage shape above) |
+
+---
+
 ## Complete Example: Set Up Editorial Workflow
 
 ```ts

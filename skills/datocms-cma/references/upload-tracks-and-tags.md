@@ -194,6 +194,86 @@ Use cases for smart tags include auditing AI-generated tags, building tag clouds
 
 ---
 
+## Type Reference
+
+These types are imported from `@datocms/cma-client/dist/types/generated/ApiTypes`. Always check the installed package for the most up-to-date definitions, as they may change between versions.
+
+```ts
+import type {
+  UploadTrack,
+  UploadTrackCreateSchema,
+  UploadTag,
+  UploadTagCreateSchema,
+  UploadTagInstancesHrefSchema,
+  UploadSmartTag,
+  UploadSmartTagInstancesHrefSchema,
+} from "@datocms/cma-client/dist/types/generated/ApiTypes";
+```
+
+### `UploadTrack` (response)
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | Unique track identifier |
+| `type` | `"subtitles" \| "audio"` | The type of track (audio or subtitles) |
+| `name` | `string` | The human-readable name of the track |
+| `language_code` | `string` | A valid BCP 47 specification compliant language code |
+| `error` | `null \| string` | When status is `"errored"`, explains the reason for the error |
+| `status` | `"preparing" \| "ready" \| "errored"` | The status of the asset |
+| `closed_captions` | `null \| boolean` | Indicates if the track provides subtitles for the Deaf or Hard-of-hearing (SDH) |
+| `upload` | `{ type: "upload", id: string }` | Reference to the parent upload |
+
+### `UploadTrackCreateSchema` (input)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `type` | `"subtitles" \| "audio"` | Yes | The type of track (audio or subtitles) |
+| `url_or_upload_request_id` | `string` | Yes | Either a URL to download, or the ID of an upload request |
+| `name` | `string` | No | The human-readable name of the track |
+| `language_code` | `string` | Yes | A valid BCP 47 specification compliant language code |
+| `closed_captions` | `null \| boolean` | No | Indicates if the track provides subtitles for the Deaf or Hard-of-hearing (SDH) |
+
+### `UploadTag` (response)
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | Unique tag identifier |
+| `type` | `"upload_tag"` | JSON API resource type |
+| `name` | `string` | The tag name |
+
+### `UploadTagCreateSchema` (input)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `type` | `"upload_tag"` | No | JSON API resource type |
+| `name` | `string` | Yes | The tag name |
+
+### `UploadTagInstancesHrefSchema` (list query params)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `filter.query` | `string` | No | Textual query to match |
+| `page.offset` | `number` | No | Zero-based offset of the first entity returned (defaults to 0) |
+| `page.limit` | `number` | No | Maximum number of entities to return (defaults to 50, maximum is 500) |
+
+### `UploadSmartTag` (response)
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | Unique smart tag identifier |
+| `type` | `"upload_smart_tag"` | JSON API resource type |
+| `name` | `string` | The tag name |
+
+### `UploadSmartTagInstancesHrefSchema` (list query params)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `filter.query` | `string` | No | Textual query to match |
+| `page.offset` | `number` | No | Zero-based offset of the first entity returned (defaults to 0) |
+| `page.limit` | `number` | No | Maximum number of entities to return (defaults to 50, maximum is 500) |
+
+---
+
 ## Complete Example: Add Subtitles and Organize Tags
 
 ```ts

@@ -175,6 +175,70 @@ console.log("Plugin uninstalled.");
 
 ---
 
+## Type Reference
+
+```ts
+import type {
+  Plugin,
+  PluginCreateSchema,
+  PluginUpdateSchema,
+} from "@datocms/cma-client/dist/types/generated/ApiTypes";
+```
+
+> **Note:** These types are auto-generated from the DatoCMS CMA OpenAPI schema. Always refer to the installed package version for the most up-to-date definitions.
+
+### `Plugin` (response type)
+
+Returned by `client.plugins.create()`, `client.plugins.find()`, `client.plugins.update()`, `client.plugins.list()`, and `client.plugins.destroy()`.
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | Plugin ID |
+| `type` | `"plugin"` | JSON API resource type |
+| `name` | `string` | The name of the plugin |
+| `description` | `null \| string` | A description of the plugin |
+| `package_name` | `null \| string` | NPM package name of the plugin (or null if it's a private plugin) |
+| `package_version` | `null \| string` | The installed version of the plugin (or null if it's a private plugin) |
+| `url` | `string` | The entry point URL of the plugin |
+| `parameters` | `{ [k: string]: unknown }` | Global plugin configuration. Plugins can persist whatever information they want in this object to reuse it later |
+| `permissions` | `"currentUserAccessToken"[]` | Permissions granted to this plugin |
+| `plugin_type` | `"field_editor" \| "sidebar" \| "field_addon" \| null` | The type of field extension a legacy plugin implements |
+| `field_types` | `null \| ("boolean" \| "date" \| "date_time" \| "float" \| "integer" \| "string" \| "text" \| "lat_lon" \| "json" \| "seo" \| "link" \| "links" \| "video" \| "color" \| "slug" \| "rich_text" \| "file" \| "gallery")[]` | On which types of field in which a legacy plugin can be used |
+| `parameter_definitions` | `null \| { global: unknown[]; instance: unknown[] }` | The schema for the parameters a legacy plugin can persist |
+| `meta` | `{ version: string }` | Metadata. `version` indicates `"1"` for legacy plugins, `"2"` for new plugins |
+
+### `PluginCreateSchema` (input for `client.plugins.create()`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` | No | Plugin ID |
+| `type` | `"plugin"` | No | JSON API resource type |
+| `package_name` | `null \| string` | No | NPM package name of the public plugin you want to install. For public plugins, that's the only attribute you need to pass |
+| `name` | `string` | No | The name of the plugin. Only to be passed if package name key is not specified |
+| `description` | `null \| string` | No | A description of the plugin. Only to be passed if package name key is not specified |
+| `url` | `string` | No | The entry point URL of the plugin. Only to be passed if package name key is not specified |
+| `permissions` | `"currentUserAccessToken"[]` | No | Permissions granted to this plugin. Only to be passed if package name key is not specified |
+| `plugin_type` | `"field_editor" \| "sidebar" \| "field_addon"` | No | The type of field extension this legacy plugin implements. Only to be passed if package name key is not specified |
+| `field_types` | `("boolean" \| "date" \| "date_time" \| "float" \| "integer" \| "string" \| "text" \| "lat_lon" \| "json" \| "seo" \| "link" \| "links" \| "video" \| "color" \| "slug" \| "rich_text" \| "file" \| "gallery")[]` | No | On which types of field in which this legacy plugin can be used. Only to be passed if package name key is not specified |
+| `parameter_definitions` | `{ global: unknown[]; instance: unknown[] }` | No | The schema for the parameters this legacy plugin can persist |
+| `package_version` | `null \| string` | No | NPM version of the plugin |
+
+### `PluginUpdateSchema` (input for `client.plugins.update()`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` | No | Plugin ID |
+| `type` | `"plugin"` | No | JSON API resource type |
+| `name` | `string` | No | The name of the plugin |
+| `description` | `null \| string` | No | A description of the plugin |
+| `url` | `string` | No | The entry point URL of the plugin |
+| `parameters` | `{ [k: string]: unknown }` | No | Global plugin configuration. Plugins can persist whatever information they want in this object to reuse it later |
+| `package_version` | `null \| string` | No | The installed version of the plugin (or null if it's a private plugin) |
+| `permissions` | `"currentUserAccessToken"[]` | No | Permissions granted to this plugin |
+| `meta` | `{ [k: string]: unknown }` | No | Additional metadata |
+
+---
+
 ## Complete Example: Audit and Configure Plugins
 
 Lists all installed plugins, finds which fields use a specific plugin, and updates its parameters.

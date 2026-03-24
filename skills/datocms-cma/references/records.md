@@ -15,6 +15,7 @@ Records are the content entries in DatoCMS. They are instances of models (item t
 - [Finding References](#finding-references)
 - [Record Versions](#record-versions)
 - [Field Value Formats](#field-value-formats)
+- [Type Reference](#type-reference)
 - [Complete Example: Create, Publish, Update, Delete](#complete-example-create-publish-update-delete)
 
 ---
@@ -432,6 +433,219 @@ Array of file objects (same shape as single file):
 ### Modular Content, Structured Text, Single Block
 
 These are complex field types — see `references/block-records-and-modular-content.md` and `references/structured-text-and-block-tools.md`.
+
+---
+
+## Type Reference
+
+**Import:** `import type { ApiTypes } from "@datocms/cma-client-node";`
+
+Type properties are based on `@datocms/cma-client@5.x`. Properties may differ on other versions.
+
+#### `ApiTypes.Item`
+
+Returned by `client.items.find()`, `client.items.create()`, `client.items.update()`, `client.items.publish()`, etc.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Record ID |
+| `type` | `"item"` | Always `"item"` |
+| `item_type` | `{ id: string; type: "item_type" }` | The model this record belongs to |
+| `creator` | `AccountData \| AccessTokenData \| UserData \| SsoUserData \| OrganizationData` | Who created the record (optional) |
+| `meta.created_at` | `string` | Date of creation |
+| `meta.updated_at` | `string` | Last update time |
+| `meta.published_at` | `string \| null` | Date of last publication |
+| `meta.first_published_at` | `string \| null` | Date of first publication |
+| `meta.publication_scheduled_at` | `string \| null` | Date of future publication |
+| `meta.unpublishing_scheduled_at` | `string \| null` | Date of future unpublishing |
+| `meta.status` | `"draft" \| "updated" \| "published" \| null` | Publication status |
+| `meta.is_valid` | `boolean` | Whether the current record is valid |
+| `meta.is_current_version_valid` | `boolean \| null` | Whether the current version is valid |
+| `meta.is_published_version_valid` | `boolean \| null` | Whether the published version is valid |
+| `meta.current_version` | `string` | The ID of the current record version |
+| `meta.stage` | `string \| null` | Workflow stage the record is in |
+| `meta.has_children` | `boolean \| null` | For tree models, whether the record has children |
+| _dynamic fields_ | _varies_ | Plus dynamic field values keyed by field API key. With generated types (`D`), these become specific typed properties. |
+
+#### `ApiTypes.ItemCreateSchema`
+
+Input for `client.items.create()`.
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | `string` | No | Provide a custom record ID |
+| `type` | `"item"` | No | Always `"item"` |
+| `item_type` | `{ id: string; type: "item_type" }` | **Yes** | The model this record belongs to |
+| `creator` | `AccountData \| AccessTokenData \| UserData \| SsoUserData \| OrganizationData` | No | Set the creator |
+| `meta.created_at` | `string` | No | Override creation date |
+| `meta.updated_at` | `string` | No | Override last update time |
+| `meta.published_at` | `string \| null` | No | Override last publication date |
+| `meta.first_published_at` | `string \| null` | No | Override first publication date |
+| `meta.publication_scheduled_at` | `string \| null` | No | Set future publication date |
+| `meta.status` | `"draft" \| "updated" \| "published" \| null` | No | Override publication status |
+| `meta.is_valid` | `boolean` | No | Override validity flag |
+| `meta.is_current_version_valid` | `boolean \| null` | No | Override current version validity |
+| `meta.is_published_version_valid` | `boolean \| null` | No | Override published version validity |
+| `meta.current_version` | `string` | No | Set current version ID |
+| _dynamic fields_ | _varies_ | _varies_ | Field values keyed by field API key |
+
+#### `ApiTypes.ItemUpdateSchema`
+
+Input for `client.items.update()`.
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | `string` | No | Record ID |
+| `type` | `"item"` | No | Always `"item"` |
+| `item_type` | `{ id: string; type: "item_type" }` | No | The model this record belongs to |
+| `creator` | `AccountData \| AccessTokenData \| UserData \| SsoUserData \| OrganizationData` | No | Set the creator |
+| `meta.created_at` | `string` | No | Override creation date |
+| `meta.updated_at` | `string` | No | Override last update time |
+| `meta.published_at` | `string \| null` | No | Override last publication date |
+| `meta.first_published_at` | `string \| null` | No | Override first publication date |
+| `meta.publication_scheduled_at` | `string \| null` | No | Set future publication date |
+| `meta.unpublishing_scheduled_at` | `string \| null` | No | Set future unpublishing date |
+| `meta.status` | `"draft" \| "updated" \| "published" \| null` | No | Override publication status |
+| `meta.is_valid` | `boolean` | No | Override validity flag |
+| `meta.current_version` | `string` | No | For optimistic locking — pass the known version to prevent overwriting concurrent changes |
+| `meta.is_current_version_valid` | `boolean \| null` | No | Override current version validity |
+| `meta.is_published_version_valid` | `boolean \| null` | No | Override published version validity |
+| `meta.stage` | `string \| null` | No | Move the record to a new workflow stage |
+| `meta.has_children` | `boolean \| null` | No | Whether the record has children |
+| _dynamic fields_ | _varies_ | No | Field values keyed by field API key (only changed fields needed) |
+
+#### `ApiTypes.ItemInstancesHrefSchema`
+
+Query params for `client.items.list()`.
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `nested` | `boolean` | No | If set, returns full payload for nested blocks instead of IDs |
+| `filter.ids` | `string` | No | Comma-separated record IDs to fetch. Must not combine with `filter.type` or `filter.fields` |
+| `filter.type` | `string` | No | Model ID or `api_key` to filter by. Must not combine with `filter.ids`. Comma-separated values accepted but must not combine with `filter.fields` |
+| `filter.query` | `string` | No | Textual query to match. Uses `locale` if defined, otherwise the environment main locale |
+| `filter.fields` | `object` | No | Field-specific filters — see the Filtering Records section above for usage patterns |
+| `filter.only_valid` | `string` | No | When set, only valid records are included |
+| `locale` | `string` | No | Locale for `filter.query` and `filter.fields`. Default: environment main locale |
+| `page.offset` | `number` | No | Zero-based offset of the first entity (defaults to 0) |
+| `page.limit` | `number` | No | Maximum entities to return (defaults to 30, max 500) |
+| `order_by` | `string` | No | Sort order. Format: `<field>_(ASC\|DESC)`. Requires single-model `filter.type`. Supports field API keys and meta columns: `id`, `_updated_at`, `_created_at`, `_status`, `_published_at`, `_first_published_at`, `_publication_scheduled_at`, `_unpublishing_scheduled_at`, `_is_valid`, `position`. Comma-separated for multiple rules |
+| `version` | `string` | No | `"published"` (default) or `"current"` for latest drafts |
+
+#### `ApiTypes.ItemSelfHrefSchema`
+
+Query params for `client.items.find()`.
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `nested` | `boolean` | No | If set, returns full payload for nested blocks instead of IDs |
+| `version` | `string` | No | `"published"` (default) or `"current"` for latest drafts |
+
+#### `ApiTypes.ItemReferencesHrefSchema`
+
+Query params for `client.items.references()`.
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `nested` | `boolean` | No | If set, returns full payload for nested blocks instead of IDs |
+| `version` | `null \| "current" \| "published" \| "published-or-current"` | No | Which version of referencing records to retrieve |
+
+#### `ApiTypes.ItemPublishSchema`
+
+Body for `client.items.publish()`. Pass `null` or `undefined` to publish the entire record, or an object for selective publication.
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `type` | `"selective_publish_operation"` | No | Must be set for selective publish |
+| `content_in_locales` | `string[]` | **Yes** | Array of locale codes to publish |
+| `non_localized_content` | `boolean` | **Yes** | Whether to also publish non-localized fields |
+
+#### `ApiTypes.ItemPublishHrefSchema`
+
+Query params for `client.items.publish()`.
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `recursive` | `boolean` | No | For tree models: when `true`, auto-publishes unpublished parent records |
+
+#### `ApiTypes.ItemUnpublishSchema`
+
+Body for `client.items.unpublish()`. Pass `null` or `undefined` to unpublish entirely, or an object for selective unpublication.
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `type` | `"selective_unpublish_operation"` | No | Must be set for selective unpublish |
+| `content_in_locales` | `string[]` | **Yes** | Array of locale codes to unpublish |
+
+#### `ApiTypes.ItemUnpublishHrefSchema`
+
+Query params for `client.items.unpublish()`.
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `recursive` | `boolean` | No | For tree models: when `true`, auto-unpublishes published child records |
+
+#### `ApiTypes.ItemBulkPublishSchema`, `ItemBulkUnpublishSchema`, `ItemBulkDestroySchema`
+
+All three share the same shape: `{ items: Array<{ type: "item"; id: string }> }`. Pass an array of record references. Maximum 200 items per request.
+
+#### `ApiTypes.ItemBulkMoveToStageSchema`
+
+Same as the other bulk schemas, plus a `stage` property: `{ items: Array<{ type: "item"; id: string }>; stage: string }`. The `stage` value is the workflow stage ID to move records into.
+
+#### `ApiTypes.ItemValidateNewSchema`
+
+Input for `client.items.validateNew()`. Same shape as `ItemCreateSchema` — pass `item_type` and field values to validate before creating.
+
+#### `ApiTypes.ItemValidateExistingSchema`
+
+Input for `client.items.validateExisting()`. Same shape as `ItemCreateSchema` — pass `item_type` and field values to validate before updating.
+
+#### `ApiTypes.ItemCurrentVsPublishedState`
+
+Returned by `client.items.currentVsPublishedState()`.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Record ID |
+| `type` | `"item_current_vs_published_state"` | Always `"item_current_vs_published_state"` |
+| `current_version_locales` | `string[]` | Locales present in the current version |
+| `published_version_locales` | `string[]` | Locales present in the published version |
+| `changed_locales` | `string[]` | Locales that differ between current and published |
+| `added_locales` | `string[]` | Locales added in the current version |
+| `removed_locales` | `string[]` | Locales removed in the current version |
+| `non_localized_fields_changed` | `boolean` | Whether non-localized fields differ |
+| `current_version_invalid_locales` | `string[]` | Locales where the current version is invalid |
+| `current_version_non_localized_fields_invalid` | `boolean` | Whether non-localized fields are invalid in current version |
+| `scheduled_publication` | `{ type: "scheduled_publication"; id: string } \| null` | Scheduled publication info |
+| `scheduled_unpublishing` | `{ type: "scheduled_unpublishing"; id: string } \| null` | Scheduled unpublishing info |
+| `published_version` | `{ type: "item_version"; id: string } \| null` | Reference to the published version |
+
+#### `ApiTypes.ItemVersion`
+
+Returned by `client.itemVersions.find()`, listed via `client.itemVersions.listPagedIterator()`.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Version ID |
+| `type` | `"item_version"` | Always `"item_version"` |
+| `item_type` | `{ id: string; type: "item_type" }` | The model this record belongs to |
+| `item` | `{ id: string; type: "item" }` | Reference to the parent record |
+| `editor` | `AccountData \| AccessTokenData \| UserData \| SsoUserData \| OrganizationData` | Who made this version |
+| `meta.created_at` | `string` | Date of version creation |
+| `meta.is_valid` | `boolean` | Whether this version is valid |
+| `meta.is_published` | `boolean` | Whether this is the published version |
+| `meta.is_current` | `boolean` | Whether this is the most recent version |
+
+#### `ApiTypes.ItemVersionInstancesHrefSchema`
+
+Query params for `client.itemVersions.listPagedIterator()`.
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `nested` | `boolean` | No | If set, returns full payload for nested blocks instead of IDs |
+| `page.offset` | `number` | No | Zero-based offset of the first entity (defaults to 0) |
+| `page.limit` | `number` | No | Maximum entities to return (defaults to 15, max 50) |
 
 ---
 

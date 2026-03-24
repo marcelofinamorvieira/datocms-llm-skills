@@ -275,6 +275,122 @@ console.log(schemaMenuItem.label, schemaMenuItem.position);
 
 ---
 
+## Type Reference
+
+```ts
+import type {
+  MenuItem,
+  MenuItemCreateSchema,
+  MenuItemUpdateSchema,
+  MenuItemInstancesHrefSchema,
+  SchemaMenuItem,
+  SchemaMenuItemCreateSchema,
+  SchemaMenuItemUpdateSchema,
+  SchemaMenuItemInstancesHrefSchema,
+} from "@datocms/cma-client";
+```
+
+> **Note:** These types are auto-generated from the DatoCMS CMA API schema. Field optionality and exact shapes may change between client versions. Always refer to the installed version's types as the source of truth.
+
+### MenuItem (response)
+
+Returned by `client.menuItems.create()`, `update()`, `find()`, and each element in `list()`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `string` | UUID of the menu item |
+| `type` | `"menu_item"` | JSON API type |
+| `label` | `string` | Display label in the sidebar |
+| `external_url` | `null \| string` | URL for external link items |
+| `position` | `number` | Ordering index |
+| `open_in_new_tab` | `boolean` | Whether external links open in a new tab |
+| `item_type` | `ItemTypeData \| null` | `{ type: "item_type"; id: string }` — model this item links to |
+| `item_type_filter` | `ItemTypeFilterData \| null` | `{ type: "item_type_filter"; id: string }` — saved filter reference |
+| `parent` | `null \| MenuItemData` | `{ type: "menu_item"; id: string }` — parent menu item for nesting |
+| `children` | `MenuItemData[]` | `{ type: "menu_item"; id: string }[]` — child menu item references |
+
+### MenuItemCreateSchema (input for `create`)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | `string` | no | Optional client-side UUID |
+| `type` | `"menu_item"` | no | JSON API type |
+| `label` | `string` | **yes** | Display label in the sidebar |
+| `external_url` | `null \| string` | no | URL for external link items |
+| `position` | `number` | no | Ordering index |
+| `open_in_new_tab` | `boolean` | no | Whether external links open in a new tab |
+| `item_type` | `ItemTypeData \| null` | no | Model this item links to |
+| `item_type_filter` | `ItemTypeFilterData \| null` | no | Saved filter reference |
+| `parent` | `null \| MenuItemData` | no | Parent menu item for nesting |
+
+### MenuItemUpdateSchema (input for `update`)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | `string` | no | UUID of the menu item |
+| `type` | `"menu_item"` | no | JSON API type |
+| `label` | `string` | no | Display label in the sidebar |
+| `external_url` | `null \| string` | no | URL for external link items |
+| `position` | `number` | no | Ordering index |
+| `open_in_new_tab` | `boolean` | no | Whether external links open in a new tab |
+| `item_type` | `ItemTypeData \| null` | no | Model this item links to |
+| `item_type_filter` | `ItemTypeFilterData \| null` | no | Saved filter reference |
+| `parent` | `null \| MenuItemData` | no | Parent menu item for nesting |
+
+### MenuItemInstancesHrefSchema (query parameters for `list`)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `filter` | `{ ids: string }` | no | IDs to fetch, comma separated |
+
+### SchemaMenuItem (response)
+
+Returned by `client.schemaMenuItems.create()`, `update()`, `find()`, and each element in `list()`.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `string` | UUID of the schema menu item |
+| `type` | `"schema_menu_item"` | JSON API type |
+| `label` | `null \| string` | Display label (only present when the item is not linked to an item type) |
+| `position` | `number` | Ordering index |
+| `kind` | `"item_type" \| "modular_block"` | Whether this refers to an item type or a modular block |
+| `item_type` | `ItemTypeData \| null` | `{ type: "item_type"; id: string }` — model this item references |
+| `parent` | `null \| SchemaMenuItemData` | `{ type: "schema_menu_item"; id: string }` — parent for nesting |
+| `children` | `SchemaMenuItemData[]` | `{ type: "schema_menu_item"; id: string }[]` — child references |
+
+### SchemaMenuItemCreateSchema (input for `create`)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | `string` | no | Optional client-side UUID |
+| `type` | `"schema_menu_item"` | no | JSON API type |
+| `label` | `null \| string` | **yes** | Display label (null when linked to an item type) |
+| `position` | `number` | no | Ordering index |
+| `kind` | `"item_type" \| "modular_block"` | **yes** | Whether this refers to an item type or a modular block |
+| `item_type` | `ItemTypeData \| null` | no | Model this item references |
+| `parent` | `null \| SchemaMenuItemData` | no | Parent schema menu item for nesting |
+
+### SchemaMenuItemUpdateSchema (input for `update`)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | `string` | no | UUID of the schema menu item |
+| `type` | `"schema_menu_item"` | no | JSON API type |
+| `label` | `null \| string` | no | Display label (null when linked to an item type) |
+| `position` | `number` | no | Ordering index |
+| `kind` | `"item_type" \| "modular_block"` | no | Whether this refers to an item type or a modular block |
+| `item_type` | `ItemTypeData \| null` | no | Model this item references |
+| `parent` | `null \| SchemaMenuItemData` | no | Parent schema menu item for nesting |
+| `children` | `SchemaMenuItemData[]` | no | Child schema menu item references |
+
+### SchemaMenuItemInstancesHrefSchema (query parameters for `list`)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `filter` | `{ ids: string }` | no | IDs to fetch, comma separated |
+
+---
+
 ## Complete Example: Organize Dashboard Navigation
 
 ```ts
