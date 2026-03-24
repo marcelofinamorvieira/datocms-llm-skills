@@ -2,7 +2,7 @@
 
 This repo now includes a model-agnostic loop for improving skill trigger quality.
 
-It follows the same pattern described in Anthropic's skill-iteration article:
+It follows the same pattern described in [Anthropic's skill-iteration article](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills):
 1. Test with curated trigger/non-trigger prompts.
 2. Measure with stable metrics (recall, precision, F1, false negatives/positives).
 3. Refine skill descriptions, then re-test and compare.
