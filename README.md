@@ -117,12 +117,6 @@ latest skill improvements: run `/plugin`, go to **Marketplaces**, select
 `claude plugin update datocms@datocms-skills`. See [docs/install.md](docs/install.md)
 for scopes, update details, and single-skill install options.
 
-To test locally during development:
-
-```bash
-claude --plugin-dir /path/to/this/repo
-```
-
 ### Codex
 
 Inside a Codex session, ask the skill installer to pull all skills from this repo:
