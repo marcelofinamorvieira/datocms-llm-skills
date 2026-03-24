@@ -172,11 +172,4 @@ evals/
 local/  # local-only scratch inputs
 ```
 
-## Validate
-
-```bash
-python3 evals/scripts/validate_skill_repo.py --repo-root .
-python3 evals/scripts/validate_skill_repo.py --repo-root . --require-clean-git
-```
-
 For the evaluation workflow details, see [evals/README.md](evals/README.md).
