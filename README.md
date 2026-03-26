@@ -159,6 +159,21 @@ Installs all 8 skills at once. Uses symlinks by default so updates are easy:
 npx skills update
 ```
 
+### Claude.ai
+
+Upload each skill individually via **Customize > Skills** in
+[claude.ai](https://claude.ai). Pre-built zips are in the [`zips/`](zips/)
+folder — one per skill:
+
+1. Go to **Customize > Skills** and click **"+"** > **"Upload a skill"**
+2. Upload each `.zip` from `zips/` (e.g. `datocms-cda.zip`, `datocms-cma.zip`, etc.)
+
+To regenerate the zips after skill content changes:
+
+```bash
+rm -rf zips && mkdir zips && for s in skills/datocms-*/; do n=$(basename "$s"); (cd skills && zip -r "../zips/${n}.zip" "$n/" -x "${n}/agents/*"); done
+```
+
 ## Repo Layout
 
 ```text
@@ -188,3 +203,13 @@ local/  # local-only scratch inputs
 ```
 
 For the evaluation workflow details, see [evals/README.md](evals/README.md).
+
+### Claude.ai
+
+To use these skills in [claude.ai](https://claude.ai):
+
+1. Download the individual `.zip` files from the [`zips/`](zips/) folder
+2. Go to **Customize > Skills** and click **"+"** > **"Upload a skill"**
+3. Upload each `.zip` one at a time (e.g. `datocms-cda.zip`, `datocms-cma.zip`, etc.)
+
+All 8 skills will then be available in your claude.ai conversations.
