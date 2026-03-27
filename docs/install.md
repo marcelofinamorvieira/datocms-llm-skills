@@ -106,6 +106,34 @@ After making changes, reload without restarting:
 /reload-plugins
 ```
 
+## Codex Plugin Install
+
+This repo ships `.codex-plugin/plugin.json`, so it can be installed as a Codex
+plugin. This is the recommended approach for Codex users.
+
+Inside a Codex session, open the Plugin Directory:
+
+```
+/plugins
+```
+
+Search for **datocms** and install it. All 8 skills are bundled into the
+plugin automatically.
+
+### Updates
+
+Codex checks for plugin updates at session start. When the plugin version is
+bumped upstream (new commit + version bump in `.codex-plugin/plugin.json`),
+Codex prompts you to update.
+
+### Fallback: `$skill-installer`
+
+If the Plugin Directory is not available or you prefer manual control, use the
+`$skill-installer` approach described in the
+[README](../README.md#codex-fallback--skill-installer). The `$skill-installer`
+copies skill files into `~/.codex/skills/` as frozen snapshots with no
+auto-update.
+
 ## Single-Skill Install
 
 If you only need one skill, link just that folder by its canonical name.

@@ -1063,6 +1063,45 @@ def _validate_setup_manifest(repo_root: Path, errors: list[str]) -> None:
         errors.append(f"{forbidden_path}: internal recipe folders must not ship `agents/openai.yaml`")
 
 
+def _validate_codex_plugin_manifest(repo_root: Path, errors: list[str]) -> None:
+    codex_manifest = repo_root / ".codex-plugin" / "plugin.json"
+    claude_manifest = repo_root / ".claude-plugin" / "plugin.json"
+
+    if not codex_manifest.exists():
+        errors.append(f"{codex_manifest}: missing Codex plugin manifest")
+        return
+
+    try:
+        codex_payload = json.loads(codex_manifest.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        errors.append(f"{codex_manifest}: invalid JSON ({exc})")
+        return
+
+    if not isinstance(codex_payload, dict):
+        errors.append(f"{codex_manifest}: manifest root must be an object")
+        return
+
+    for field in ("name", "version", "description", "skills"):
+        value = codex_payload.get(field)
+        if not isinstance(value, str) or not value.strip():
+            errors.append(f"{codex_manifest}: missing or empty required field `{field}`")
+
+    if claude_manifest.exists():
+        try:
+            claude_payload = json.loads(claude_manifest.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            claude_payload = {}
+
+        if isinstance(claude_payload, dict):
+            for field in ("name", "version", "description", "skills"):
+                claude_value = claude_payload.get(field)
+                codex_value = codex_payload.get(field)
+                if claude_value != codex_value:
+                    errors.append(
+                        f"{codex_manifest}: `{field}` does not match .claude-plugin/plugin.json"
+                    )
+
+
 def _validate_clean_git(repo_root: Path, errors: list[str]) -> None:
     completed = subprocess.run(
         ["git", "-C", str(repo_root), "status", "--short"],
@@ -1144,6 +1183,7 @@ def main() -> int:
     _validate_eval_result_names(repo_root, canonical_skill_names, errors)
     _validate_astro_imports(repo_root, errors)
     _validate_setup_manifest(repo_root, errors)
+    _validate_codex_plugin_manifest(repo_root, errors)
     _validate_setup_router_eval(repo_root, errors)
 
     if args.require_fresh_results_sync:
@@ -1172,6 +1212,7 @@ def main() -> int:
     print("[ok] banned host-specific labels are absent from skill bodies")
     print("[ok] Astro references use subpath imports")
     print("[ok] datocms-setup manifest paths, prerequisites, references, scripts, and assets are valid")
+    print("[ok] Codex plugin manifest is present and synced with Claude Code manifest")
     if args.require_clean_git:
         print("[ok] git status is clean (ignoring local-only excluded paths)")
     return 0

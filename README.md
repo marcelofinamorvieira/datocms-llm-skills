@@ -118,9 +118,25 @@ latest skill improvements: run `/plugin`, go to **Marketplaces**, select
 `claude plugin update datocms@datocms-skills`. See [docs/install.md](docs/install.md)
 for scopes, update details, and single-skill install options.
 
-### Codex
+### Codex (recommended)
 
-Inside a Codex session, ask the skill installer to pull all skills from this repo:
+This repo ships as a Codex plugin. Inside a Codex session:
+
+```
+/plugins
+```
+
+Search for **datocms** in the Plugin Directory and install it. All 8 skills
+are bundled into the plugin automatically.
+
+**Updates:** Codex checks for plugin updates at session start. When the plugin
+version is bumped upstream (new commit + version bump in
+`.codex-plugin/plugin.json`), Codex prompts you to update.
+
+### Codex (fallback — `$skill-installer`)
+
+If the Plugin Directory is unavailable, ask the skill installer to pull all
+skills from this repo:
 
 ```
 $skill-installer install all of these skills from https://github.com/marcelofinamorvieira/datocms-llm-skills:
@@ -180,6 +196,8 @@ rm -rf zips && mkdir zips && for s in skills/datocms-*/; do n=$(basename "$s"); 
 .claude-plugin/
   plugin.json         # Claude Code plugin manifest
   marketplace.json    # Claude Code marketplace registry
+.codex-plugin/
+  plugin.json         # Codex plugin manifest
 skills/
   datocms-cda/
   datocms-cli/

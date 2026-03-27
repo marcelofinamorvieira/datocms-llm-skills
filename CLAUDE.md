@@ -10,6 +10,7 @@ DatoCMS skills repository — 8 public skills that provide focused AI-tool guida
 
 - `.claude-plugin/plugin.json` — Claude Code plugin manifest (points `skills` at `./skills/`)
 - `.claude-plugin/marketplace.json` — Claude Code marketplace registry (lists the `datocms` plugin for `/plugin` discovery)
+- `.codex-plugin/plugin.json` — Codex plugin manifest (points `skills` at `./skills/`, includes Plugin Directory metadata)
 - `skills/<skill-name>/SKILL.md` — skill definition (YAML frontmatter + markdown body)
 - `skills/<skill-name>/references/` — detailed reference docs imported by the skill
 - `skills/<skill-name>/agents/openai.yaml` — Codex agent interface config, must stay synced with SKILL.md frontmatter
