@@ -1,8 +1,8 @@
 # synced_from_name: datocms-cli
-# synced_from_description_sha256: 934ee78d3ebc6a7384864e5f7eb32a425c797c5cc61b86056e707c50e677c4a3
+# synced_from_description_sha256: 269121546e0a0f5ef5f7fed3bc5fbb0495b3687a3300f13a76c61d4daf4e6ba1
 interface:
   display_name: "DatoCMS CLI"
-  short_description: "Run DatoCMS CLI migrations, imports, and envs"
+  short_description: "Run DatoCMS CLI migrations, imports, envs, and plugins"
   default_prompt: "Use $datocms-cli to set up or modify DatoCMS CLI migrations, profiles, imports, environments, or CI workflows."
 policy:
   allow_implicit_invocation: true

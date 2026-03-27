@@ -13,7 +13,7 @@ npx datocms schema:generate src/lib/datocms/cma-types.ts
 ## Useful flags
 
 - `--environment <name>` — Generate the file from a sandbox or staging environment instead of the primary environment
-- `--item-types article,author` — Include only the listed item types and their dependencies
+- `--item-types article,author` — Include only the listed item types (and their dependencies — e.g., linked models are pulled in automatically)
 - `--profile <name>` or `--api-token <token>` — Select credentials the same way as other CLI commands
 - `DATOCMS_PROFILE` / `DATOCMS_<PROFILE_ID>_PROFILE_API_TOKEN` — Use the same profile-selection rules described in the CLI setup reference
 

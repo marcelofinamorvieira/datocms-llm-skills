@@ -7,7 +7,7 @@ CLI.
 
 ## Simple Environment Commands
 
-- **`environments:list`** — list all primary and sandbox environments: `npx datocms environments:list`
+- **`environments:list`** (alias: `environments:index`) — list all primary and sandbox environments: `npx datocms environments:list`
 - **`environments:primary`** — get the ID of the primary environment: `npx datocms environments:primary` (CLI convenience — no direct CMA client equivalent)
 - **`environments:rename`** — rename an environment: `npx datocms environments:rename <ENVIRONMENT_ID> <NEW_ENVIRONMENT_ID>`
 - **`environments:destroy`** — destroy a sandbox environment: `npx datocms environments:destroy <ENVIRONMENT_ID>`
@@ -60,43 +60,25 @@ npx datocms environments:promote staging
 
 ---
 
-## cma:call
+## cma:call (Environment-Specific Usage)
 
-Use `cma:call` for one-off CMA operations directly from the terminal.
-
-The command surface is dynamic and follows the installed CLI / `@datocms/cma-client`
-version, so always check `npx datocms cma:call --help` before assuming a
-resource/method pair exists. DatoCMS announced this dynamic surface on
-December 4, 2025.
-
-### Command shape
+For one-off environment operations from the terminal, `cma:call` can target
+environments directly:
 
 ```bash
-npx datocms cma:call <RESOURCE> <METHOD> [...pathArgs]
+# List all environments
+npx datocms cma:call environments list
+
+# Find an environment
+npx datocms cma:call environments find <ENVIRONMENT_ID>
+
+# Target a specific environment for any resource
+npx datocms cma:call items list --environment=staging
+npx datocms cma:call item_types list --environment=my-feature
 ```
 
-### Examples
+> **Prefer the dedicated CLI commands** (`environments:fork`, `environments:promote`,
+> etc.) over `cma:call environments` — they have better flags and output.
 
-```bash
-# List all models
-npx datocms cma:call item_types list
-
-# Find a specific record
-npx datocms cma:call items find 12345
-
-# Create a record
-npx datocms cma:call items create --data '{"item_type": {"type": "item_type", "id": "blog_post"}, "title": "Hello"}'
-
-# List records with filtering
-npx datocms cma:call items list --params '{"filter": {"type": "blog_post"}}'
-
-# Target a specific environment and profile
-npx datocms cma:call items list --environment=staging --profile=staging
-```
-
-### Guidance
-
-- Use `--data` for create/update request bodies and `--params` for query parameters
-- Add `--environment` when targeting a sandbox
-- Use `--profile` or `--api-token` when the command must run against a non-default credential context
-- Switch to `datocms-cma` when the task needs loops, branching, retries, or reusable typed code
+For full `cma:call` documentation — all resources, methods, flags, pagination,
+JSON5 syntax, and scripting patterns — see `references/direct-cma-calls.md`.

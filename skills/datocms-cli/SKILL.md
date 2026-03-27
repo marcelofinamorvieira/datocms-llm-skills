@@ -8,8 +8,11 @@ description: >-
   schema:generate, cma:call, migration scaffolding for
   models/fields/blocks, CLI setup with datocms.config.json and profiles,
   environment commands (list/fork/promote/rename/destroy), maintenance-mode
-  toggling, CI/CD migration pipelines, blueprint/client project sync, and
-  imports from WordPress or Contentful (including assets/content).
+  toggling, CI/CD migration pipelines, blueprint/client project sync,
+  imports from WordPress or Contentful (including assets/content), and CLI
+  plugin management (plugins:install, plugins:add, plugins:available,
+  plugins:link for local plugin development, plugins:remove, plugins:update,
+  plugins:reset, plugins:inspect).
 ---
 
 # DatoCMS CLI Skill
@@ -62,6 +65,7 @@ Classify the user's task into one or more categories:
 | **Deployment workflow** | Maintenance mode, safe deployment sequences, CI/CD integration |
 | **Multi-project sync** | Shared migrations across blueprint/client projects via CLI profiles |
 | **Importing content** | WordPress import, Contentful import |
+| **CLI plugin management** | Install, remove, update, list, inspect, link, or reset CLI plugins (`plugins:*` commands) |
 
 ---
 
@@ -115,6 +119,7 @@ Confirm these inputs when they are not already clear:
 - resource + method
 - required positional path args
 - whether the call needs `--data`, `--params`, or `--environment`
+- whether the operation is read-only (list/find — safe), mutating (create/update/publish — confirm environment), or destructive (destroy/bulk_destroy/promote — always confirm target)
 - whether this is truly a one-off CLI call or should become reusable CMA code
 
 ### Environment management
@@ -149,6 +154,13 @@ Confirm these inputs when they are not already clear:
 - content-type narrowing needs
 - concurrency / ignore-errors tolerance for large asset sets
 
+### CLI plugin management
+
+Confirm these inputs when they are not already clear:
+- whether the goal is installing an official DatoCMS CLI plugin or a third-party/custom one
+- whether the plugin is being developed locally (`plugins:link`) or installed from npm
+- whether the action targets all plugins (`reset` / `update`) or a specific one
+
 ### Destructive and production-sensitive confirmations
 
 If context is missing, ask for explicit confirmation before proposing final commands for:
@@ -158,7 +170,8 @@ If context is missing, ask for explicit confirmation before proposing final comm
 - `migrations:run --in-place` on a primary-like environment
 - `maintenance:on --force`
 - `environments:fork --fast --force`
-- destructive `cma:call` mutations
+- `cma:call` with `destroy`, `bulk_destroy`, or `promote` methods
+- `plugins:reset` (removes all user-installed and linked CLI plugins)
 
 ---
 
@@ -181,6 +194,7 @@ Based on the task classification, read the appropriate reference files from the 
 | Deployment workflow | `references/deployment-workflow.md` |
 | Multi-project sync | `references/blueprint-sync.md` |
 | Importing content | `references/importing-content.md` |
+| CLI plugin management | `references/cli-plugin-management.md` |
 
 **Load cross-cutting references when needed:**
 - If creating + running migrations together -> load both `creating-migrations.md` and `running-migrations.md`
@@ -188,6 +202,7 @@ Based on the task classification, read the appropriate reference files from the 
 - If a direct CMA call grows beyond a one-off command -> switch to `datocms-cma` for reusable code
 - If deployment involves environment commands -> also load `environment-commands.md`
 - If multi-project sync involves rollout execution -> also load `running-migrations.md`
+- If a CLI plugin install is specifically for WordPress/Contentful import -> also load `importing-content.md`
 
 ---
 
@@ -226,6 +241,12 @@ Write commands and scripts following these mandatory rules:
 - Add `--environment` when the call must target a sandbox environment
 - Switch to `datocms-cma` when the task needs reusable code, iteration, branching, or typed application logic
 
+### CLI Plugin Commands
+- Use `npx datocms plugins:available` to discover official CLI plugins before installing
+- Use `npx datocms plugins:add <PLUGIN>` to install a CLI plugin by npm package name or GitHub URL
+- Use `npx datocms plugins:link <PATH>` only for local plugin development
+- These commands manage CLI extensions, not DatoCMS project plugins — route project plugin work to **datocms-plugin-builder**
+
 ### Environment Safety
 - Always specify `--source` when running migrations to be explicit about the target
 - Use `--dry-run` first to preview changes before applying
@@ -246,6 +267,7 @@ Before presenting the final commands or scripts:
 6. **Direct CMA calls** — If using `cma:call`, verify positional args, `--data`, `--params`, and `--environment` align with the targeted method
 7. **Environment targeting** — Verify the correct `--source` / `--destination` environment is specified
 8. **Safety checks** — For destructive operations (promote, destroy, destructive `cma:call` usage, risky imports, maintenance-mode force), confirm the user intends to target the right environment
+9. **CLI plugin commands** — If using `plugins:*` commands, verify the plugin name is correct and distinguish CLI plugins from DatoCMS project plugins
 
 ---
 
